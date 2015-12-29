@@ -1,4 +1,4 @@
-package com.baidu.zhuanche.ui;
+package com.baidu.zhuanche.ui.user;
 
 import java.util.ArrayList;
 import java.util.Date;

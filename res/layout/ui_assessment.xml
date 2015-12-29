@@ -1,0 +1,152 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/layout_header" />
+
+   	<include layout="@layout/layout_driver_info"/>
+    <RelativeLayout
+        android:id="@+id/assess_relativeLayout_03"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp" >
+
+        <ImageView
+            android:id="@+id/assess_image_05"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/pingjialine" />
+
+        <TextView
+            android:id="@+id/assess_text_07"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/assess_image_05"
+            android:text="成功支付"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_toRightOf="@+id/assess_text_07"
+            android:src="@drawable/pingjialine" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp" >
+
+        <TextView
+            android:id="@+id/assess_tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="672.5元"
+            android:textColor="#333333"
+            android:textSize="30sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/assess_relativeLayout_05"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp" >
+
+        <ImageView
+            android:id="@+id/assess_image_06"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/pingjialine" />
+
+        <TextView
+            android:id="@+id/assess_text_08"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/assess_image_06"
+            android:text="评价司机"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/assess_image_07"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="40dp"
+            android:layout_toRightOf="@+id/assess_text_08"
+            android:src="@drawable/pingjialine" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RatingBar
+            android:id="@+id/assess_rb_assessdriver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:progressDrawable="@drawable/layerlist_ratingbar_big_bg"
+            android:rating="1.5" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/assess_text_14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="请把您的不满告诉我们"
+        android:textColor="#FF9827"
+        android:textSize="10sp" />
+
+    <EditText
+        android:id="@+id/assess_et_pingjia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:textSize="12sp"
+        android:background="@drawable/bg_btn_gray"
+        android:hint="可以输入其他意见和建议"
+        android:lines="5" />
+
+    <RelativeLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/assess_bt_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:padding="4dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_bg_page_green"
+            android:textColor="@color/textcolor_selector"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="提交评价" />
+    </RelativeLayout>
+
+</LinearLayout>

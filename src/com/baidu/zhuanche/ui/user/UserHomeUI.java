@@ -1,4 +1,4 @@
-package com.baidu.zhuanche.ui;
+package com.baidu.zhuanche.ui.user;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.adapter.HomeGridAdapter;
 import com.baidu.zhuanche.adapter.HotAskAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
@@ -111,6 +112,7 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 	public void initListener()
 	{
 		super.initListener();
+		mIvLeftHeader.setOnClickListener(this);
 		mContainerLogin.setOnClickListener(this);
 		mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
@@ -141,6 +143,8 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 			{
 				startActivity(YuyueUI.class);
 			}
+		}else if(v == mIvLeftHeader){
+			finishActivity(SplashUI.class);
 		}
 	}
 

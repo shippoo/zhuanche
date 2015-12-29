@@ -31,7 +31,7 @@ import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.ui.YuYueDetailUI;
+import com.baidu.zhuanche.ui.user.YuYueDetailUI;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.OrderUtil;

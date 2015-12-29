@@ -1,4 +1,4 @@
-package com.baidu.zhuanche.ui;
+package com.baidu.zhuanche.ui.user;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;

@@ -52,6 +52,8 @@ public interface URLS
 	public interface Driver
 	{
 		String	login	= "Driver/Login/login";
+		String	regist	= "Driver/Login/register";
+		String	verify	= "Driver/Login/verify";
 	}
 
 	String	MOBILE			= "mobile";		// 手机号码

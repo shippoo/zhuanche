@@ -52,4 +52,9 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/white</item>
     </style>
+     <style name="CustomCheckboxAssess" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_assess</item>
+        <item name="android:width">25dp </item>
+        <item name="android:height">25dp</item>
+    </style>
 </resources>

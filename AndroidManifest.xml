@@ -26,16 +26,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.UserLoginSelectUI"/>
-        <activity android:name=".ui.UserLoginUI"/>
-        <activity android:name=".ui.UserCenterUI"/>
-        <activity android:name=".ui.UserInfoUI"/>
-        <activity android:name=".ui.UserMessageUI"/>
-        <activity android:name=".ui.SettingUI"/>
-        <activity android:name=".ui.YuYueDetailUI"/>
-        <activity android:name=".ui.UserHomeUI"/>
-        <activity android:name=".ui.UserRegistUI"/>
-        <activity android:name=".ui.YuyueUI"/>
+        <!-- 用户端 -->
+        <activity android:name=".ui.user.UserLoginSelectUI"/>
+        <activity android:name=".ui.user.UserLoginUI"/>
+        <activity android:name=".ui.user.UserCenterUI"/>
+        <activity android:name=".ui.user.UserInfoUI"/>
+        <activity android:name=".ui.user.SettingUI"/>
+        <activity android:name=".ui.user.YuYueDetailUI"/>
+        <activity android:name=".ui.user.UserRegistUI"/>
+        <activity android:name=".ui.user.YuyueUI"/>
+        <activity android:name=".ui.user.UserHomeUI"/>
+        <activity android:name=".ui.user.UserMessageUI"/>
+        <activity android:name=".ui.user.UserFindPasswordUI"/>
+        <activity android:name=".ui.user.UserFindPasswordNextUI"/>
+        
+        
+        
+        <!-- 司机端 -->
+        <activity android:name=".ui.driver.DriverLoginUI"/>
+        <activity android:name=".ui.driver.DriverRegistUI"/>
+        <activity android:name=".ui.driver.DriverFindPasswordUI"/>
+        <activity android:name=".ui.driver.DriverFindPasswordNextUI"/>
     </application>
 
 </manifest>

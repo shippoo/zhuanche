@@ -9,7 +9,7 @@ import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseHolder;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.URLS;
-import com.baidu.zhuanche.ui.UserInfoUI;
+import com.baidu.zhuanche.ui.user.UserInfoUI;
 import com.baidu.zhuanche.utils.ImageUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.CircleImageView;

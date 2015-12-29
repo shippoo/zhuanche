@@ -1,9 +1,9 @@
 package com.baidu.zhuanche;
 
 import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.ui.UserHomeUI;
-import com.baidu.zhuanche.ui.UserHomeUI;
-import com.baidu.zhuanche.ui.UserLoginSelectUI;
+import com.baidu.zhuanche.ui.driver.DriverLoginUI;
+import com.baidu.zhuanche.ui.user.UserHomeUI;
+import com.baidu.zhuanche.ui.user.UserLoginSelectUI;
 import com.baidu.zhuanche.utils.SPUtils;
 
 import android.os.Bundle;
@@ -36,7 +36,7 @@ public class SplashUI extends BaseActivity implements OnClickListener
 	public void onClick(View v)
 	{
 		if(v == mBtDriver){
-			
+			startActivityAndFinish(DriverLoginUI.class);
 		}else if(v == mBtUser){
 			startActivityAndFinish(UserHomeUI.class);
 		}

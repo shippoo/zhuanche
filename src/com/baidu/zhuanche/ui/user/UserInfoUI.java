@@ -1,19 +1,28 @@
-package com.baidu.zhuanche.ui;
+package com.baidu.zhuanche.ui.user;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.User;
-import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.holder.InfoMobileHolder;
 import com.baidu.zhuanche.holder.InfoNameHolder;
@@ -31,23 +40,7 @@ import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.CircleImageView;
 import com.baidu.zhuanche.view.SelectPicPopupWindow;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 /**
  * @项目名: ZhuanChe
