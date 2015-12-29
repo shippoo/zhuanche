@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#F6F6F6</color>
+    <!-- 对话框标题的背景颜色 -->
+    <color name="title">#1368AA</color>
+    <!-- 对话框中内容 条目的文字颜色 -->
+    <color name="item_textColor">#000000</color>
+    
+    <!-- 分割线的颜色 -->
+    <color name="divide_color">#33000000</color>
+    
+    <!-- 预约列表信息的字体颜色 -->
+    <color name="item_yuyue_textColor">#666666</color>
+    
+    <!-- ********个人信息******* -->
+    <color name="info_bg">#F6F6F6</color>
+    <color name="info_textColor">#7E7E7E</color>
+    <color name="info_ItemColor">#AEAEAE</color>
+    <!-- 条目背景 -->
+    <color name="info_bg_color">#fff</color>
+    
+    <!-- Time-Picker日期选择器 -->
+    <color name="colorPrimary">#FF5722</color>
+    <color name="white">#ffffff</color>
+</resources>
