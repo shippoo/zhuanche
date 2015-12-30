@@ -253,7 +253,7 @@
         android:src="@drawable/page_19" />
 
     <RelativeLayout
-        android:id="@+id/childerContainer_date"
+        android:id="@+id/yuyueContainer_date"
         android:layout_width="match_parent"
         android:layout_height="38dp" >
 
@@ -307,7 +307,7 @@
         android:src="@drawable/page_19" />
 
     <RelativeLayout
-        android:id="@+id/childerContainer_port"
+        android:id="@+id/yuyueContainer_port"
         android:layout_width="match_parent"
         android:layout_height="38dp" >
 
@@ -358,7 +358,7 @@
         android:src="@drawable/page_19" />
 
     <RelativeLayout
-        android:id="@+id/childrenContainer_shangche"
+        android:id="@+id/yuyueContainer_geton"
         android:layout_width="match_parent"
         android:layout_height="38dp" >
 
@@ -383,7 +383,7 @@
             android:textSize="14sp" />
         
         <TextView
-            android:id="@+id/children_list_05"
+            android:id="@+id/yuyue_tv_geton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -409,7 +409,7 @@
         android:src="@drawable/page_19" />
 
     <RelativeLayout
-        android:id="@+id/childrenContainer_xiache"
+        android:id="@+id/yuyueContainer_getoff"
         android:layout_width="match_parent"
         android:layout_height="38dp" >
 
@@ -434,7 +434,7 @@
             android:textSize="14sp" />
         
         <TextView
-            android:id="@+id/children_list_06"
+            android:id="@+id/yuyue_tv_getoff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

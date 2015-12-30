@@ -10,7 +10,6 @@ import org.feezu.liuli.timeselector.Utils.DateUtil;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
-import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -24,10 +23,13 @@ import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.CartTypeBean;
 import com.baidu.zhuanche.bean.CartTypeBean.LevelBean;
+import com.baidu.zhuanche.bean.Location;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.bean.Yuyue;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.ui.user.GetOffUI.OnGetOffLocationListener;
+import com.baidu.zhuanche.ui.user.GetOnUI.OnGetOnLocationListener;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -47,7 +49,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class YuyueUI extends BaseActivity implements OnClickListener
+public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLocationListener, OnGetOffLocationListener
 {
 	private Yuyue				mYuyueData;									// 预约所需值，都封装在这个class中
 
@@ -71,6 +73,12 @@ public class YuyueUI extends BaseActivity implements OnClickListener
 	/** 口岸 */
 	private RelativeLayout		mContainerPort;
 	private TextView			mTvPort;
+	/** 上车地点 */
+	private RelativeLayout		mContainerGetOn;
+	private TextView			mTvGetOn;
+	/** 下车地点 */
+	private RelativeLayout		mContainerGetOff;
+	private TextView			mTvGetOff;
 
 	@Override
 	public void initView()
@@ -89,11 +97,17 @@ public class YuyueUI extends BaseActivity implements OnClickListener
 		mContainerSignType = (RelativeLayout) view.findViewById(R.id.yuyueContainer_signtype);
 		mTvSignType = (TextView) view.findViewById(R.id.yuyue_tv_signtype);
 		// 时间
-		mContainerTime = (RelativeLayout) view.findViewById(R.id.childerContainer_date);
+		mContainerTime = (RelativeLayout) view.findViewById(R.id.yuyueContainer_date);
 		mTvTime = (TextView) view.findViewById(R.id.yuyue_tv_time);
 		// 口岸
-		mContainerPort = (RelativeLayout) view.findViewById(R.id.childerContainer_port);
+		mContainerPort = (RelativeLayout) view.findViewById(R.id.yuyueContainer_port);
 		mTvPort = (TextView) view.findViewById(R.id.yuyue_tv_port);
+		// 上车地点
+		mContainerGetOn = (RelativeLayout) view.findViewById(R.id.yuyueContainer_geton);
+		mTvGetOn = (TextView) view.findViewById(R.id.yuyue_tv_geton);
+		// 下车地点
+		mContainerGetOff = (RelativeLayout) view.findViewById(R.id.yuyueContainer_getoff);
+		mTvGetOff = (TextView) view.findViewById(R.id.yuyue_tv_getoff);
 	}
 
 	@Override
@@ -113,6 +127,8 @@ public class YuyueUI extends BaseActivity implements OnClickListener
 	public void initListener()
 	{
 		super.initListener();
+		GetOnUI.setOnGetOnLocationListener(this);// 上车地点接口回调
+		GetOffUI.setOnGetOffLocationListener(this);
 		mIvLeftHeader.setOnClickListener(this);
 		mIvRightHeader.setOnClickListener(this);
 		mContainerLevel.setOnClickListener(this);
@@ -120,6 +136,8 @@ public class YuyueUI extends BaseActivity implements OnClickListener
 		mContainerSignType.setOnClickListener(this);
 		mContainerTime.setOnClickListener(this);
 		mContainerPort.setOnClickListener(this);
+		mContainerGetOn.setOnClickListener(this);
+		mContainerGetOff.setOnClickListener(this);
 	}
 
 	@Override
@@ -152,6 +170,14 @@ public class YuyueUI extends BaseActivity implements OnClickListener
 		else if (v == mContainerPort)
 		{
 			doClickPort();
+		}
+		else if (v == mContainerGetOn)
+		{
+			startActivity(GetOnUI.class);
+		}
+		else if (v == mContainerGetOff)
+		{
+			startActivity(GetOffUI.class);
 		}
 	}
 
@@ -267,5 +293,19 @@ public class YuyueUI extends BaseActivity implements OnClickListener
 			}
 		});
 		mBuilder.show();
+	}
+
+	@Override
+	public void onGetOnLocation(Location location)
+	{
+		mYuyueData.getOnLocation = location;
+		mTvGetOn.setText(location.address);
+	}
+
+	@Override
+	public void onGetOffLocation(Location location)
+	{
+		mYuyueData.getOffLocation = location;
+		mTvGetOff.setText(location.address);
 	}
 }

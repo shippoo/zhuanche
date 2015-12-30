@@ -31,6 +31,7 @@ import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.ui.user.MyRouteUI;
 import com.baidu.zhuanche.ui.user.YuYueDetailUI;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
@@ -55,7 +56,7 @@ import com.loopj.android.http.RequestParams;
  */
 public class OrderAdapter extends MyBaseApdater<OrderBean>
 {
-	private User			mUser;
+	private User	mUser;
 
 	public OrderAdapter(Context context, List<OrderBean> dataSource) {
 		super(context, dataSource);
@@ -175,8 +176,10 @@ public class OrderAdapter extends MyBaseApdater<OrderBean>
 				builder.show();
 			}
 		});
-		/** 去付款按钮点击事件*/
-		holder.btPay.setOnClickListener(new MyOnClickLsterner(mContext,holder,bean));
+		/** 去付款按钮点击事件 */
+		holder.btPay.setOnClickListener(new MyOnClickLsterner(mContext, holder, bean));
+		/** 行程点击事件 */
+		holder.btLook.setOnClickListener(new MyOnClickLsterner(mContext, holder, bean));
 		return convertView;
 	}
 
@@ -213,20 +216,22 @@ class MyOnClickLsterner implements OnClickListener
 {
 	private OrderViewHolder	mHolder;
 	private boolean			mIsShow	= false;
-	private List<OrderBean> mDataSource;
+	private List<OrderBean>	mDataSource;
 	private Context			mContext;
 	private OrderBean		mOrderBean;
+
 	public MyOnClickLsterner(OrderViewHolder holder) {
 		mHolder = holder;
 		doIvArrowAnimation();
 	}
 
-	public MyOnClickLsterner(Context context,OrderViewHolder holder, List<OrderBean> dataSource) {
+	public MyOnClickLsterner(Context context, OrderViewHolder holder, List<OrderBean> dataSource) {
 		mContext = context;
 		mDataSource = dataSource;
 		mHolder = holder;
 	}
 
+	/** 我的行程，去付款 初始数值传递 */
 	public MyOnClickLsterner(Context context, OrderViewHolder holder, OrderBean bean) {
 		mContext = context;
 		mHolder = holder;
@@ -239,10 +244,22 @@ class MyOnClickLsterner implements OnClickListener
 		if (v == mHolder.ivArrow)
 		{
 			doIvArrowAnimation();
-		}else if(v == mHolder.btPay){
+		}
+		else if (v == mHolder.btPay)
+		{
 			Intent intent = new Intent(mContext, YuYueDetailUI.class);
 			Bundle bundle = new Bundle();
 			bundle.putSerializable(MyConstains.ITEMBEAN, mOrderBean);
+			intent.putExtra(MyConstains.ITEMBEAN, bundle);
+			mContext.startActivity(intent);
+			((Activity) mContext).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+		}
+		else if (v == mHolder.btLook)
+		{	//查看我的行程
+			Intent intent = new Intent(mContext, MyRouteUI.class);
+			Bundle bundle = new Bundle();
+			bundle.putSerializable(MyConstains.ITEMBEAN, mOrderBean);
+			intent.putExtra(MyConstains.ITEMBEAN, bundle);
 			mContext.startActivity(intent);
 			((Activity) mContext).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 		}
@@ -259,23 +276,23 @@ class MyOnClickLsterner implements OnClickListener
 
 class OrderViewHolder
 {
-	TextView		tvTime;					// 08:00
+	TextView		tvTime;				// 08:00
 	TextView		tvStatus;				// 订单状态
 	TextView		tvLevel;				// 乘车级别 豪华5人座
-	TextView		tvType;					// 类型 专车或者拼车
+	TextView		tvType;				// 类型 专车或者拼车
 	TextView		tvPeople;				// 乘车人数
-	TextView		tvPort;					// 口岸
+	TextView		tvPort;				// 口岸
 	TextView		tvScPosition;			// 上车地点
 	TextView		tvXcPosition;			// 下车地点
 	TextView		tvBudget;				// 预算
 	TextView		tvFee;					// 小费
-	Button			btLook;					// 查看我的行程
+	Button			btLook;				// 查看我的行程
 	Button			btAddFee;				// 加小费
 	Button			btPay;					// 去付款
 	ImageView		ivArrow;				// 箭头
-	
+
 	RelativeLayout	container_daijiedan;	// 待接单状态
-	LinearLayout	container_yiyueyue;		// 已预约状态
+	LinearLayout	container_yiyueyue;	// 已预约状态
 	LinearLayout	container_orderDetail;	// 详情
 }
 

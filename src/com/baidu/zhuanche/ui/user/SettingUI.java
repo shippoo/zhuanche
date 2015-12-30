@@ -132,7 +132,7 @@ public class SettingUI extends BaseActivity implements OnClickListener
 		String url = URLS.BASESERVER + URLS.User.logout;
 		ToastUtils.showProgress(this);
 		client.post(url, new MyAsyncResponseHandler() {
-			
+
 			@Override
 			public void success(String json)
 			{
@@ -141,7 +141,5 @@ public class SettingUI extends BaseActivity implements OnClickListener
 			}
 		});
 	}
-
-
 
 }

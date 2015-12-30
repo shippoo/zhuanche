@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	<include layout="@layout/layout_header" android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#000000" >
+
+        <ImageView
+            android:id="@+id/geton_iv_leftarrow"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:src="@drawable/left_arrow" />
+
+        <SearchView
+            android:id="@+id/geton_searchview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/geton_iv_leftarrow"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bg_search"
+            android:imeOptions="actionGo"
+            android:queryHint="输入地址查询" />
+    </RelativeLayout>
+
+    <!-- 引入布局文件 -->
+
+    <com.amap.api.maps.MapView
+        android:id="@+id/geton_mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
