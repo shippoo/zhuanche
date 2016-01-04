@@ -94,9 +94,9 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 		
 		/** 新闻资讯数据 */
 		List<String> picDatas = new ArrayList<String>(); // TODO 模拟数据
-		picDatas.add("http://192.168.1.131:8080/zc01.jpg");
-		picDatas.add("http://192.168.1.131:8080/zc02.jpg");
-		picDatas.add("http://192.168.1.131:8080/zc03.jpg");
+		picDatas.add("http://192.168.1.142:8080/zc01.jpg");
+		picDatas.add("http://192.168.1.142:8080/zc02.jpg");
+		picDatas.add("http://192.168.1.142:8080/zc03.jpg");
 		picHolder.setDataAndRefreshHolderView(picDatas);
 
 		mListDatas = new ArrayList<String>();
@@ -137,7 +137,7 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 		{
 			if (mUser == null || TextUtils.isEmpty(mUser.mobile))
 			{
-				startActivity(UserLoginSelectUI.class);
+				startActivity(UserLoginUI.class);
 			}
 			else
 			{

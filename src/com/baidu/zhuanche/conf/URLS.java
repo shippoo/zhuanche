@@ -40,7 +40,7 @@ public interface URLS
 		String	hotCity			= "User/User/hotCity";			// 热门城市
 		String	addFee			= "User/User/addFee";
 		String	makeOrder		= "User/User/makeOrder";		// 用戶预约接口
-
+		String  index			= "User/Login/index";
 	}
 
 	/**

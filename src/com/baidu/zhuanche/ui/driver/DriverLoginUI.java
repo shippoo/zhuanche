@@ -119,7 +119,8 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		}
 		else if (v == mBtLogin)
 		{
-			doClickLogin();
+			startActivityAndFinish(DriverHomeUI.class);
+			//doClickLogin(); TODO
 		}
 		else if (v == mTvWangji)
 		{

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:background="#ffffff"
+    android:padding="8dp" >
+
+    <com.baidu.zhuanche.view.CircleImageView
+        android:id="@+id/item_driver_civ_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/photo" />
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/item_driver_civ_photo"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="今天 08:00"
+            android:textColor="#666666"
+            android:textSize="16sp" />
+
+        <TextView
+            style="@style/TextNormalStyle"
+            android:drawableLeft="@drawable/driverhome_01"
+            android:drawablePadding="4dp"
+            android:text="深圳宝安中心"
+            android:textSize="14sp" />
+
+        <TextView
+            style="@style/TextNormalStyle"
+            android:drawableLeft="@drawable/driverhome_02"
+            android:drawablePadding="4dp"
+            android:text="香港九龙"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" >
+
+            <TextView
+                style="@style/TextNormalStyle"
+                android:drawableLeft="@drawable/driverhome_03"
+                android:drawablePadding="4dp"
+                android:text="豪华型5座"
+                android:textSize="14sp" />
+
+            <TextView
+                style="@style/TextNormalStyle"
+                android:layout_marginLeft="10dp"
+                android:drawableLeft="@drawable/driverhome_04"
+                android:drawablePadding="4dp"
+                android:text="专车"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" >
+
+            <TextView
+                style="@style/TextNormalStyle"
+                android:text="价格:"
+                android:textSize="16sp" />
+
+            <TextView
+                style="@style/TextNormalStyle"
+                android:text="120元"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/TextNormalStyle"
+                android:layout_marginLeft="10dp"
+                android:text="小费:"
+                android:textSize="14sp" />
+
+            <TextView
+                style="@style/TextNormalStyle"
+                android:text="￥50"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/ll">
+
+        <TextView
+            android:id="@+id/item_driver_tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="待出发"
+            android:textColor="#f00"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/item_driver_iv_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/driver_03" />
+
+        <ImageView
+            android:layout_width="0.1dp"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:background="#666666" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

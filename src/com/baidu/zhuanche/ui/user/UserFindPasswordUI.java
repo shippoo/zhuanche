@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -125,13 +126,18 @@ public class UserFindPasswordUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "请完善信息!");
 			return;
 		}
-//		if (TextUtils.isEmpty(mVerifyCode))
-//		{
-//			ToastUtils.makeShortText(this, "请先获取验证码!");
-//			return;
-//		}
+		if (TextUtils.isEmpty(mVerifyCode))
+		{
+			ToastUtils.makeShortText(this, "请先获取验证码!");
+			return;
+		}
 		// 传送数据过去 TODO
-		startActivity(UserFindPasswordNextUI.class);
+		Intent intent = new Intent(this, UserFindPasswordNextUI.class);
+		intent.putExtra("code", mVerifyCode);
+		intent.putExtra("mobile", number);
+		startActivity(intent);
+		finish();
+		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 	}
 
 	/** 获取验证码 */
@@ -183,5 +189,9 @@ public class UserFindPasswordUI extends BaseActivity implements OnClickListener
 		});
 		builder.show();
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 }

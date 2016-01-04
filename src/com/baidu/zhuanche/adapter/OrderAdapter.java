@@ -257,9 +257,7 @@ class MyOnClickLsterner implements OnClickListener
 		else if (v == mHolder.btLook)
 		{	//查看我的行程
 			Intent intent = new Intent(mContext, MyRouteUI.class);
-			Bundle bundle = new Bundle();
-			bundle.putSerializable(MyConstains.ITEMBEAN, mOrderBean);
-			intent.putExtra(MyConstains.ITEMBEAN, bundle);
+			intent.putExtra(MyConstains.ITEMBEAN, mOrderBean);
 			mContext.startActivity(intent);
 			((Activity) mContext).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 		}

@@ -49,5 +49,10 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 			finishActivity();
 		}
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		//super.onBackPressed();
+		finishActivity();
+	}
 }

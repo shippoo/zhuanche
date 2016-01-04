@@ -58,12 +58,16 @@
         <activity android:name=".ui.user.UserFindPasswordNextUI" />
         <activity android:name=".ui.user.GetOnUI" />
         <activity android:name=".ui.user.GetOffUI" />
-        <activity android:name=".ui.user.MyRouteUI"/>
+        <activity android:name=".ui.user.MyRouteUI" />
         <!-- 司机端 -->
         <activity android:name=".ui.driver.DriverLoginUI" />
         <activity android:name=".ui.driver.DriverRegistUI" />
         <activity android:name=".ui.driver.DriverFindPasswordUI" />
         <activity android:name=".ui.driver.DriverFindPasswordNextUI" />
+        <activity android:name=".ui.driver.DriverHomeUI" />
+        <activity android:name=".ui.driver.DriverUI" />
+        <activity android:name=".ui.driver.AcceptOrderUI" />
+        <activity android:name=".ui.driver.IdentityCheckUI" />
     </application>
 
 </manifest>

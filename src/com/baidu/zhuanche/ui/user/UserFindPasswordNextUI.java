@@ -8,7 +8,12 @@ import android.widget.EditText;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
+import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
 
 
 /**
@@ -30,6 +35,15 @@ public class UserFindPasswordNextUI extends BaseActivity implements OnClickListe
 	private EditText	mEtPassword;
 	private EditText	mEtRePassword;
 	private Button		mBtConfirm;
+	private String  	mVerifyCode;
+	private String 		mMobile;
+	@Override
+	public void init()
+	{
+		super.init();
+		mVerifyCode = getIntent().getStringExtra("code");
+		mMobile = getIntent().getStringExtra("mobile");
+	}
 	@Override
 	public void initView()
 	{
@@ -77,7 +91,26 @@ public class UserFindPasswordNextUI extends BaseActivity implements OnClickListe
 			ToastUtils.makeShortText(this, "两次输入密码不一致！");
 			return;
 		}
-		ToastUtils.makeShortText(this, "找回密码"); //TODO
+		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
+		String url = URLS.BASESERVER + URLS.User.findPassword;
+		RequestParams params = new RequestParams();
+		params.add("verify", mVerifyCode);
+		params.add("mobile", mMobile);
+		params.add("password", pwd);
+		ToastUtils.showProgress(this);
+		client.post(url, params, new MyAsyncResponseHandler() {
+			
+			@Override
+			public void success(String json)
+			{
+				//加密后的新密码，这里没处理TODO
+				ToastUtils.makeShortText(getApplicationContext(), "修改成功！");
+				//跳转到登陆
+				startActivityAndFinish(UserLoginUI.class);
+			}
+		});
+		
+		
 	}
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="bg">#F6F6F6</color>
+    <color name="textColor">#666666</color>
     <!-- 对话框标题的背景颜色 -->
     <color name="title">#1368AA</color>
     <!-- 对话框中内容 条目的文字颜色 -->
@@ -22,4 +23,6 @@
     <!-- Time-Picker日期选择器 -->
     <color name="colorPrimary">#FF5722</color>
     <color name="white">#ffffff</color>
+    <!-- price颜色 -->
+    <color name="price_color">#FFA55D</color>
 </resources>

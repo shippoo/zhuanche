@@ -139,7 +139,8 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 		mSearchView.setSubmitButtonEnabled(true);
 		mMarkerOptions = new MarkerOptions();
 		mMarkerOptions.title("你的位置");
-		mMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+		//mMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+		mMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pass));
 		/** 通过反射修改searchview 改变其样式 */
 		try
 		{
@@ -319,5 +320,11 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 	@Override
 	public void initView()
 	{
+	}
+	@Override
+	public void onBackPressed()
+	{
+		//super.onBackPressed();
+		finishActivity();
 	}
 }
