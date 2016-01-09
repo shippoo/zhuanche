@@ -2,9 +2,6 @@ package com.baidu.zhuanche.ui.user;
 
 import java.io.File;
 
-import org.apache.http.Header;
-
-import android.content.Intent;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,18 +12,13 @@ import android.widget.ToggleButton;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.base.BaseApplication;
-import com.baidu.zhuanche.bean.User;
-import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.DataCleanManager;
 import com.baidu.zhuanche.utils.FileUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
-import com.baidu.zhuanche.utils.UIUtils;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class SettingUI extends BaseActivity implements OnClickListener
 {

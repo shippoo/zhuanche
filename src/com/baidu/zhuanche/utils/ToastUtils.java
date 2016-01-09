@@ -1,9 +1,9 @@
 package com.baidu.zhuanche.utils;
 
-import com.baidu.zhuanche.view.ProgressDialog;
-
 import android.content.Context;
 import android.widget.Toast;
+
+import com.baidu.zhuanche.view.ProgressDialog;
 
 /**
  * @项目名: ZhuanChe

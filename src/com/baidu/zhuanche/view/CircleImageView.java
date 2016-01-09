@@ -1,8 +1,6 @@
 package com.baidu.zhuanche.view;
 
 
-import com.baidu.zhuanche.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -19,6 +17,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.baidu.zhuanche.R;
 
 public class CircleImageView extends ImageView
 {

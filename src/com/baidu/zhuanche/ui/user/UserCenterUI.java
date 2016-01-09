@@ -2,7 +2,6 @@ package com.baidu.zhuanche.ui.user;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -66,11 +65,10 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		super.initData();
 		mTvTitle.setText("个人中心");
 		mUser = BaseApplication.getUser();
-		ImageUtils i = new ImageUtils(this);
-		i.display(mCivPic, URLS.BASE + mUser.icon);
+		mImageUtils.display(mCivPic, URLS.BASE + mUser.icon);
 		mTvNumber.setText(AtoolsUtil.mobile4(mUser.mobile));
 		mTvName.setText(mUser.username);
-
+		setEmptyView(mListView, "没有订单数据！");
 		/*
 		 * 去网络上加载订单列表数据,加载时显示进度条 加载完成后隐藏进度条
 		 */

@@ -1,18 +1,14 @@
 package com.baidu.zhuanche.utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -24,7 +20,6 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.util.LruCache;
-import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -60,7 +55,6 @@ public class ImageUtils
 		{
 			int maxSize = (int) (Runtime.getRuntime().freeMemory() / 8f + 0.5f);// lru申请的最大内存空间
 
-			Log.d(TAG, "maxSize : " + maxSize);
 			mCaches = new LruCache<String, Bitmap>(maxSize);
 		}
 		if (mHandler == null)
@@ -87,7 +81,6 @@ public class ImageUtils
 		Bitmap bitmap = mCaches.get(url);
 		if (bitmap != null)
 		{
-			Log.d(TAG, "在内存中去图片");
 			// 内存中有
 			iv.setImageBitmap(bitmap);
 			return;
@@ -100,7 +93,6 @@ public class ImageUtils
 			// 存储到内存
 			mCaches.put(url, bitmap);
 
-			Log.d(TAG, "在disk中去图片");
 			// 显示
 			iv.setImageBitmap(bitmap);
 			return;
@@ -216,9 +208,7 @@ public class ImageUtils
 						@Override
 						public void run()
 						{
-							Log.d(TAG, "在net中去图片---");
 							display(mIv, mUrl);
-							Log.d(TAG, "--------------");
 						}
 					});
 				}

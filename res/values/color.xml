@@ -9,7 +9,8 @@
     
     <!-- 分割线的颜色 -->
     <color name="divide_color">#33000000</color>
-    
+    <!-- listview分隔线的颜色 -->
+    <color name="divide_listview_color">#05000000</color>
     <!-- 预约列表信息的字体颜色 -->
     <color name="item_yuyue_textColor">#666666</color>
     
@@ -25,4 +26,6 @@
     <color name="white">#ffffff</color>
     <!-- price颜色 -->
     <color name="price_color">#FFA55D</color>
+    <!-- money背景颜色 -->
+    <color name="bg_money">#ff8c03</color>
 </resources>

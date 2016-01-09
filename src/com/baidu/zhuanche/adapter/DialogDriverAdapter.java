@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.amap.api.mapcore.p;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.MyBaseApdater;
 import com.baidu.zhuanche.utils.UIUtils;

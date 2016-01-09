@@ -47,7 +47,7 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/dl_container_quhao"
             android:background="@null"
-            android:hint="手机号"
+            android:hint="手機號"
             android:inputType="number"
             android:textColor="#ffffff"
             android:textSize="14sp" />
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:background="@null"
-            android:hint="请输入至少6位数密码"
+            android:hint="請輸入至少6位數密碼"
             android:inputType="textPassword"
             android:textColor="#ffffff"
             android:textSize="14sp" />
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="18dp"
-            android:text="记住密码"
+            android:text="記住密碼"
             android:textColor="@drawable/bt_text_main_selector"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -117,7 +117,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/bg_btn_01"
             android:gravity="center"
-            android:text="登陆"
+            android:text="登陸"
             android:textColor="@drawable/bt_text_main_selector" />
     </RelativeLayout>
 
@@ -131,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:text="忘记密码?"
+            android:text="忘記密碼?"
             android:textColor="@drawable/bt_text_main_selector"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -147,7 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:gravity="center_horizontal"
-            android:text="立即注册"
+            android:text="立即註冊"
             android:textColor="@drawable/bt_text_main_selector"
             android:textSize="14sp" />
     </RelativeLayout>

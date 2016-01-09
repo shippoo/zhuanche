@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="100dp"
     android:gravity="center"
     android:background="#ffffff"
     android:orientation="vertical"
@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/item_uh_gridview_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:src="@drawable/gridview_01" />
 
     <TextView

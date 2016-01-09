@@ -3,11 +3,12 @@ package com.baidu.zhuanche.base;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.baidu.zhuanche.bean.User;
-
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
+
+import com.baidu.zhuanche.bean.Driver;
+import com.baidu.zhuanche.bean.User;
 
 
 /**
@@ -27,7 +28,7 @@ public class BaseApplication extends Application
 	private static long			mMainThreadId;
 	private static Handler		mMainThreadHandler;
 	private static User			mUser;
-	
+	private static Driver		mDriver;
 
 	/*--------------- 放置协议内容  begin---------------*/
 	private Map<String, String>	mCacheJsonStringMap	= new HashMap<String, String>();
@@ -62,6 +63,16 @@ public class BaseApplication extends Application
 	public static void setUser(User User)
 	{
 		mUser = User;
+	}
+	
+	public static Driver getDriver()
+	{
+		return mDriver;
+	}
+
+	public static void setDriver(Driver driver)
+	{
+		mDriver = driver;
 	}
 
 	@Override

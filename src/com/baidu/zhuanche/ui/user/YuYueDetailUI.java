@@ -1,13 +1,12 @@
 package com.baidu.zhuanche.ui.user;
 
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
+
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.bean.OrderListBean.OrderBean;
-
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class YuYueDetailUI extends BaseActivity implements OnClickListener
 {

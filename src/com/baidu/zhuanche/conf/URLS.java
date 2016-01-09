@@ -15,7 +15,7 @@ package com.baidu.zhuanche.conf;
  */
 public interface URLS
 {
-	String	BASE		= "http://192.168.1.80";
+	String	BASE		= "http://192.168.1.12";
 	/**
 	 * 基地址
 	 */
@@ -40,7 +40,10 @@ public interface URLS
 		String	hotCity			= "User/User/hotCity";			// 热门城市
 		String	addFee			= "User/User/addFee";
 		String	makeOrder		= "User/User/makeOrder";		// 用戶预约接口
-		String  index			= "User/Login/index";
+		String	index			= "User/Login/index";
+		String	artilce_list	= "User/Login/artilce_list";
+		String	myMessage		= "User/User/myMessage";
+		String	cleanMessage	= "User/User/cleanMessage";
 	}
 
 	/**
@@ -51,9 +54,20 @@ public interface URLS
 	 */
 	public interface Driver
 	{
-		String	login	= "Driver/Login/login";
-		String	regist	= "Driver/Login/register";
-		String	verify	= "Driver/Login/verify";
+		String	login				= "Driver/Login/login";
+		String	regist				= "Driver/Login/register";
+		String	verify				= "Driver/Login/verify";
+		String	todayMoney			= "Driver/Driver/todayMoney";
+		String	myBalance			= "Driver/Driver/myBalance";
+		String	historyMoney		= "Driver/Driver/historyMoney";
+		String	myWithdraw			= "Driver/Driver/myWithdraw";
+		String	todayMoneyList		= "Driver/Driver/todayMoneyList";
+		String	historyMoneyList	= "Driver/Driver/historyMoneyList";
+		String	withdrawApply		= "Driver/Driver/withdrawApply";
+		String	allComment			= "Driver/Driver/allComment";
+		String	orderList			= "Driver/Driver/orderList";
+		String	cleanMessage		= "Driver/Driver/cleanMessage";
+		String	driverMessage		= "Driver/Driver/driverMessage";
 	}
 
 	String	MOBILE			= "mobile";		// 手机号码
@@ -64,4 +78,5 @@ public interface URLS
 	String	CARTYPE			= "cartype";		// 车辆级别
 
 	String	ICON			= "icon";
+	String	CURRENTPAGER	= "currentpager";	// 当前页
 }

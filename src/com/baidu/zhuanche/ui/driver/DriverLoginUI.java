@@ -20,14 +20,11 @@ import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
-import com.baidu.zhuanche.bean.User;
-import com.baidu.zhuanche.bean.UserBean;
+import com.baidu.zhuanche.bean.Driver;
+import com.baidu.zhuanche.bean.DriverBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.ui.user.UserRegistUI;
-import com.baidu.zhuanche.ui.user.YuyueUI;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
-import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -82,7 +79,7 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 	public void initData()
 	{
 		super.initData();
-		mTvTitle.setText("登陆");
+		mTvTitle.setText("登陸");
 		/** 区号适配器数据 */
 		mDatas = new ArrayList<String>();
 		mDatas.add("+86");
@@ -119,8 +116,8 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		}
 		else if (v == mBtLogin)
 		{
-			startActivityAndFinish(DriverHomeUI.class);
-			//doClickLogin(); TODO
+			//startActivityAndFinish(DriverHomeUI.class);
+			doClickLogin(); 
 		}
 		else if (v == mTvWangji)
 		{
@@ -160,12 +157,12 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		mPassword = mEtPassword.getText().toString();
 		if (TextUtils.isEmpty(mNumber))
 		{
-			ToastUtils.makeShortText(this, "请输入手机号码！");
+			ToastUtils.makeShortText(this, "請輸入手機號碼！");
 			return;
 		}
 		if (TextUtils.isEmpty(mPassword))
 		{
-			ToastUtils.makeShortText(this, "请输入密码！");
+			ToastUtils.makeShortText(this, "請輸入密碼！");
 			return;
 		}
 		ToastUtils.showProgress(this);
@@ -198,6 +195,13 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 	private void processJson(String json)
 	{
 		Gson gson = new Gson();
+		DriverBean driverBean = gson.fromJson(json, DriverBean.class);
+		Driver driver = BaseApplication.getDriver();
+		driver = driverBean.content.driver_data;
+		driver.access_token = driverBean.content.access_token;
+		driver.password = mPassword;
+		BaseApplication.setDriver(driver);
+		startActivityAndFinish(DriverHomeUI.class);
 	}
 }
 

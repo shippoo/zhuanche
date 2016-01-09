@@ -1,13 +1,13 @@
 package com.baidu.zhuanche.view;
 
-import com.baidu.zhuanche.R;
-
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.PopupWindow;
+
+import com.baidu.zhuanche.R;
 
 /**
  * @创建者 Administrator

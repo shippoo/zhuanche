@@ -15,8 +15,9 @@ import android.widget.LinearLayout.LayoutParams;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseHolder;
+import com.baidu.zhuanche.bean.UserIndexBean.Banner;
+import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.utils.ImageViewHelper;
-import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.InnerViewPager;
 
@@ -33,7 +34,7 @@ import com.baidu.zhuanche.view.InnerViewPager;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class UserHomePicHolder extends BaseHolder<List<String>> implements OnTouchListener
+public class UserHomePicHolder extends BaseHolder<List<Banner>> implements OnTouchListener
 {
 	private InnerViewPager	mViewPager;
 	private LinearLayout	mContainerPoint;
@@ -49,9 +50,8 @@ public class UserHomePicHolder extends BaseHolder<List<String>> implements OnTou
 	}
 
 	@Override
-	protected void refreshHolderView(List<String> data)
+	protected void refreshHolderView(List<Banner> data)
 	{
-		PrintUtils.print(mData.get(0));
 		mViewPager.setAdapter(new PicturesPagerAdapter());
 		// 添加indicatior
 		for (int i = 0; i < mData.size(); i++)
@@ -161,7 +161,8 @@ public class UserHomePicHolder extends BaseHolder<List<String>> implements OnTou
 			position = position % mData.size();
 			ImageView iv = new ImageView(UIUtils.getContext());
 			iv.setScaleType(ScaleType.FIT_XY);
-			String url = mData.get(position);
+			Banner banner = mData.get(position);
+			String url = URLS.BASE + banner.img;
 			ImageViewHelper.display(iv, url);
 			container.addView(iv);
 			return iv;

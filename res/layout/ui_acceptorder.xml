@@ -18,25 +18,36 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:background="#000000"
                 android:gravity="center"
                 android:orientation="vertical" >
 
-                <ImageView
+                <com.baidu.zhuanche.view.CircleImageView
                     android:id="@+id/acceptorder_iv_photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:layout_marginTop="10dp"
                     android:src="@drawable/photo" />
 
                 <TextView
                     android:id="@+id/acceptorder_tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:text="张小姐"
                     android:textColor="#ffffff"
                     android:textSize="20sp" />
+                
+                <TextView
+                    android:id="@+id/acceptorder_tv_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="13652304622"
+                    android:layout_marginBottom="6dp"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout

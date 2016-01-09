@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 
-import com.amap.api.mapcore.l;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMap.OnMapLongClickListener;
 import com.amap.api.maps.AMap.OnMarkerClickListener;

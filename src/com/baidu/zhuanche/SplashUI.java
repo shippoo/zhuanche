@@ -1,18 +1,12 @@
 package com.baidu.zhuanche;
 
-import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.ui.driver.DriverLoginUI;
-import com.baidu.zhuanche.ui.user.UserHomeUI;
-import com.baidu.zhuanche.ui.user.UserLoginSelectUI;
-import com.baidu.zhuanche.utils.SPUtils;
-
-import android.os.Bundle;
-import android.app.Activity;
-import android.content.Intent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import com.baidu.zhuanche.base.BaseActivity;
+import com.baidu.zhuanche.ui.driver.DriverLoginUI;
+import com.baidu.zhuanche.ui.user.UserHomeUI;
 
 public class SplashUI extends BaseActivity implements OnClickListener
 {

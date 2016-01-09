@@ -23,7 +23,6 @@ import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.ui.driver.DriverFindPasswordNextUI;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.ToastUtils;

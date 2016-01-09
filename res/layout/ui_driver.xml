@@ -7,8 +7,10 @@
 
     <include layout="@layout/layout_header" />
 
-    <ScrollView
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/driver_scrollview"
+        ptr:ptrAnimationStyle="flip"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -59,7 +61,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="张师傅"
+                        android:text="張師傅"
                         android:textColor="#fff"
                         android:textSize="18sp" />
 
@@ -69,6 +71,7 @@
                         android:layout_height="20dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="8dp"
+                        android:isIndicator="true"
                         android:numStars="5"
                         android:progressDrawable="@drawable/layerlist_ratingbar_bg"
                         android:rating="3" />
@@ -89,7 +92,7 @@
                     android:id="@+id/driver_tv_checkidentity"
                     style="@style/ContentMenuStyle"
                     android:drawableTop="@drawable/picture_14"
-                    android:text="身份审核" />
+                    android:text="身份審覈" />
 
                 <TextView
                     android:id="@+id/driver_tv_mymsg"
@@ -101,19 +104,19 @@
                     android:id="@+id/driver_tv_allorder"
                     style="@style/ContentMenuStyle"
                     android:drawableTop="@drawable/picture_16"
-                    android:text="全部订单" />
+                    android:text="全部訂單" />
 
                 <TextView
                     android:id="@+id/driver_tv_myaccount"
                     style="@style/ContentMenuStyle"
                     android:drawableTop="@drawable/picture_17"
-                    android:text="我的账户" />
+                    android:text="我的賬戶" />
 
                 <TextView
                     android:id="@+id/driver_tv_allassess"
                     style="@style/ContentMenuStyle"
                     android:drawableTop="@drawable/driver_05"
-                    android:text="全部评价" />
+                    android:text="全部評價" />
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -127,6 +130,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
-    </ScrollView>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
 </LinearLayout>

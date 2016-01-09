@@ -11,7 +11,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@drawable/bg_gridivew_gray_normal"
         android:padding="10dp" >
 
         <LinearLayout
@@ -19,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:background="@drawable/bg_identity"
+            android:background="@drawable/bg_login"
             android:gravity="center"
             android:orientation="horizontal" >
 
@@ -33,12 +32,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="过境小车"
-                android:textColor="#99000000"
+                android:textColor="@color/textColor"
                 android:textSize="20sp" />
         </LinearLayout>
     </RelativeLayout>
     <!-- 中间方块 -->
 	<com.baidu.zhuanche.view.NoScrolledGridView
+	    android:padding="0.1dp"
 	    android:background="#33000000"
 	    android:id="@+id/uh_gridview" 
 	    android:numColumns="3"

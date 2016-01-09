@@ -1,318 +1,126 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:toggle="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingActivity" >
+    android:background="@color/bg"
+    android:orientation="vertical" >
 
-    <include android:id="@+id/setting_header" layout="@layout/layout_header"/>
+    <include
+        android:id="@+id/setting_header"
+        layout="@layout/layout_header" />
 
-    <LinearLayout
-        android:id="@+id/set_linearLayout_01"
-        android:layout_width="wrap_content"
-        android:layout_height="14dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/setting_header"
-        android:background="#F6F6F6"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/set_image_02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_linearLayout_01"
-        android:src="@drawable/line_page_gray" />
+    <View style="@style/DivideStyle" />
 
     <RelativeLayout
         android:id="@+id/setting_xgpassword"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_image_02" >
+        style="@style/SettingContainerStyle"
+        android:layout_marginTop="20dp" >
 
         <TextView
             android:id="@+id/set_text_02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text="修改密码"
-            android:textColor="#373737"
-            android:textSize="13sp" />
+            style="@style/SettingTextStyle"
+            android:text="修改密码" />
 
-        <ImageView
-            android:id="@+id/set_image_04"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/right_arrow_pressed" />
+        <ImageView style="@style/SettingRightImgStyle" />
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/set_image_05"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/setting_xgpassword"
-        android:src="@drawable/line_page_gray" />
-
-    <RelativeLayout
-        android:id="@+id/set_relativeLayout_03"
-        android:layout_width="wrap_content"
-        android:layout_height="14dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_image_05"
-        android:background="#F6F6F6" >
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/set_image_06"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_relativeLayout_03"
-        android:src="@drawable/line_page_gray" />
 
     <RelativeLayout
         android:id="@+id/setting_container_cache"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_image_06" >
+        style="@style/SettingContainerStyle"
+        android:layout_marginTop="20dp" >
 
         <TextView
             android:id="@+id/set_text_03"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text="清空缓存"
-            android:textColor="#373737"
-            android:textSize="13sp" />
+            style="@style/SettingTextStyle"
+            android:text="清空缓存" />
 
         <TextView
             android:id="@+id/setting_tv_cache"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/set_text_03"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="25dp"
-            android:text="0KB"
-            android:textColor="#999999" />
+            style="@style/SettingRightTextStyle" />
+
+        <ImageView style="@style/SettingRightImgStyle" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/set_image_11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/setting_container_cache"
-        android:src="@drawable/line_page_gray" />
+    <View style="@style/DivideStyle" />
 
     <RelativeLayout
         android:id="@+id/setting_container_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_image_11" >
+        style="@style/SettingContainerStyle" >
 
         <TextView
             android:id="@+id/set_text_04"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text="接收推送"
-            android:textColor="#373737"
-            android:textSize="13sp" />
+            style="@style/SettingTextStyle"
+            android:text="接收推送" />
 
-        <ToggleButton
+        <com.zcw.togglebutton.ToggleButton
             android:id="@+id/setting_tb_toggle"
-            android:layout_width="wrap_content"
+            android:layout_width="54dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="@null"
-            android:background="@drawable/toggle" />
-
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/set_image_07"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/setting_container_msg"
-        android:src="@drawable/line_page_gray" />
 
     <RelativeLayout
-        android:id="@+id/set_relativeLayout_06"
-        android:layout_width="wrap_content"
-        android:layout_height="14dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_image_07"
-        android:background="#F6F6F6" >
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/set_image_08"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_relativeLayout_06"
-        android:src="@drawable/line_page_gray" />
-
-    <RelativeLayout
+        android:layout_marginTop="20dp"
         android:id="@+id/setting_container_check"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_image_08" >
+        style="@style/SettingContainerStyle" >
 
         <TextView
             android:id="@+id/set_text_06"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text="检查更新"
-            android:textColor="#373737"
-            android:textSize="13sp" />
+            style="@style/SettingTextStyle"
+            android:text="检查更新" />
 
-        <ImageView
-            android:id="@+id/set_image_09"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/right_arrow_pressed" />
+        <ImageView style="@style/SettingRightImgStyle" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/set_image_12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/setting_container_check"
-        android:src="@drawable/line_page_gray" />
+    <View style="@style/DivideStyle" />
 
     <RelativeLayout
         android:id="@+id/setting_container_us"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_image_12" >
+        style="@style/SettingContainerStyle" >
 
         <TextView
             android:id="@+id/set_text_07"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text="关于我们"
-            android:textColor="#373737"
-            android:textSize="13sp" />
+            style="@style/SettingTextStyle"
+            android:text="关于我们" />
 
-        <ImageView
-            android:id="@+id/set_image_10"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/right_arrow_pressed" />
+        <ImageView style="@style/SettingRightImgStyle" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/set_image_13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/setting_container_us"
-        android:src="@drawable/line_page_gray" />
+    <View style="@style/DivideStyle" />
 
     <RelativeLayout
         android:id="@+id/setting_container_fankui"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/set_image_13" >
+        style="@style/SettingContainerStyle" >
 
         <TextView
             android:id="@+id/set_text_08"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text="意见反馈"
-            android:textColor="#373737"
-            android:textSize="13sp" />
+            style="@style/SettingTextStyle"
+            android:text="意见反馈" />
 
-        <ImageView
-            android:id="@+id/set_image_15"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15sp"
-            android:src="@drawable/right_arrow_pressed" />
+        <ImageView style="@style/SettingRightImgStyle" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/set_image_14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/setting_container_fankui"
-        android:src="@drawable/line_page_gray" />
+    <View style="@style/DivideStyle" />
+
     <RelativeLayout 
-        android:background="#F6F6F6"
-        android:layout_below="@+id/set_image_14" 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <Button 
-            android:id="@+id/setting_bt_logout"
-            android:layout_height="45dp"
-            android:layout_width="match_parent"
-			android:layout_centerInParent="true"         	   
-            android:gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/bg_btn_01"
-            android:text="退出登录"
-            android:textColor="#666666"
-            android:textSize="19sp"
-            />
-    </RelativeLayout>
-	 
-  
+        android:layout_marginTop="40dp"
+        android:background="@null"
+        style="@style/SettingContainerStyle" >
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/setting_bt_logout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/bg_btn_gray"
+            android:gravity="center"
+            android:text="退出登录"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,11 +1,11 @@
 package com.baidu.zhuanche.utils;
 
 
-import com.baidu.zhuanche.base.BaseApplication;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
+
+import com.baidu.zhuanche.base.BaseApplication;
 
 /**
  * @创建者	 Administrator

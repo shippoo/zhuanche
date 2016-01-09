@@ -1,33 +1,14 @@
 package com.baidu.zhuanche.ui.driver;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
-import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.conf.URLS;
-import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
-import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
-import com.baidu.zhuanche.utils.UIUtils;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.RequestParams;
 
 /**
  * @项目名: 拼车

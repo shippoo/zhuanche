@@ -1,10 +1,10 @@
 package com.baidu.zhuanche.utils;
 
-import com.baidu.zhuanche.conf.MyConstains;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
+import com.baidu.zhuanche.conf.MyConstains;
 
 /**
  * @创建者	 Administrator

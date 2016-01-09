@@ -1,7 +1,6 @@
 package com.baidu.zhuanche.base;
 
 import android.view.View;
-import android.widget.TextView;
 
 /**
  * @param <HOLDERBEANTYPE>

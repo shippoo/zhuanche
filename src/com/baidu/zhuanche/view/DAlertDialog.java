@@ -1,13 +1,8 @@
 package com.baidu.zhuanche.view;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.baidu.zhuanche.R;
 

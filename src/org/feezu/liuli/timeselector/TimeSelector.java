@@ -1,5 +1,13 @@
 package org.feezu.liuli.timeselector;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import org.feezu.liuli.timeselector.Utils.DateUtil;
+import org.feezu.liuli.timeselector.Utils.ScreenUtil;
+import org.feezu.liuli.timeselector.Utils.TextUtil;
+import org.feezu.liuli.timeselector.view.PickerView;
+
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.Dialog;
@@ -10,15 +18,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import org.feezu.liuli.timeselector.Utils.DateUtil;
-import org.feezu.liuli.timeselector.Utils.ScreenUtil;
-import org.feezu.liuli.timeselector.Utils.TextUtil;
-import org.feezu.liuli.timeselector.view.PickerView;
 
 import com.baidu.zhuanche.R;
 

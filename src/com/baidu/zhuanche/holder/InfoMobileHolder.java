@@ -8,7 +8,6 @@ import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseHolder;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.utils.AtoolsUtil;
-import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 
 /**

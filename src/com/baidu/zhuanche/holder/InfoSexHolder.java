@@ -1,8 +1,5 @@
 package com.baidu.zhuanche.holder;
 
-import org.apache.http.Header;
-import org.json.JSONException;
-
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,15 +12,12 @@ import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.base.BaseHolder;
 import com.baidu.zhuanche.bean.User;
-import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
-import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /**

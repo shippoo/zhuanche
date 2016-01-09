@@ -15,11 +15,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
-import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.conf.URLS;

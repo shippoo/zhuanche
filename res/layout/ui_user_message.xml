@@ -1,31 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F6F6"
-    tools:context=".MyMessageActivity" >
+    android:background="@color/bg"
+    android:orientation="vertical" >
 
-	<include android:id="@+id/um_header" layout="@layout/layout_header"/>
+    <include layout="@layout/layout_header" />
 
-    <FrameLayout
+    <ListView
+        android:id="@+id/msg_listview"
+        android:divider="@color/divide_color"
+        android:dividerHeight="0.1dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/um_header" >
+        android:layout_height="match_parent" >
+    </ListView>
 
-        <ListView
-            android:id="@+id/msg_listview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-        <TextView 
-            android:id="@+id/msg_emptymsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:layout_gravity="center"
-            android:text="没有任何消息!"/>
-    </FrameLayout>
-
-
-</RelativeLayout>
+</LinearLayout>

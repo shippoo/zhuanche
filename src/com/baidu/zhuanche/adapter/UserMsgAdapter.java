@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.MyBaseApdater;
 import com.baidu.zhuanche.bean.Msg;
+import com.baidu.zhuanche.utils.AtoolsUtil;
 
 /**
  * @项目名: ZhuanChe
@@ -46,9 +47,9 @@ public class UserMsgAdapter extends MyBaseApdater<Msg>
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		Msg msg = (Msg) getItem(position);
-		holder.tvMsg.setText(msg.msg);
-		holder.tvDate.setText(msg.date);
+		Msg bean = (Msg) getItem(position);
+		holder.tvDate.setText(AtoolsUtil.unixTimeToLocalTime(bean.createtime));
+		holder.tvMsg.setText(bean.content);
 		return convertView;
 	}
 

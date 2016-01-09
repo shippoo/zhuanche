@@ -3,20 +3,17 @@ package com.baidu.zhuanche.ui.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.SystemClock;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.SplashUI;
@@ -24,10 +21,16 @@ import com.baidu.zhuanche.adapter.HomeGridAdapter;
 import com.baidu.zhuanche.adapter.HotAskAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
-import com.baidu.zhuanche.base.MyBaseApdater;
 import com.baidu.zhuanche.bean.User;
+import com.baidu.zhuanche.bean.UserIndexBean;
+import com.baidu.zhuanche.bean.UserIndexBean.Article;
+import com.baidu.zhuanche.bean.UserIndexBean.Banner;
+import com.baidu.zhuanche.bean.UserIndexBean.Cate;
+import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.holder.UserHomePicHolder;
+import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.view.NoScrolledGridView;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -39,7 +42,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
  * @类名: UserHomeUI
  * @创建者: 陈选文
  * @创建时间: 2015-12-26 上午11:37:53
- * @描述: TODO
+ * @描述: 用户首页
  * 
  * @svn版本: $Rev$
  * @更新人: $Author$
@@ -48,30 +51,33 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
  */
 public class UserHomeUI extends BaseActivity implements OnClickListener
 {
-	private PullToRefreshListView	mListView;
-	private LinearLayout			mContainerLogin;	// 点击过境小车登陆
-	private User					mUser;
-	private FrameLayout				mContainerPic;		// 首页轮播图
-	private List<String>			mListDatas;
-	private HotAskAdapter			mAskAdapter;
-	private NoScrolledGridView		mGridView;
-	private List<Integer>			mGridViewDatas;
+	private ListView			mListView;
+	private LinearLayout		mContainerLogin;						// 点击过境小车登陆
+	private User				mUser;
+	private FrameLayout			mContainerPic;							// 首页轮播图
+	private List<Article>		mListDatas	= new ArrayList<Article>();
+	private HotAskAdapter		mAskAdapter;
+	private NoScrolledGridView	mGridView;
+	private List<Cate>			mGridViewDatas;
+	private List<Banner>		mBannerDatas;							// 轮播图数据
+	private int					currentPage	= 1;
 
 	@Override
 	public void initView()
 	{
 		setContentView(R.layout.ui_userhome);
-		mListView = (PullToRefreshListView) findViewById(R.id.home_listview);
+		mListView = (ListView) findViewById(R.id.home_listview);
 		View headerView = View.inflate(this, R.layout.layout_uh_header, null);
 		mContainerPic = (FrameLayout) headerView.findViewById(R.id.uh_container_pic);
 		mContainerLogin = (LinearLayout) headerView.findViewById(R.id.home_container_guojingxiaoche);
 		mGridView = (NoScrolledGridView) headerView.findViewById(R.id.uh_gridview);
 		/** 为pulltorefreshListview添加头 */
-		mListView.setMode(Mode.PULL_FROM_END);
-		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
-		headerView.setLayoutParams(layoutParams);
-		ListView lv = mListView.getRefreshableView();
-		lv.addHeaderView(headerView);
+		//mListView.setMode(Mode.PULL_FROM_END);
+//		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
+//		headerView.setLayoutParams(layoutParams);
+//		ListView lv = mListView.getRefreshableView();
+//		lv.addHeaderView(headerView);
+		mListView.addHeaderView(headerView);
 		mListView.setAdapter(null); // TODO 显示头视图的作用？
 	}
 
@@ -82,30 +88,54 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 
 		mUser = BaseApplication.getUser();
 		mTvTitle.setText("首页");
-		UserHomePicHolder picHolder = new UserHomePicHolder();
-		mContainerPic.addView(picHolder.mHolderView);
-		mGridViewDatas = new ArrayList<Integer>();
-		for(int i = 0; i < 9; i++){
-			mGridViewDatas.add(R.drawable.gridview_01);
-		}
-		mGridView.setAdapter(new HomeGridAdapter(this, mGridViewDatas));
-		
-		
-		
-		/** 新闻资讯数据 */
-		List<String> picDatas = new ArrayList<String>(); // TODO 模拟数据
-		picDatas.add("http://192.168.1.142:8080/zc01.jpg");
-		picDatas.add("http://192.168.1.142:8080/zc02.jpg");
-		picDatas.add("http://192.168.1.142:8080/zc03.jpg");
-		picHolder.setDataAndRefreshHolderView(picDatas);
-
-		mListDatas = new ArrayList<String>();
-		for (int i = 0; i < 10; i++)
-		{
-			mListDatas.add("哈哈哈");
-		}
 		mAskAdapter = new HotAskAdapter(this, mListDatas);
 		mListView.setAdapter(mAskAdapter);
+		/** 数据 */
+		String url = URLS.BASESERVER + URLS.User.index;
+		mClient.post(url, new MyAsyncResponseHandler() {
+
+			@Override
+			public void success(String json)
+			{
+				processJson(json);
+			}
+		});
+	}
+
+	protected void processJson(String json)
+	{
+		Gson gson = new Gson();
+		UserIndexBean userIndexBean = gson.fromJson(json, UserIndexBean.class);
+
+		UserHomePicHolder picHolder = new UserHomePicHolder();
+		mContainerPic.addView(picHolder.mHolderView);
+		mBannerDatas = userIndexBean.content.banner;
+		picHolder.setDataAndRefreshHolderView(mBannerDatas);
+		/** 中间板块数据 */
+		mGridViewDatas = userIndexBean.content.cate;
+		HomeGridAdapter homeGridAdapter = new HomeGridAdapter(this, mGridViewDatas);
+		mGridView.setAdapter(homeGridAdapter);
+		/** 新闻资讯数据 */
+		if (userIndexBean.content.article != null && userIndexBean.content.article.size() > 0)
+		{
+			mListDatas.addAll(userIndexBean.content.article);
+			mAskAdapter.notifyDataSetChanged();
+		}
+		//mListView.onRefreshComplete();
+	}
+
+	protected void loadMore(String json)
+	{
+		Gson gson = new Gson();
+		UserIndexBean userIndexBean = gson.fromJson(json, UserIndexBean.class);
+		/** 新闻资讯数据 */
+		if (userIndexBean.content.article != null && userIndexBean.content.article.size() > 0)
+		{
+			mListDatas.addAll(userIndexBean.content.article);
+			mAskAdapter.notifyDataSetChanged();
+			currentPage++;
+		}
+	//	mListView.onRefreshComplete();
 	}
 
 	@Override
@@ -114,18 +144,32 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 		super.initListener();
 		mIvLeftHeader.setOnClickListener(this);
 		mContainerLogin.setOnClickListener(this);
-		mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		// mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		//
+		// @Override
+		// public void onRefresh(PullToRefreshBase<ListView> refreshView)
+		// {
+		// setPullRefreshListUserLoadMoreData(refreshView);
+		// mListView.postDelayed(new LoadMore(), 1000);
+		// }
+		// });
+		mGridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView)
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				String str = DateUtils.formatDateTime(UserHomeUI.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-				/** 上拉加载数据设置 */
-				mListView.getLoadingLayoutProxy().setRefreshingLabel("正在加载");
-				mListView.getLoadingLayoutProxy().setPullLabel("上拉加载更多");
-				mListView.getLoadingLayoutProxy().setReleaseLabel("释放开始加载");
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最后加载时间:" + str);
-				new MyTask().execute();
+				Bundle bundle = new Bundle();
+				Cate cate = mGridViewDatas.get(position);
+				bundle.putSerializable("cate", cate);
+				startActivity(NewsListUI.class, bundle);
+			}
+		});
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				startActivity(NewsDetailUI.class);
 			}
 		});
 	}
@@ -143,31 +187,31 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 			{
 				startActivity(YuyueUI.class);
 			}
-		}else if(v == mIvLeftHeader){
+		}
+		else if (v == mIvLeftHeader)
+		{
 			finishActivity(SplashUI.class);
 		}
 	}
 
-	private class MyTask extends AsyncTask<Void, Void, List<String>>
+	private class LoadMore implements Runnable
 	{
 
 		@Override
-		protected List<String> doInBackground(Void... params)
+		public void run()
 		{
-			SystemClock.sleep(2000);
-			for (int i = 0; i < 10; i++)
-			{
-				mListDatas.add("哈哈哈");
-			}
-			return mListDatas;
+			/** 数据 */
+			String url = URLS.BASESERVER + URLS.User.index;
+			mClient.post(url, new MyAsyncResponseHandler() {
+
+				@Override
+				public void success(String json)
+				{
+					loadMore(json);
+				}
+			});
 		}
 
-		@Override
-		protected void onPostExecute(List<String> result)
-		{
-			mAskAdapter.notifyDataSetChanged();
-			mListView.onRefreshComplete();
-			super.onPostExecute(result);
-		}
 	}
+
 }

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -56,7 +57,10 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 	private List<String>			mLevelDatas;									// 等级数据
 	private SelectPicPopupWindow	mPopupWindow;
 	private RelativeLayout			mContainerLevel;
-
+	/* 审核的三个状态图标 */
+	private ImageView				mIvStatusCheck;
+	private ImageView				mIvStatusChecking;
+	private ImageView				mIvStatusChecked;
 	private static String			path					= "/sdcard/myHead/";	// sd路径
 	/* 审核数据 */
 	private TextView				mTvLevel;										// 等级
@@ -73,6 +77,9 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 	public void initView()
 	{
 		setContentView(R.layout.ui_identity_check);
+		mIvStatusCheck = (ImageView) findViewById(R.id.ic_iv_status01);
+		mIvStatusChecking = (ImageView) findViewById(R.id.ic_iv_status02);
+		mIvStatusChecked = (ImageView) findViewById(R.id.ic_iv_status03);
 		mContainerLevel = (RelativeLayout) findViewById(R.id.ic_container_level);
 		mTvLevel = (TextView) findViewById(R.id.ic_tv_carlevel);
 		mEtCarpool = (EditText) findViewById(R.id.ic_et_carpool);
@@ -331,7 +338,7 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 	{
 		switch (requestCode)
 		{
-		/* 车牌号 */
+			/* 车牌号 */
 			case 1:
 				if (resultCode == RESULT_OK) // 从相册取
 				{
@@ -384,7 +391,7 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 					}
 				}
 				break;
-				/* 身份证号 */
+			/* 身份证号 */
 			case 20:
 				if (resultCode == RESULT_OK) // 从相册取
 				{

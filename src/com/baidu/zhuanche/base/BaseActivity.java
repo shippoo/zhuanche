@@ -1,17 +1,36 @@
 package com.baidu.zhuanche.base;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.bean.User;
+import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.ui.user.UserHomeUI;
+import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
+import com.baidu.zhuanche.utils.ImageUtils;
 import com.baidu.zhuanche.utils.SPUtils;
+import com.baidu.zhuanche.utils.ToastUtils;
+import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.loopj.android.http.AsyncHttpClient;
 
 /**
  * @创建者 Administrator
@@ -37,16 +56,23 @@ public abstract class BaseActivity extends Activity
 	// 属性
 	public SPUtils							mSpUtils;
 
-	public TextView							mTvTitle;											// 头标题
-	public ImageView						mIvLeftHeader;										// 左菜单
-	public ImageView						mIvRightHeader;										// 右菜单
+	public TextView							mTvTitle;												// 头标题
+	public ImageView						mIvLeftHeader;											// 左菜单
+	public ImageView						mIvRightHeader;
+	public static final String				VALUE_PASS		= "pass_value";						// 传值
+	public AsyncHttpClient					mClient			= AsyncHttpClientUtil.getInstance();
+	public ImageUtils						mImageUtils		= new ImageUtils(this);
+	public Gson								mGson;
+	public boolean							isReceiveDriver	= true; //是否接受司机端消息 默认接受
+	public boolean							isReceiveUser	= true; //是否接受用户端消息 默认接受
 
+	// 右菜单
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		mSpUtils = new SPUtils(this);
-
+		mGson = new Gson();
 		init();
 		initView();
 		initActionBar();
@@ -92,8 +118,7 @@ public abstract class BaseActivity extends Activity
 
 	public void initListener()
 	{
-		// TODO
-
+		
 	}
 
 	/**
@@ -154,7 +179,20 @@ public abstract class BaseActivity extends Activity
 		startActivity(intent);
 		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 	}
-	
+
+	/**
+	 * 开启一个新界面,并携带数据
+	 * 
+	 * @param clazz
+	 */
+	public void startActivity(Class clazz, Bundle bundle)
+	{
+		Intent intent = new Intent(this, clazz);
+		intent.putExtra(VALUE_PASS, bundle);
+		startActivity(intent);
+		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+	}
+
 	/**
 	 * 结束当前界面
 	 * 
@@ -165,6 +203,7 @@ public abstract class BaseActivity extends Activity
 		finish();
 		overridePendingTransition(R.anim.pre_enter, R.anim.pre_exit);
 	}
+
 	/**
 	 * 开启一个新界面,并且结束当前界面
 	 * 
@@ -176,5 +215,94 @@ public abstract class BaseActivity extends Activity
 		startActivity(intent);
 		finish();
 		overridePendingTransition(R.anim.pre_enter, R.anim.pre_exit);
+	}
+
+	/**
+	 * 判段集合是否为空
+	 * 
+	 * @param collection
+	 * @return true :为空；false 不为空
+	 */
+	public boolean isListEmpty(Collection collection)
+	{
+		if (collection.size() > 0 && collection != null) { return false; }
+		return true;
+	}
+
+	/***
+	 * 設置空視圖
+	 * 
+	 * @param listview
+	 * @param msg
+	 *            說明文字
+	 */
+	public void setEmptyView(ListView listview, String msg)
+	{
+		TextView emptyView = new TextView(this);
+		emptyView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		emptyView.setText(msg);
+		emptyView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		emptyView.setVisibility(View.GONE);
+		((ViewGroup) listview.getParent()).addView(emptyView);
+		listview.setEmptyView(emptyView);
+	}
+	/***
+	 * 設置空視圖
+	 * 
+	 * @param listview
+	 * @param msg
+	 *            說明文字
+	 */
+	public void setEmptyView(PullToRefreshListView listview, String msg)
+	{
+		TextView emptyView = new TextView(this);
+		emptyView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		emptyView.setText(msg);
+		emptyView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		emptyView.setVisibility(View.GONE);
+		((ViewGroup) listview.getParent()).addView(emptyView);
+		listview.setEmptyView(emptyView);
+	}
+	/**
+	 * 退出
+	 */
+	public void userLogout()
+	{
+		String url = URLS.BASESERVER + URLS.User.logout;
+		ToastUtils.showProgress(this);
+		mClient.post(url, new MyAsyncResponseHandler() {
+
+			@Override
+			public void success(String json)
+			{
+				ToastUtils.makeShortText(getApplicationContext(), "你已成功退出！");
+				exit();
+			}
+		});
+	}
+	/**
+	 * 上拉加載更多數據設置
+	 * @param refreshView
+	 */
+	public void setPullRefreshListDriverLoadMoreData(PullToRefreshBase<ListView> refreshView)
+	{
+		String str = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+		refreshView.getLoadingLayoutProxy().setRefreshingLabel("正在加載");
+		refreshView.getLoadingLayoutProxy().setPullLabel("上拉加載更多");
+		refreshView.getLoadingLayoutProxy().setReleaseLabel("釋放開始加載");
+		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最後加載時間:" + str);
+	}
+	/**
+	 * 上拉加載更多數據設置
+	 * @param refreshView
+	 */
+	public void setPullRefreshListUserLoadMoreData(PullToRefreshBase<ListView> refreshView)
+	{
+		String str = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+		/** 上拉加载数据设置 */
+		refreshView.getLoadingLayoutProxy().setRefreshingLabel("正在加载");
+		refreshView.getLoadingLayoutProxy().setPullLabel("上拉加载更多");
+		refreshView.getLoadingLayoutProxy().setReleaseLabel("释放开始加载");
+		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最后加载时间:" + str);
 	}
 }

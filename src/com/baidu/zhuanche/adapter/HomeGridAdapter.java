@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.bean.UserIndexBean.Cate;
+import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.utils.ImageUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 
 /**
@@ -27,12 +30,12 @@ import com.baidu.zhuanche.utils.UIUtils;
  */
 public class HomeGridAdapter extends BaseAdapter
 {
-	private Context			mContext;
-	private List<Integer>	mDatas;
+	private Context		mContext;
+	private List<Cate>	mDatas;
 
-	public HomeGridAdapter(Context context, List<Integer> datas) {
+	public HomeGridAdapter(Context context, List<Cate> gridViewDatas) {
 		mContext = context;
-		mDatas = datas;
+		mDatas = gridViewDatas;
 	}
 
 	@Override
@@ -51,26 +54,24 @@ public class HomeGridAdapter extends BaseAdapter
 		{
 			holder = (HomeGridViewHolder) convertView.getTag();
 		}
-		Integer i = (Integer) getItem(position);
-		holder.iv.setImageResource(i);
+		Cate bean = (Cate) getItem(position);
+		ImageUtils imageUtils = new ImageUtils(mContext);
+		imageUtils.display(holder.iv, URLS.BASE + bean.icon);
+		holder.tv.setText(bean.name);
 		return convertView;
 	}
 
 	@Override
 	public int getCount()
 	{
-		if(mDatas != null){
-			return mDatas.size();
-		}
+		if (mDatas != null) { return mDatas.size(); }
 		return 0;
 	}
 
 	@Override
 	public Object getItem(int position)
 	{
-		if(mDatas != null){
-			return mDatas.get(position);
-		}
+		if (mDatas != null) { return mDatas.get(position); }
 		return null;
 	}
 
@@ -85,5 +86,5 @@ public class HomeGridAdapter extends BaseAdapter
 class HomeGridViewHolder
 {
 	ImageView	iv;
-	TextView  	tv;
+	TextView	tv;
 }

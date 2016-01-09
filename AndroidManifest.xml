@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:name=".base.BaseApplication"
@@ -59,6 +60,8 @@
         <activity android:name=".ui.user.GetOnUI" />
         <activity android:name=".ui.user.GetOffUI" />
         <activity android:name=".ui.user.MyRouteUI" />
+        <activity android:name=".ui.user.NewsListUI" />
+        <activity android:name=".ui.user.NewsDetailUI" />
         <!-- 司机端 -->
         <activity android:name=".ui.driver.DriverLoginUI" />
         <activity android:name=".ui.driver.DriverRegistUI" />
@@ -67,7 +70,21 @@
         <activity android:name=".ui.driver.DriverHomeUI" />
         <activity android:name=".ui.driver.DriverUI" />
         <activity android:name=".ui.driver.AcceptOrderUI" />
-        <activity android:name=".ui.driver.IdentityCheckUI" />
+        <activity
+            android:name=".ui.driver.IdentityCheckUI"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity android:name=".ui.driver.DriverAccount" />
+        <activity android:name=".ui.driver.WithDrawRecordUI" />
+        <activity
+            android:name=".ui.driver.ApplyCashUI"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity android:name=".ui.driver.TodayAccoutUI" />
+        <activity android:name=".ui.driver.HistoryAccoutUI" />
+        <activity android:name=".ui.driver.DriverAllAssessUI" />
+        <activity android:name=".ui.driver.DriverMessageUI" />
+        <activity android:name=".ui.driver.DriverAllOrderUI" />
+        <activity android:name=".ui.driver.SettingUI"/>
+        <activity android:name=".ui.driver.FeedBackUI"/>
     </application>
 
 </manifest>

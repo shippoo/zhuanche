@@ -3,22 +3,36 @@ package com.baidu.zhuanche.ui.driver;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
+import android.text.format.DateUtils;
+import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.adapter.DriverOrderListAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.base.MyBaseApdater;
+import com.baidu.zhuanche.base.BaseApplication;
+import com.baidu.zhuanche.bean.Driver;
+import com.baidu.zhuanche.bean.DriverCenterOrderListBean;
+import com.baidu.zhuanche.bean.DriverCenterOrderListBean.OrderBean;
+import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.CircleImageView;
 import com.baidu.zhuanche.view.NoScrollListView;
+import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.loopj.android.http.RequestParams;
 
 /**
  * @项目名: 拼车
@@ -33,25 +47,38 @@ import com.baidu.zhuanche.view.NoScrollListView;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DriverUI extends BaseActivity implements OnClickListener
+public class DriverUI extends BaseActivity implements OnClickListener, OnRefreshListener<ScrollView>
 {
-	private NoScrollListView	mListView;
-	private ScrollView			mScrollView;
-	private CircleImageView     mCivPhoto; //头像
-	private TextView			mTvName; //名称
-	private RatingBar			mRatingBar;
-	
-	private TextView  			mContainerIdentity;
-	private TextView 			mContainerMessage;
-	private TextView			mContainerOrder;
-	private TextView			mContainerAccount;
-	private TextView			mContainerAssess;
+	private NoScrollListView		mListView;
+	private PullToRefreshScrollView	mRefreshScrollView;
+	private ScrollView				mScrollView;
+	private CircleImageView			mCivPhoto;									// 头像
+	private TextView				mTvName;									// 名称
+	private RatingBar				mRatingBar;
+
+	private TextView				mContainerIdentity;
+	private TextView				mContainerMessage;
+	private TextView				mContainerOrder;
+	private TextView				mContainerAccount;
+	private TextView				mContainerAssess;
+	private List<OrderBean>			mDatas		= new ArrayList<OrderBean>();
+	private DriverOrderListAdapter	mAdapter;
+	private Driver					driver;
+	private int						currentPage	= 1;
+
+	@Override
+	public void init()
+	{
+		super.init();
+		driver = BaseApplication.getDriver();
+	}
+
 	@Override
 	public void initView()
 	{
 		setContentView(R.layout.ui_driver);
 		mListView = (NoScrollListView) findViewById(R.id.driver_listview);
-		mScrollView = (ScrollView) findViewById(R.id.driver_scrollview);
+		mRefreshScrollView = (PullToRefreshScrollView) findViewById(R.id.driver_scrollview);
 		mCivPhoto = (CircleImageView) findViewById(R.id.driver_civ_photo);
 		mTvName = (TextView) findViewById(R.id.driver_tv_name);
 		mRatingBar = (RatingBar) findViewById(R.id.driver_ratingbar);
@@ -61,7 +88,7 @@ public class DriverUI extends BaseActivity implements OnClickListener
 		mContainerOrder = (TextView) findViewById(R.id.driver_tv_allorder);
 		mContainerAccount = (TextView) findViewById(R.id.driver_tv_myaccount);
 		mContainerAssess = (TextView) findViewById(R.id.driver_tv_allassess);
-				
+
 	}
 
 	@Override
@@ -71,17 +98,63 @@ public class DriverUI extends BaseActivity implements OnClickListener
 		mTvTitle.setText("我");
 		mIvRightHeader.setVisibility(0);
 		mIvRightHeader.setImageResource(R.drawable.picture_19);
-		List<String> datas = new ArrayList<String>();
-		for (int i = 0; i < 10; i++)
+		mAdapter = new DriverOrderListAdapter(this, mDatas);
+		mRefreshScrollView.setMode(Mode.PULL_FROM_END);
+		mListView.setAdapter(mAdapter);
+		setEmptyView(mListView, "沒有訂單列表數據");
+		mImageUtils.display(mCivPhoto, URLS.BASE + driver.icon);
+		mTvName.setText(driver.username);
+		ToastUtils.showProgress(this);
+		// mRefreshScrollView.smoothScrollTo(0, 0);
+		loadMore();
+	}
+
+	public void loadMore()
+	{
+		String url = URLS.BASESERVER + URLS.Driver.orderList;
+		RequestParams params = new RequestParams();
+		params.add(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
+		params.add("limit", "" + 10);
+		params.add(URLS.CURRENTPAGER, "" + currentPage);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+
+			@Override
+			public void success(String json)
+			{
+				processJson(json);
+			}
+		});
+	}
+
+	protected void processJson(String json)
+	{
+		Gson gson = new Gson();
+		DriverCenterOrderListBean driverOrderListBean = gson.fromJson(json, DriverCenterOrderListBean.class);
+		if (driverOrderListBean.content != null && driverOrderListBean.content.size() > 0)
 		{
-			datas.add("" + i);
+			mDatas.addAll(driverOrderListBean.content);
+			mAdapter.notifyDataSetChanged();
+			currentPage++;
 		}
-		mListView.setAdapter(new DriverOrderListAdapter(this, datas));
-		mScrollView.smoothScrollTo(0, 0);
+		mRefreshScrollView.onRefreshComplete();
+	}
+
+	@SuppressWarnings("deprecation")
+	public void setEmptyView(ListView listview, String msg)
+	{
+		TextView emptyView = new TextView(this);
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		emptyView.setLayoutParams(params);
+		emptyView.setText(msg);
+		emptyView.setPadding(0, UIUtils.dip2Px(100), 0, 0);
+		emptyView.setGravity(Gravity.CENTER);
+		emptyView.setVisibility(View.GONE);
+		((ViewGroup) listview.getParent()).addView(emptyView);
+		listview.setEmptyView(emptyView);
 	}
 
 	@Override
-	public void initListener()    
+	public void initListener()
 	{
 		super.initListener();
 		mIvLeftHeader.setOnClickListener(this);
@@ -91,6 +164,8 @@ public class DriverUI extends BaseActivity implements OnClickListener
 		mContainerOrder.setOnClickListener(this);
 		mContainerAccount.setOnClickListener(this);
 		mContainerAssess.setOnClickListener(this);
+		mRefreshScrollView.setOnRefreshListener(this);
+		mScrollView = mRefreshScrollView.getRefreshableView();
 	}
 
 	@Override
@@ -102,46 +177,60 @@ public class DriverUI extends BaseActivity implements OnClickListener
 		}
 		else if (v == mIvRightHeader)
 		{
-			// TODO 设置按钮
-		}else if(v == mContainerIdentity){
-			startActivity(IdentityCheckUI.class);
-		}else if(v == mContainerMessage){
-			//TODO 我的消息
-			ToastUtils.makeShortText(this, "我的消息");
-		}else if(v == mContainerOrder){
-			//TODO 我的订单
-			ToastUtils.makeShortText(this, "全部订单");
-		}else if(v == mContainerAccount){
-			//TODO 我的账户
-			ToastUtils.makeShortText(this, "我的账户");
-		}else if(v == mContainerMessage){
-			//TODO 全部评价
-			ToastUtils.makeShortText(this, "全部评价");
+			startActivity(SettingUI.class);
 		}
-	}
-
-	class DriverOrderListAdapter extends MyBaseApdater<String>
-	{
-
-		public DriverOrderListAdapter(Context context, List<String> dataSource) {
-			super(context, dataSource);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent)
+		else if (v == mContainerIdentity)
 		{
-			convertView = View.inflate(mContext, R.layout.item_driver_listview, null);
-			return convertView;
+			startActivity(IdentityCheckUI.class);
+		}
+		else if (v == mContainerMessage)
+		{
+			// 我的消息
+			startActivity(DriverMessageUI.class);
+		}
+		else if (v == mContainerOrder)
+		{
+			// 我的订单
+			startActivity(DriverAllOrderUI.class);
+		}
+		else if (v == mContainerAccount)
+		{
+			// 我的账户
+			startActivity(DriverAccount.class);
+		}
+		else if (v == mContainerAssess)
+		{
+			// 全部评价
+			startActivity(DriverAllAssessUI.class);
 		}
 	}
-	private class ViewHolder{
-		
-	}
+
 	@Override
 	public void onBackPressed()
 	{
 		finishActivity();
 	}
 
-	
+	@Override
+	public void onRefresh(PullToRefreshBase<ScrollView> refreshView)
+	{
+		String str = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+		refreshView.getLoadingLayoutProxy().setRefreshingLabel("正在加載");
+		refreshView.getLoadingLayoutProxy().setPullLabel("上拉加載更多");
+		refreshView.getLoadingLayoutProxy().setReleaseLabel("釋放開始加載");
+		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最後加載時間:" + str);
+		mRefreshScrollView.postDelayed(new LoadMore(), 1000);
+	}
+
+	private class LoadMore implements Runnable
+	{
+
+		@Override
+		public void run()
+		{
+
+			loadMore();
+		}
+
+	}
 }

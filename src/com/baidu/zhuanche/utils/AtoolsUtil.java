@@ -3,11 +3,7 @@ package com.baidu.zhuanche.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import android.text.TextUtils;
-
-import com.baidu.zhuanche.conf.MyConstains;
-import com.loopj.android.http.RequestParams;
+import java.util.Date;
 
 /**
  * @项目名: ZhuanChe
@@ -15,7 +11,7 @@ import com.loopj.android.http.RequestParams;
  * @类名: AtoolsUtil
  * @创建者: 陈选文
  * @创建时间: 2015-12-3 下午7:35:14
- * @描述: TODO
+ * @描述: 項目中常用方法抽取
  * 
  * @svn版本: $Rev$
  * @更新人: $Author$
@@ -24,6 +20,27 @@ import com.loopj.android.http.RequestParams;
  */
 public class AtoolsUtil
 {
+	/**
+	 * 获取卡号尾数最后4位
+	 * @param num
+	 * @return
+	 */
+	public static String getEndCardNum(String num){
+		int len = num.length();
+		if(len <= 4){
+			return num;
+		}
+		return num.substring(len - 4);
+	}
+	/**
+	 * 将unix时间转化为Window时间
+	 * @param time
+	 * @return
+	 */
+	public static String unixTimeToLocalTime(String time){
+		long t = Long.parseLong(time) * 1000;
+		return DateFormatUtil.getDateTimeStr(new Date(t));
+	}
 	/**
 	 * 隐藏手机号中间4位
 	 * 
@@ -34,8 +51,10 @@ public class AtoolsUtil
 	{
 		return phone2.substring(0, 3) + "****" + phone2.substring(7, phone2.length());
 	}
+
 	/**
 	 * 字节流转化为字符串
+	 * 
 	 * @param is
 	 * @return
 	 */
@@ -76,5 +95,51 @@ public class AtoolsUtil
 		}
 		return null;
 	}
-	
+
+	/***
+	 * 获取是否是专车或者顺风车
+	 * 
+	 * @param carpool
+	 * @return
+	 */
+	public static String getCarPool(String carpool)
+	{
+		return carpool.equals("1") ? "顺风车" : "专车";
+	}
+
+	/***
+	 * 获取司机端订单状态
+	 * 
+	 * @param status
+	 * @return
+	 */
+	public static String getDriverStatus(String status)
+	{
+		String text = "未知";
+		if ("0".equals(status))
+		{
+			text = "预约中";
+		}
+		else if ("1".equals(status))
+		{
+			text = "已预约";
+		}
+		else if ("2".equals(status))
+		{
+			text = "已付款";
+		}
+		else if ("3".equals(status))
+		{
+			text = "已完成";
+		}
+		else if ("4".equals(status))
+		{
+			text = "已取消";
+		}
+		else if ("5".equals(status))
+		{
+			text = "已确认";
+		}
+		return text;
+	}
 }

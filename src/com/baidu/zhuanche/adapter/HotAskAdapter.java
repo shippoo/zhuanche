@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.MyBaseApdater;
+import com.baidu.zhuanche.bean.UserIndexBean.Article;
+import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.utils.ImageUtils;
 
 /**
  * @项目名: 拼车
@@ -24,12 +27,13 @@ import com.baidu.zhuanche.base.MyBaseApdater;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class HotAskAdapter extends MyBaseApdater<String>
+public class HotAskAdapter extends MyBaseApdater<Article>
 {
 
 	
 
-	public HotAskAdapter(Context context, List<String> dataSource) {
+
+	public HotAskAdapter(Context context, List<Article> dataSource) {
 		super(context, dataSource);
 	}
 
@@ -37,8 +41,7 @@ public class HotAskAdapter extends MyBaseApdater<String>
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		HotAskViewHolder holder = null;
-		if (convertView == null)
-		{
+		if(convertView == null){
 			holder = new HotAskViewHolder();
 			convertView = View.inflate(mContext, R.layout.item_user_home_listview, null);
 			convertView.setTag(holder);
@@ -50,7 +53,11 @@ public class HotAskAdapter extends MyBaseApdater<String>
 		{
 			holder = (HotAskViewHolder) convertView.getTag();
 		}
-
+		Article bean = (Article) getItem(position);
+		holder.tvTitle.setText(bean.title);
+		holder.tvText.setText(bean.content);
+		ImageUtils imageUtils = new ImageUtils(mContext);
+		imageUtils.display(holder.ivIcon, URLS.BASE + bean.img);
 		return convertView;
 	}
 }
