@@ -25,10 +25,10 @@ import com.baidu.zhuanche.utils.UIUtils;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DialogDriverAdapter extends MyBaseApdater<LevelBean>
+public class DialogDriverLevelAdapter extends MyBaseApdater<LevelBean>
 {
 
-	public DialogDriverAdapter(Context context, List<LevelBean> dataSource) {
+	public DialogDriverLevelAdapter(Context context, List<LevelBean> dataSource) {
 		super(context, dataSource);
 	}
 
@@ -51,10 +51,10 @@ public class DialogDriverAdapter extends MyBaseApdater<LevelBean>
 		holder.tvName.setText(bean.name);
 		return convertView;
 	}
+	private class DialogDriverViewHolder
+	{
+		TextView	tvName;
+	}
 
 }
 
-class DialogDriverViewHolder
-{
-	TextView	tvName;
-}

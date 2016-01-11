@@ -58,7 +58,7 @@ public class DriverMessageUI extends BaseActivity implements OnClickListener, On
 		mIvRightHeader.setVisibility(0);
 		mMsgAdapter = new UserMsgAdapter(this, mDatas);
 		mListView.setAdapter(mMsgAdapter);
-		setEmptyView(mListView, "没有相关消息！");
+		setEmptyView(mListView, "沒有相關消息！");
 		ToastUtils.showProgress(this);
 		String url = URLS.BASESERVER + URLS.Driver.driverMessage;
 		RequestParams params = new RequestParams();

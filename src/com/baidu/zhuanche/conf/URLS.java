@@ -68,6 +68,10 @@ public interface URLS
 		String	orderList			= "Driver/Driver/orderList";
 		String	cleanMessage		= "Driver/Driver/cleanMessage";
 		String	driverMessage		= "Driver/Driver/driverMessage";
+		String	enum_				= "Driver/Driver/enum";			// 枚舉值接口
+		String	driverVerify		= "Driver/Driver/driverVerify";
+		String	showVerifyInfo		= "Driver/Driver/showVerifyInfo";
+		String  modifyDriver		= "Driver/Driver/modifyDriver";
 	}
 
 	String	MOBILE			= "mobile";		// 手机号码
@@ -76,7 +80,8 @@ public interface URLS
 	String	ACCESS_TOKEN	= "access_token";	// 全局token
 	String	SEAPORT			= "seaport";		// 港口
 	String	CARTYPE			= "cartype";		// 车辆级别
-
+	String	COMMENT			= "comment";
 	String	ICON			= "icon";
 	String	CURRENTPAGER	= "currentpager";	// 当前页
+	String	TYPE			= "type";			// 枚舉值類型
 }

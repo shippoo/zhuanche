@@ -76,7 +76,7 @@ public class DriverRegistUI extends BaseActivity implements OnClickListener
 	public void initData()
 	{
 		super.initData();
-		mTvTitle.setText("手机注册");
+		mTvTitle.setText("手機註冊");
 		mDatas = new ArrayList<String>();
 		mDatas.add("+86");
 		mDatas.add("+852");
@@ -125,19 +125,19 @@ public class DriverRegistUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "验证码不对！");
 			return;
 		}
-		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
 		String url = URLS.BASESERVER + URLS.Driver.regist;
 		RequestParams params = new RequestParams();
 		params.put(URLS.MOBILE, number);
 		params.put(URLS.PASSWORD, password);
+		params.put("area", quhao.substring(1));
 		params.put(URLS.VERIFY_CODE, code);
-		client.post(url, params, new MyAsyncResponseHandler() {
+		mClient.post(url, params, new MyAsyncResponseHandler() {
 			
 			@Override
 			public void success(String json)
 			{
-				ToastUtils.makeShortText(getApplicationContext(), "注册成功！");
-				/**跳转到登陆*/
+				ToastUtils.makeShortText(getApplicationContext(), "註冊成功，請填寫資料！");
+				/*跳轉到資料審覈頁面*/
 				startActivityAndFinish(DriverLoginUI.class);
 			}
 		});

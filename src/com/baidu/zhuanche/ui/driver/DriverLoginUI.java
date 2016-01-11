@@ -200,6 +200,11 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		driver = driverBean.content.driver_data;
 		driver.access_token = driverBean.content.access_token;
 		driver.password = mPassword;
+		/*判段賬號是否禁用*/
+		if("0".equals(driver.status)){
+			ToastUtils.makeShortText(this, "此帳號被禁用！");
+			return;
+		}
 		BaseApplication.setDriver(driver);
 		startActivityAndFinish(DriverHomeUI.class);
 	}

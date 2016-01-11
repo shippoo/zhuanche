@@ -51,7 +51,7 @@
                         android:layout_below="@id/ic_iv_status01"
                         android:layout_marginLeft="110dp"
                         android:layout_marginTop="10dp"
-                        android:text="身份验证"
+                        android:text="身份驗證"
                         android:textColor="@color/textColor" />
 
                     <View
@@ -76,7 +76,7 @@
                         android:layout_below="@id/ic_iv_status02"
                         android:layout_marginLeft="180dp"
                         android:layout_marginTop="10dp"
-                        android:text="正在审核"
+                        android:text="正在審覈"
                         android:textColor="@color/textColor" />
 
                     <View
@@ -101,7 +101,7 @@
                         android:layout_below="@id/ic_iv_status03"
                         android:layout_marginLeft="250dp"
                         android:layout_marginTop="10dp"
-                        android:text="审核通过"
+                        android:text="審覈通過"
                         android:textColor="@color/textColor" />
 
                     <TextView
@@ -113,7 +113,7 @@
                         android:drawableLeft="@drawable/pictutre_88"
                         android:drawablePadding="4dp"
                         android:gravity="center"
-                        android:text="审核状态"
+                        android:text="審覈狀態"
                         android:textSize="14sp" />
                 </RelativeLayout>
             </RelativeLayout>
@@ -139,11 +139,11 @@
                         android:text="姓名" />
 
                     <EditText
-                        android:id="@+id/ic_tv_name"
+                        android:id="@+id/ic_et_name"
                         style="@style/RightTextStyle"
                         android:layout_toRightOf="@id/ic_tv_titlename"
                         android:background="@null"
-                        android:hint="请填写真实姓名" />
+                        android:hint="請填寫真實姓名" />
                 </RelativeLayout>
 
                 <View
@@ -158,7 +158,7 @@
                     <TextView
                         android:id="@+id/ic_tv_title_carpai"
                         style="@style/LeftTitleTextStyle"
-                        android:text="车牌号" />
+                        android:text="車牌號" />
 
                     <EditText
                         android:id="@+id/ic_et_carnum"
@@ -196,14 +196,14 @@
                     <TextView
                         android:id="@+id/ic_tv_titlecarpool"
                         style="@style/LeftTitleTextStyle"
-                        android:text="车型" />
+                        android:text="車型" />
 
                     <EditText
                         android:id="@+id/ic_et_carpool"
                         style="@style/RightTextStyle"
                         android:layout_toRightOf="@id/ic_tv_titlecarpool"
                         android:background="@null"
-                        android:hint="请填写车型" />
+                        android:hint="請填寫車型" />
                 </RelativeLayout>
 
                 <View
@@ -219,7 +219,7 @@
                     <TextView
                         android:id="@+id/ic_tv_title_carlevel"
                         style="@style/LeftTitleTextStyle"
-                        android:text="车级别" />
+                        android:text="車級別" />
 
                     <TextView
                         android:id="@+id/ic_tv_carlevel"
@@ -289,11 +289,13 @@
                     <TextView
                         android:id="@+id/ic_tv_titlezjzh"
                         style="@style/LeftTitleTextStyle"
-                        android:text="准驾证号" />
+                        android:text="準駕證號" />
 
-                    <TextView
-                        android:id="@+id/ic_tv_zjzh"
+                    <EditText
+                        android:id="@+id/ic_et_zjzh"
                         style="@style/RightTextStyle"
+                         android:hint="請填寫準駕證號"
+                         android:background="@null"
                         android:layout_toRightOf="@id/ic_tv_titlezjzh" />
 
                     <ImageView
@@ -319,11 +321,13 @@
                     <TextView
                         android:id="@+id/ic_tv_title_idcard"
                         style="@style/LeftTitleTextStyle"
-                        android:text="身份证号" />
+                        android:text="身份證號" />
 
-                    <TextView
-                        android:id="@+id/ic_tv_idcard"
+                    <EditText
+                        android:id="@+id/ic_et_idcard"
                         style="@style/RightTextStyle"
+                        android:hint="請填寫身份證號"
+                        android:background="@null"
                         android:layout_toRightOf="@id/ic_tv_title_idcard" />
 
                     <ImageView
@@ -343,7 +347,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/bg_identity"
+                android:background="@drawable/bg_bt_selector"
+                android:textColor="@color/textcolor_order_selector"
                 android:text="提交" />
         </LinearLayout>
     </ScrollView>

@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
+
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -26,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.DialogDriverLevelAdapter;
@@ -47,6 +52,7 @@ import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.SelectPicPopupWindow;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.ResponseHandlerInterface;
 
 /**
  * @项目名: 拼车
@@ -61,7 +67,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class IdentityCheckUI extends BaseActivity implements OnClickListener
+public class RegisterIdentityCheckUI extends BaseActivity implements OnClickListener
 {
 	private Dialog					mDialog;										// 底部对话框
 	private int						selectedLevelPosition	= 0;					// 默认选中位置
@@ -133,7 +139,6 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 
 	private void setDefaultValue()
 	{
-		
 		if("3".equals(mDriver.status) || "2".equals(mDriver.status)){
 			ToastUtils.showProgress(this);
 			String url = URLS.BASESERVER + URLS.Driver.showVerifyInfo;
@@ -147,25 +152,7 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 					processDefaultJson(json);
 				}
 			});
-			/*設置不能輸入框不能用*/
-			enableView(false);
-		}else if("4".equals(mDriver.status)){
-			ToastUtils.showProgress(this);
-			String url = URLS.BASESERVER + URLS.Driver.showVerifyInfo;
-			RequestParams params = new RequestParams();
-			params.put(URLS.ACCESS_TOKEN, mDriver.access_token);
-			mClient.post(url, params, new MyAsyncResponseHandler() {
-				
-				@Override
-				public void success(String json)
-				{
-					processDefaultJson(json);
-				}
-			});
-			/*設置不能輸入框不能用*/
-			enableView(true);
 		}
-		
 	}
 	/**
 	 * 處理默認的json
@@ -183,9 +170,11 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		mEtCarNum.setText(data.carid);
 		mTvSeaport.setText(data.seaport);
 		mEtCarpool.setText(data.type);
-		mImageUtils.display(mIvZjzh, URLS.BASE + data.driverid_pic);
-		mImageUtils.display(mIvIdcard, URLS.BASE +data.citizenid_pic);
-		mImageUtils.display(mIvCarNum, URLS.BASE + data.carid_pic);
+		mImageUtils.display(mIvZjzh, URLS.BASESERVER + data.driverid_pic);
+		mImageUtils.display(mIvIdcard, URLS.BASESERVER +data.citizenid_pic);
+		mImageUtils.display(mIvCarNum, URLS.BASESERVER + data.carid_pic);
+		/*設置不能輸入框不能用*/
+		enableView(false);
 		/*更新数据*/
 		mDriver.status = data.status;
 		BaseApplication.setDriver(mDriver);
@@ -206,7 +195,7 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		mIvIdcard.setEnabled(enabled);
 		mIvZjzh.setEnabled(enabled);
 		mBtSubmit.setEnabled(enabled);
-		mBtSubmit.setBackgroundResource(enabled ? R.drawable.bg_identity:R.drawable.bg_identity_press);
+		mBtSubmit.setBackgroundResource(R.drawable.bg_identity_press);
 	}
 
 	private void setStatusImg()
@@ -215,24 +204,24 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		switch (status)
 		{
 			case 1:
-				mIvStatusCheck.setImageResource(R.drawable.ic_dui_press);
-				mIvStatusChecking.setImageResource(R.drawable.ic_dui_normal);
-				mIvStatusChecked.setImageResource(R.drawable.ic_dui_normal);
+				mIvStatusCheck.setImageResource(R.drawable.dui_pressed);
+				mIvStatusChecking.setImageResource(R.drawable.dui_normal);
+				mIvStatusChecked.setImageResource(R.drawable.dui_normal);
 				break;
 			case 2:
-				mIvStatusCheck.setImageResource(R.drawable.ic_dui_press);
-				mIvStatusChecking.setImageResource(R.drawable.ic_dui_press);
-				mIvStatusChecked.setImageResource(R.drawable.ic_dui_normal);
+				mIvStatusCheck.setImageResource(R.drawable.dui_pressed);
+				mIvStatusChecking.setImageResource(R.drawable.dui_pressed);
+				mIvStatusChecked.setImageResource(R.drawable.dui_normal);
 				break;
 			case 3:
-				mIvStatusCheck.setImageResource(R.drawable.ic_dui_press);
-				mIvStatusChecking.setImageResource(R.drawable.ic_dui_press);
-				mIvStatusChecked.setImageResource(R.drawable.ic_dui_press);
+				mIvStatusCheck.setImageResource(R.drawable.dui_pressed);
+				mIvStatusChecking.setImageResource(R.drawable.dui_pressed);
+				mIvStatusChecked.setImageResource(R.drawable.dui_pressed);
 				break;
 			case 4:
-				mIvStatusCheck.setImageResource(R.drawable.ic_dui_press);
-				mIvStatusChecking.setImageResource(R.drawable.ic_dui_press);
-				mIvStatusChecked.setImageResource(R.drawable.ic_dui_error);
+				mIvStatusCheck.setImageResource(R.drawable.dui_pressed);
+				mIvStatusChecking.setImageResource(R.drawable.dui_pressed);
+				mIvStatusChecked.setImageResource(R.drawable.ic_status_error);
 				break;
 			default:
 				break;

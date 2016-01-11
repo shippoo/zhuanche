@@ -166,6 +166,7 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 		mContainerAssess.setOnClickListener(this);
 		mRefreshScrollView.setOnRefreshListener(this);
 		mScrollView = mRefreshScrollView.getRefreshableView();
+		mCivPhoto.setOnClickListener(this);
 	}
 
 	@Override
@@ -181,7 +182,9 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 		}
 		else if (v == mContainerIdentity)
 		{
-			startActivity(IdentityCheckUI.class);
+			/*如果需求改變，需要調用下面doClickIdentity*/
+			//startActivity(IdentityCheckUI.class);
+			doClickIdentity();
 		}
 		else if (v == mContainerMessage)
 		{
@@ -202,6 +205,20 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 		{
 			// 全部评价
 			startActivity(DriverAllAssessUI.class);
+		}else if(v == mCivPhoto){
+			//完善資料
+			startActivity(CompleteUI.class);
+		}
+	}
+
+	private void doClickIdentity()
+	{
+		/*根據狀態是否審覈成功*/
+		String status = BaseApplication.getDriver().status;
+		if("4".equals(status)){
+			startActivity(IdentityErrorUI.class);
+		}else{
+			startActivity(IdentityCheckUI.class);
 		}
 	}
 

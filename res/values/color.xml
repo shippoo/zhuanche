@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="bg">#F6F6F6</color>
-    <color name="textColor">#666666</color>
+    <color name="textColor">#999999</color>
     <!-- 对话框标题的背景颜色 -->
     <color name="title">#1368AA</color>
     <!-- 对话框中内容 条目的文字颜色 -->
     <color name="item_textColor">#000000</color>
     
     <!-- 分割线的颜色 -->
-    <color name="divide_color">#33000000</color>
+    <color name="divide_color">#E5E5E5</color>
     <!-- listview分隔线的颜色 -->
-    <color name="divide_listview_color">#05000000</color>
+    <color name="divide_listview_color">#E5E5E5</color>
     <!-- 预约列表信息的字体颜色 -->
     <color name="item_yuyue_textColor">#666666</color>
     

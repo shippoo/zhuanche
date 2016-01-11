@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.MyBaseApdater;
 import com.baidu.zhuanche.bean.CartTypeBean.LevelBean;
+import com.baidu.zhuanche.bean.SearportBean.SearPort;
 import com.baidu.zhuanche.utils.UIUtils;
 
 /**
@@ -25,10 +26,10 @@ import com.baidu.zhuanche.utils.UIUtils;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DialogDriverAdapter extends MyBaseApdater<LevelBean>
+public class DialogDriverSeaportAdapter extends MyBaseApdater<SearPort>
 {
 
-	public DialogDriverAdapter(Context context, List<LevelBean> dataSource) {
+	public DialogDriverSeaportAdapter(Context context, List<SearPort> dataSource) {
 		super(context, dataSource);
 	}
 
@@ -47,14 +48,14 @@ public class DialogDriverAdapter extends MyBaseApdater<LevelBean>
 		{
 			holder = (DialogDriverViewHolder) convertView.getTag();
 		}
-		LevelBean bean = (LevelBean) getItem(position);
+		SearPort bean = (SearPort) getItem(position);
 		holder.tvName.setText(bean.name);
 		return convertView;
+	}
+	private class DialogDriverViewHolder
+	{
+		TextView	tvName;
 	}
 
 }
 
-class DialogDriverViewHolder
-{
-	TextView	tvName;
-}
