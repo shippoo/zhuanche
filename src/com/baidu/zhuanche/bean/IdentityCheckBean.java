@@ -35,5 +35,6 @@ public class IdentityCheckBean extends BaseBean
 		public String	type;			// 11111
 		public String	user_id;		// 5
 		public String	status;
+		public String	remark;
 	}
 }

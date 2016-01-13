@@ -71,7 +71,10 @@ public interface URLS
 		String	enum_				= "Driver/Driver/enum";			// 枚舉值接口
 		String	driverVerify		= "Driver/Driver/driverVerify";
 		String	showVerifyInfo		= "Driver/Driver/showVerifyInfo";
-		String  modifyDriver		= "Driver/Driver/modifyDriver";
+		String	modifyDriver		= "Driver/Driver/modifyDriver";
+		String	getModify			= "Driver/Driver/getModify";
+		String	pushMessage			= "Driver/Driver/pushMessage";
+		String	getorderList		= "Driver/Driver/getorderList";
 	}
 
 	String	MOBILE			= "mobile";		// 手机号码

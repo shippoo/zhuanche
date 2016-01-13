@@ -37,7 +37,7 @@ import android.widget.ImageView;
  * 
  * @更新内容: TODO
  */
-public class ImageUtils
+public class CopyOfImageUtils
 {
 	private static final String				TAG			= "ImageUtils";
 	// 保证全局只有一个缓存
@@ -50,7 +50,7 @@ public class ImageUtils
 
 	private Map<String, String>				mHeaders;
 
-	public ImageUtils(Context context) {
+	public CopyOfImageUtils(Context context) {
 		this.mContext = context;
 		if (mCaches == null)
 		{
@@ -190,7 +190,10 @@ public class ImageUtils
 				InputStream is = response.getEntity().getContent();
 
 				// 将流转化为bitmap
-				Bitmap bitmap = BitmapFactory.decodeStream(is);
+				Options opts = new Options();
+				// 代表的是取宽度的1/4 和 高度的 1/4的像素个数 ，实际上就是总像素的原来 1/16
+				opts.inSampleSize = 5;
+				Bitmap bitmap = BitmapFactory.decodeStream(is,null,opts);
 				// 存储到本地
 				save2Disk(mUrl, bitmap);
 
@@ -228,7 +231,7 @@ public class ImageUtils
 		try
 		{
 			stream = new FileOutputStream(file);
-			bitmap.compress(CompressFormat.PNG, 100, stream);
+			bitmap.compress(CompressFormat.PNG, 10, stream);
 		}
 		catch (Exception e)
 		{

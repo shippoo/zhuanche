@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:gravity="top|left"
-            android:hint="請輸入你的寶貴意見"
+            android:hint="请输入你的宝贵意见"
             android:lines="5"
             android:padding="8dp" />
 
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:gravity="top|left"
-            android:hint="請輸入你的郵箱"
+            android:hint="请输入你的邮箱"
             android:lines="1"
             android:padding="8dp" />
 

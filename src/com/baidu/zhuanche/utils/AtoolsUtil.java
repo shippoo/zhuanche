@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+
 /**
  * @项目名: ZhuanChe
  * @包名: com.baidu.zhuanche.utils
@@ -20,27 +25,100 @@ import java.util.Date;
  */
 public class AtoolsUtil
 {
+	public static String getSpace(String range){
+		String space = "";
+		float r = Float.parseFloat(range);
+		if(r >= 1000){
+			space = (r / 1000 + 0.5f) + "km";
+		}else {
+			space = r + "m";
+		}
+		return space;
+	}
+
+	public static String getNumberToGender(String gender)
+	{
+		String sex = "未知";
+		if ("0".equals(gender))
+		{
+			sex = "未知";
+		}
+		else if ("1".equals(gender))
+		{
+			sex = "男";
+		}
+		else if ("2".equals(gender))
+		{
+			sex = "女";
+		}
+		return sex;
+	}
+
+	public static String getGenderToNumber(String gender)
+	{
+		String sex = "0";
+		if ("未知".equals(gender))
+		{
+			sex = "0";
+		}
+		else if ("男".equals(gender))
+		{
+			sex = "1";
+		}
+		else if ("女".equals(gender))
+		{
+			sex = "2";
+		}
+		return sex;
+	}
+
+	/**
+	 * 根據uri獲取圖片
+	 * 
+	 * @param context
+	 * @param uri
+	 * @return Bitmap
+	 */
+	public static Bitmap getBitmapFromUri(Context context, Uri uri)
+	{
+		try
+		{
+			// 读取uri所在的图片
+			Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+			return bitmap;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	/**
 	 * 获取卡号尾数最后4位
+	 * 
 	 * @param num
 	 * @return
 	 */
-	public static String getEndCardNum(String num){
+	public static String getEndCardNum(String num)
+	{
 		int len = num.length();
-		if(len <= 4){
-			return num;
-		}
+		if (len <= 4) { return num; }
 		return num.substring(len - 4);
 	}
+
 	/**
 	 * 将unix时间转化为Window时间
+	 * 
 	 * @param time
 	 * @return
 	 */
-	public static String unixTimeToLocalTime(String time){
+	public static String unixTimeToLocalTime(String time)
+	{
 		long t = Long.parseLong(time) * 1000;
 		return DateFormatUtil.getDateTimeStr(new Date(t));
 	}
+
 	/**
 	 * 隐藏手机号中间4位
 	 * 

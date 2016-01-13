@@ -63,7 +63,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class IdentityCheckUI extends BaseActivity implements OnClickListener
+public class ReIdentityCheckUI extends BaseActivity implements OnClickListener
 {
 	private Dialog					mDialog;										// 底部对话框
 	private int						selectedLevelPosition	= 0;					// 默认选中位置
@@ -135,12 +135,11 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		// 圖標的設置
 		setStatusImg();
 		// 根據狀態設置默認值
-		setDefaultValue();
+		//setDefaultValue();
 	}
 
 	private void setDefaultValue()
 	{
-
 		if ("3".equals(mDriver.status) || "2".equals(mDriver.status))
 		{
 			ToastUtils.showProgress(this);
@@ -158,23 +157,23 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 			/* 設置不能輸入框不能用 */
 			enableView(false);
 		}
-		 else if ("4".equals(mDriver.status))
-		 {
-		 ToastUtils.showProgress(this);
-		 String url = URLS.BASESERVER + URLS.Driver.showVerifyInfo;
-		 RequestParams params = new RequestParams();
-		 params.put(URLS.ACCESS_TOKEN, mDriver.access_token);
-		 mClient.post(url, params, new MyAsyncResponseHandler() {
-		
-		 @Override
-		 public void success(String json)
-		 {
-			 processDefaultJson(json);
-		 }
-		 });
-		 /* 設置不能輸入框能用 */
-		 enableView(true);
-		 }
+		else if ("4".equals(mDriver.status))
+		{
+			ToastUtils.showProgress(this);
+			String url = URLS.BASESERVER + URLS.Driver.showVerifyInfo;
+			RequestParams params = new RequestParams();
+			params.put(URLS.ACCESS_TOKEN, mDriver.access_token);
+			mClient.post(url, params, new MyAsyncResponseHandler() {
+
+				@Override
+				public void success(String json)
+				{
+					processDefaultJson(json);
+				}
+			});
+			/* 設置不能輸入框能用 */
+			enableView(true);
+		}
 
 	}
 
@@ -189,24 +188,23 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		Identity data = identityCheckBean.content;
 		/* 設置默認數據 */
 		mEtName.setText(data.name);
-		mTvLevel.setText(data.cartype);
+		// mTvLevel.setText(data.cartype);
 		mEtIdCard.setText(data.citizenid);
 		mEtZjzh.setText(data.driverid);
 		mEtCarNum.setText(data.carid);
-		mTvSeaport.setText(data.seaport);
+		// mTvSeaport.setText(data.seaport);
 		mEtCarpool.setText(data.type);
-		
+		//對的也要改成錯的
 		CopyOfImageUtils utils = new CopyOfImageUtils(this);
 		utils.display(mIvZjzh, URLS.BASE + data.driverid_pic);
 		utils.display(mIvIdcard, URLS.BASE + data.citizenid_pic);
 		utils.display(mIvCarNum, URLS.BASE + data.carid_pic);
-		mZjzhFile = utils.getBitmapFile(URLS.BASE + data.driverid_pic);
-		mIdcardFile = utils.getBitmapFile(URLS.BASE + data.citizenid_pic);
-		mCarnumFile = utils.getBitmapFile(URLS.BASE + data.carid_pic);
+		mZjzhFile = mImageUtils.getBitmapFile(URLS.BASE + data.driverid_pic);
+		mIdcardFile = mImageUtils.getBitmapFile(URLS.BASE + data.citizenid_pic);
+		mCarnumFile = mImageUtils.getBitmapFile(URLS.BASE + data.carid_pic);
 		/* 更新数据 */
 		mDriver.status = data.status;
 		BaseApplication.setDriver(mDriver);
-		setStatusImg();
 	}
 
 	/**
@@ -227,7 +225,6 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		mEtZjzh.setEnabled(enabled);
 		mEtIdCard.setEnabled(enabled);
 		mIvZjzh.setEnabled(enabled);
-		mBtSubmit.setEnabled(enabled);
 		mBtSubmit.setEnabled(enabled);
 		mBtSubmit.setBackgroundResource(enabled ? R.drawable.bg_identity : R.drawable.bg_identity_press);
 	}
@@ -279,7 +276,12 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 	{
 		if (v == mIvLeftHeader)
 		{
-			finishActivity();
+			if("3".equals(mDriver.status)){
+				finishActivity();
+			}else{
+				startActivityAndFinish(DriverLoginUI.class);
+			}
+			
 		}
 		else if (v == mContainerLevel)
 		{
@@ -332,6 +334,7 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		boolean empty = TextUtils.isEmpty(name) || TextUtils.isEmpty(carid) || TextUtils.isEmpty(driverid)
 						|| TextUtils.isEmpty(citizenid) || TextUtils.isEmpty(type) || TextUtils.isEmpty(level)
 						|| TextUtils.isEmpty(seaport) || carnum == null || zjzh == null || idcard == null;
+		boolean imgEmpty =  carnum == null || zjzh == null || idcard == null;
 		if (TextUtils.isEmpty(name))
 		{
 			ToastUtils.makeShortText(this, "請填寫姓名！");
@@ -368,13 +371,18 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "請填寫口岸！");
 			return;
 		}
-		if (! mIdcardFile.exists()|| !mZjzhFile.exists() || !mCarnumFile.exists())
-		{
-			ToastUtils.makeShortText(this, "请上传照片！");
+		if(imgEmpty){
+			ToastUtils.makeShortText(this, "請上傳圖片！");
 			return;
 		}
-		/*設置輸入框不能用*/
-		enableView(false);
+		// if (!mIdcardFile.exists() || !mZjzhFile.exists() ||
+		// !mCarnumFile.exists())
+		// {
+		// ToastUtils.makeShortText(this, "请上传照片！");
+		// return;
+		// }
+		/* 設置輸入框不能用 */
+
 		ToastUtils.showProgress(this);
 		/* 爲bitmap創建文件 */
 		File dirFile = new File(Environment.getExternalStorageDirectory(), "/myHead/");
@@ -415,6 +423,7 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 			@Override
 			public void success(String json)
 			{
+				enableView(false);
 				processJson(json);
 			}
 		});
@@ -437,8 +446,9 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 			@Override
 			public void success(String json)
 			{
-				// processLookJson(json);
-				processDefaultJson(json);
+				
+				processLookJson(json);
+				//processDefaultJson(json);
 			}
 		});
 	}
@@ -450,7 +460,11 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 	 */
 	protected void processLookJson(String json)
 	{
-		PrintUtils.print("成功 = " + json);
+		IdentityCheckBean identityCheckBean = mGson.fromJson(json, IdentityCheckBean.class);
+		Identity identity = identityCheckBean.content;
+		mDriver.status = identity.status;
+		BaseApplication.setDriver(mDriver);
+		setStatusImg();
 	}
 
 	/** 港口對話框 */
@@ -479,6 +493,8 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 			mBtCancel = (Button) mDialog.findViewById(R.id.dialog_cancel);
 			mBtOK = (Button) mDialog.findViewById(R.id.dialog_ok);
 			mListView = (ListView) mDialog.findViewById(R.id.dialog_listview);
+			TextView tv = (TextView) mDialog.findViewById(R.id.dialog_title);
+			tv.setText("口岸");
 			// 设置点击事件
 			mBtCancel.setOnClickListener(this);
 			mBtOK.setOnClickListener(new OnClickListener() {
@@ -558,8 +574,6 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 			mDialog.setContentView(R.layout.layout_dialog);
 			mBtCancel = (Button) mDialog.findViewById(R.id.dialog_cancel);
 			mBtOK = (Button) mDialog.findViewById(R.id.dialog_ok);
-			TextView tv = (TextView) mDialog.findViewById(R.id.dialog_title);
-			tv.setText("口岸");
 			mListView = (ListView) mDialog.findViewById(R.id.dialog_listview);
 			// 设置点击事件
 			mBtCancel.setOnClickListener(this);
@@ -620,7 +634,11 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 	@Override
 	public void onBackPressed()
 	{
-		finishActivity();
+		if("3".equals(mDriver.status)){
+			finishActivity();
+		}else{
+			startActivityAndFinish(DriverLoginUI.class);
+		}
 	}
 
 	/**
@@ -864,8 +882,8 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 250);
-		intent.putExtra("outputY", 250);
+		intent.putExtra("outputX", 150);
+		intent.putExtra("outputY", 150);
 		intent.putExtra("return-data", true);
 		startActivityForResult(intent, requestCode);
 	}

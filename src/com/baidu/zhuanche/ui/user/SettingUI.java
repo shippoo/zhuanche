@@ -2,25 +2,28 @@ package com.baidu.zhuanche.ui.user;
 
 import java.io.File;
 
+import android.content.Intent;
 import android.text.format.Formatter;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+
+import cn.jpush.android.api.JPushInterface;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.conf.URLS;
-import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
+import com.baidu.zhuanche.ui.driver.DriverAboutUsUI;
 import com.baidu.zhuanche.utils.DataCleanManager;
 import com.baidu.zhuanche.utils.FileUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
-import com.loopj.android.http.AsyncHttpClient;
+import com.zcw.togglebutton.ToggleButton;
+import com.zcw.togglebutton.ToggleButton.OnToggleChanged;
 
-public class SettingUI extends BaseActivity implements OnClickListener
+public class SettingUI extends BaseActivity implements OnClickListener, OnToggleChanged
 {
 	private RelativeLayout	mContainerPassword;
 	private RelativeLayout	mContainerCache;
@@ -31,6 +34,7 @@ public class SettingUI extends BaseActivity implements OnClickListener
 	private Button			mBtLogout;
 	private TextView		mTvCache;
 	private ToggleButton	mTbToggle;
+	private TextView		mTvSet07;
 
 	@Override
 	public void initView()
@@ -45,6 +49,7 @@ public class SettingUI extends BaseActivity implements OnClickListener
 		mTvCache = (TextView) findViewById(R.id.setting_tv_cache);
 		mTbToggle = (ToggleButton) findViewById(R.id.setting_tb_toggle);
 		mBtLogout = (Button) findViewById(R.id.setting_bt_logout);
+		mTvSet07 = (TextView) findViewById(R.id.set_text_07);
 	}
 
 	@Override
@@ -52,6 +57,16 @@ public class SettingUI extends BaseActivity implements OnClickListener
 	{
 		super.initData();
 		mTvTitle.setText("设置");
+		if (isReceiveUser)
+		{
+			mTbToggle.toggleOn();
+			JPushInterface.resumePush(getApplicationContext());
+		}
+		else
+		{
+			mTbToggle.toggleOff();
+			JPushInterface.stopPush(getApplicationContext());
+		}
 		mTvCache.setText(Formatter.formatFileSize(this, getCache()));
 	}
 
@@ -83,6 +98,11 @@ public class SettingUI extends BaseActivity implements OnClickListener
 		mContainerPassword.setOnClickListener(this);
 		mContainerCache.setOnClickListener(this);
 		mBtLogout.setOnClickListener(this);
+		mTbToggle.setOnToggleChanged(this);
+		mContainerFanKui.setOnClickListener(this);
+		mContainerUs.setOnClickListener(this);
+		mContainerCheck.setOnClickListener(this);
+		mTvSet07.setOnClickListener(this);
 	}
 
 	@Override
@@ -97,41 +117,55 @@ public class SettingUI extends BaseActivity implements OnClickListener
 		}
 		else if (v == mContainerCache)
 		{
-			if (getCache() == 0)
-			{
-				ToastUtils.makeShortText(this, "没有缓存！");
-			}
-			else
-			{
-				ToastUtils.makeShortText(this, "清理" + Formatter.formatFileSize(this, getCache()) + "缓存！");
-				DataCleanManager.cleanCustomCache(FileUtils.getIconDir());
-				DataCleanManager.cleanCustomCache(FileUtils.getCacheDir());
-				mTvCache.setText(Formatter.formatFileSize(this, getCache()));
-			}
+			clearCache();
 		}
 		else if (v == mBtLogout)
 		{
-			logout();
+			userLogout();
+		}
+		else if (v == mContainerUs)
+		{
+			startActivity(CopyOfFeedBackUI.class);	
+		}
+		else if (v == mContainerFanKui)
+		{
+			startActivity(FeedBackUI.class);
+		}
+		
+		else if (v == mContainerCheck)
+		{
+			ToastUtils.makeShortText(this, "当前已经是最新版本！");
 		}
 	}
 
-	/**
-	 * 退出
-	 */
-	private void logout()
+	public void clearCache()
 	{
-		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
-		String url = URLS.BASESERVER + URLS.User.logout;
-		ToastUtils.showProgress(this);
-		client.post(url, new MyAsyncResponseHandler() {
-
-			@Override
-			public void success(String json)
-			{
-				ToastUtils.makeShortText(getApplicationContext(), "你已经成功退出！");
-				exit();
-			}
-		});
+		if (getCache() == 0)
+		{
+			ToastUtils.makeShortText(this, "没有缓存！");
+		}
+		else
+		{
+			ToastUtils.makeShortText(this, "清理" + Formatter.formatFileSize(this, getCache()) + "缓存！");
+			DataCleanManager.cleanCustomCache(FileUtils.getIconDir());
+			DataCleanManager.cleanCustomCache(FileUtils.getCacheDir());
+			mTvCache.setText(Formatter.formatFileSize(this, getCache()));
+		}
 	}
 
+	@Override
+	public void onToggle(boolean on)
+	{
+		isReceiveUser = on;
+		if (on)
+		{
+			JPushInterface.resumePush(getApplicationContext());
+		}
+		else
+		{
+			JPushInterface.stopPush(getApplicationContext());
+		}
+	}
+
+	
 }

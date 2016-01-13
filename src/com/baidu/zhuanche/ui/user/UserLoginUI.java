@@ -24,6 +24,7 @@ import com.baidu.zhuanche.bean.UserBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
+import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -167,6 +168,7 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 		RequestParams params = new RequestParams();
 		params.add("mobile", mNumber);
 		params.add("password", mPassword);
+		params.add("receive_id", MD5Utils.encode(mNumber));
 		client.post(url, params, new MyAsyncResponseHandler() {
 			@Override
 			public void success(String json)

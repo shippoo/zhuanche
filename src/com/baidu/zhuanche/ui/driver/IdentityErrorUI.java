@@ -3,9 +3,16 @@ package com.baidu.zhuanche.ui.driver;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
+import com.baidu.zhuanche.base.BaseApplication;
+import com.baidu.zhuanche.bean.IdentityCheckBean;
+import com.baidu.zhuanche.bean.IdentityCheckBean.Identity;
+import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 /**
  * @项目名: 拼车
@@ -22,6 +29,7 @@ import com.baidu.zhuanche.base.BaseActivity;
  */
 public class IdentityErrorUI extends BaseActivity implements OnClickListener
 {
+	private TextView mTvDes;
 	private Button	mBtReEdit;
 
 	@Override
@@ -29,6 +37,7 @@ public class IdentityErrorUI extends BaseActivity implements OnClickListener
 	{
 		setContentView(R.layout.ui_identity_error);
 		mBtReEdit = (Button) findViewById(R.id.error_bt_reedit);
+		mTvDes = (TextView) findViewById(R.id.error_tv_des);
 	}
 
 	@Override
@@ -36,6 +45,24 @@ public class IdentityErrorUI extends BaseActivity implements OnClickListener
 	{
 		super.initData();
 		mTvTitle.setText("審覈失敗");
+		String url = URLS.BASESERVER + URLS.Driver.showVerifyInfo;
+		RequestParams params = new RequestParams();
+		params.add(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+			
+			@Override
+			public void success(String json)
+			{
+				processJson(json);
+			}
+		});
+	}
+
+	protected void processJson(String json)
+	{
+		IdentityCheckBean identityCheckBean = mGson.fromJson(json, IdentityCheckBean.class);
+		Identity identity = identityCheckBean.content;
+		mTvDes.setText(identity.remark);
 	}
 
 	@Override
@@ -54,7 +81,7 @@ public class IdentityErrorUI extends BaseActivity implements OnClickListener
 		}
 		else if (v == mBtReEdit)
 		{
-			startActivityAndFinish(IdentityCheckUI.class);
+			startActivityAndFinish(ReIdentityCheckUI.class);
 		}
 	}
 

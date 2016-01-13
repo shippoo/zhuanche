@@ -7,6 +7,8 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import cn.jpush.android.api.JPushInterface;
+
 import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.User;
 
@@ -93,9 +95,8 @@ public class BaseApplication extends Application
 
 		// 4.用户信息
 		mUser = new User();
-		// 5.百度地图初始化
-		// 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
-		//SDKInitializer.initialize(this);
+		JPushInterface.setDebugMode(true);
+	    JPushInterface.init(this);
 		super.onCreate();
 	}
 }

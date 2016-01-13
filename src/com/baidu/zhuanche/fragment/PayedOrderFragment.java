@@ -51,6 +51,13 @@ public class PayedOrderFragment extends BaseFragment implements OnRefreshListene
 	}
 
 	@Override
+	public void onPause()
+	{
+		currentPage = 1;
+		super.onPause();
+	}
+
+	@Override
 	public void initData()
 	{
 		mListView.setMode(Mode.PULL_FROM_END);

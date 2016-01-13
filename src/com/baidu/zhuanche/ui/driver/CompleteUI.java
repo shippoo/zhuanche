@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,19 +21,20 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.DialogSexAdapter;
@@ -41,6 +45,8 @@ import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.Sex;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.utils.AtoolsUtil;
+import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.PhotoUtilChange;
 import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
@@ -66,7 +72,7 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 {
 	private Bitmap					head;										// 头像Bitmap
 	private static String			path				= "/sdcard/myHead/";	// sd路径
-	private String					mHeadName			= "head.jpg";
+	private String					mHeadName			= "head1.jpg";
 	private CircleImageView			mCivPic;
 	private TextView				mTvMobile;
 	private EditText				mEtName;
@@ -87,7 +93,8 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 	private QuhaoAdapter			mQuhaoAdapter;
 	private SelectPicPopupWindow	mPopupWindow;
 	private TextView				mTvMainQuhao;
-	private Driver	mDriver;
+	private Driver					mDriver;
+
 	@Override
 	public void initView()
 	{
@@ -110,6 +117,48 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		super.initData();
 		mTvTitle.setText("完善資料");
 		mDriver = BaseApplication.getDriver();
+		mTvMainQuhao.setText(TextUtils.isEmpty(mDriver.area) ? "" : "+" + mDriver.area);
+		mTvMobile.setText(mDriver.mobile);
+		ToastUtils.showProgress(this);
+		String url = URLS.BASESERVER + URLS.Driver.getModify;
+		RequestParams params = new RequestParams();
+		params.put(URLS.ACCESS_TOKEN, mDriver.access_token);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+
+			@Override
+			public void success(String json)
+			{
+				try
+				{
+					processDefaultJson(json);
+				}
+				catch (JSONException e)
+				{
+					PrintUtils.print("json解析異常！");
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	protected void processDefaultJson(String json) throws JSONException
+	{
+		JSONObject content = JsonUtils.getContent(json);
+		String icon = content.getString("icon");
+		String gender = content.getString("gender");
+		String area1 = content.getString("area1");
+		String mobile1 = content.getString("mobile1");
+		String username = content.getString("username");
+		mImageUtils.display(mCivPic, URLS.BASE + icon);
+		mEtName.setText(username);
+		mTvSex.setText(gender);
+		mTvQuhao.setText("+" + area1);
+		mEtBackupMobile.setText(mobile1);
+		mTvSex.setText(gender);
+		mDriver.icon = icon;
+		mDriver.username = username;
+		mDriver.gender = AtoolsUtil.getGenderToNumber(gender);
+		BaseApplication.setDriver(mDriver);
 	}
 
 	@Override
@@ -118,6 +167,7 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		mIvLeftHeader.setOnClickListener(this);
 		mContainerQuhao.setOnClickListener(this);
 		mContainerSex.setOnClickListener(this);
+		mTvSex.setOnClickListener(this);
 		mCivPic.setOnClickListener(this);
 		mBtConfirm.setOnClickListener(this);
 	}
@@ -150,7 +200,9 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		else if (v == mCivPic)
 		{
 			setOnModifyIcon(mCivPic, mHeadName);
-		}else if( v== mBtConfirm){
+		}
+		else if (v == mBtConfirm)
+		{
 			try
 			{
 				confirm();
@@ -159,53 +211,73 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 			{
 				e.printStackTrace();
 			}
+		}else if(v == mTvSex){
+			showSexDialog();
 		}
 	}
 
 	private void confirm() throws FileNotFoundException
 	{
-		/*判段值不能为空*/
-		String area = mTvMainQuhao.getText().toString().replace("+", "");
+		/* 判段值不能为空 */
 		String username = mEtName.getText().toString().trim();
 		String gender = selectedSexPosition + "";
 		String area1 = mTvQuhao.getText().toString().replace("+", "");
 		String mobile1 = mEtBackupMobile.getText().toString().trim();
-		boolean b  = TextUtils.isEmpty(area) || TextUtils.isEmpty(username)
-				|| TextUtils.isEmpty(gender) || TextUtils.isEmpty(area1) || TextUtils.isEmpty(mobile1);
-		if(b){
+		boolean b = TextUtils.isEmpty(username)
+					|| TextUtils.isEmpty(gender) || TextUtils.isEmpty(area1) || TextUtils.isEmpty(mobile1);
+		if (b)
+		{
 			ToastUtils.makeShortText(this, "请完善资料！");
 			return;
 		}
 		/* 爲bitmap創建文件 */
 		File dirFile = new File(Environment.getExternalStorageDirectory(), "/myHead/");
 		File headFile = new File(dirFile, mHeadName);
+		if(!headFile.exists()){
+			ToastUtils.makeShortText(this, "上傳圖片不存在！");
+			return;
+		}
 		String url = URLS.BASESERVER + URLS.Driver.modifyDriver;
 		RequestParams params = new RequestParams();
 		params.put(URLS.ACCESS_TOKEN, mDriver.access_token);
-		params.put("area", area);
 		params.put("username", username);
 		params.put("gender", gender);
 		params.put("area1", area1);
 		params.put("mobile1", mobile1);
 		params.put("icon", headFile);
 		mClient.post(url, params, new MyAsyncResponseHandler() {
-			
+
 			@Override
 			public void success(String json)
 			{
 				ToastUtils.makeShortText(UIUtils.getContext(), "修改成功！");
+				if (mListener != null)
+				{
+					if(head != null){
+						mListener.onModify(head);
+					}
+				}
+				finishActivity();
 			}
 		});
 	}
-
-
+	public static OnModifyListener mListener;
+	public static void setOnModifyListener(OnModifyListener listener){
+		mListener = listener;
+	}
+	/**
+	 * 修改成功之後的接口回調
+	 */
+	public interface OnModifyListener{
+		void onModify(Bitmap bitmap);
+	}
 	/** 区号选择 */
 	private void doClickQuhao()
 	{
 		AlertDialog.Builder builder = new Builder(this);
 		mQuhaoDatas = new ArrayList<String>();
 		mQuhaoDatas.add("+86");
-		mQuhaoDatas.add("+852"    );
+		mQuhaoDatas.add("+852");
 		mQuhaoAdapter = new QuhaoAdapter(this, mQuhaoDatas);
 		builder.setAdapter(mQuhaoAdapter, new DialogInterface.OnClickListener() {
 
@@ -267,6 +339,7 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 	private void loadData()
 	{
 		mDatas = new ArrayList<Sex>();
+		mDatas.add(new Sex("未知", "0"));
 		mDatas.add(new Sex("男", "1"));
 		mDatas.add(new Sex("女", "2"));
 		mAdapter = new DialogSexAdapter(this, mDatas);
@@ -278,7 +351,7 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
 				view.setSelected(true);
-				selectedSexPosition = position + 1;
+				selectedSexPosition = position;
 			}
 		});
 		mDialog.show();
@@ -423,4 +496,6 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 
 		}
 	}
+
+
 }

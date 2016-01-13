@@ -2,11 +2,14 @@ package com.baidu.zhuanche.base;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -18,19 +21,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.bean.Driver;
+import com.baidu.zhuanche.bean.DriverBean;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.ui.user.UserHomeUI;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.ImageUtils;
+import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.SPUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
 
 /**
  * @创建者 Administrator
@@ -63,8 +68,12 @@ public abstract class BaseActivity extends Activity
 	public AsyncHttpClient					mClient			= AsyncHttpClientUtil.getInstance();
 	public ImageUtils						mImageUtils		= new ImageUtils(this);
 	public Gson								mGson;
-	public boolean							isReceiveDriver	= true; //是否接受司机端消息 默认接受
-	public boolean							isReceiveUser	= true; //是否接受用户端消息 默认接受
+	public boolean							isReceiveDriver	= true;								// 是否接受司机端消息
+																									// 默认接受
+	public boolean							isReceiveUser	= true;								// 是否接受用户端消息
+																									// 默认接受
+
+	public Timer							mTimer;
 
 	// 右菜单
 	@Override
@@ -73,6 +82,7 @@ public abstract class BaseActivity extends Activity
 		super.onCreate(savedInstanceState);
 		mSpUtils = new SPUtils(this);
 		mGson = new Gson();
+		mTimer = new Timer();
 		init();
 		initView();
 		initActionBar();
@@ -118,7 +128,7 @@ public abstract class BaseActivity extends Activity
 
 	public void initListener()
 	{
-		
+
 	}
 
 	/**
@@ -130,6 +140,11 @@ public abstract class BaseActivity extends Activity
 		for (BaseActivity activity : allActivitys)
 		{
 			activity.finish();
+		}
+		if (mTimer != null)
+		{
+			mTimer.cancel();
+			mTimer = null;
 		}
 	}
 
@@ -246,6 +261,7 @@ public abstract class BaseActivity extends Activity
 		((ViewGroup) listview.getParent()).addView(emptyView);
 		listview.setEmptyView(emptyView);
 	}
+
 	/***
 	 * 設置空視圖
 	 * 
@@ -263,6 +279,7 @@ public abstract class BaseActivity extends Activity
 		((ViewGroup) listview.getParent()).addView(emptyView);
 		listview.setEmptyView(emptyView);
 	}
+
 	/**
 	 * 退出
 	 */
@@ -280,8 +297,10 @@ public abstract class BaseActivity extends Activity
 			}
 		});
 	}
+
 	/**
 	 * 上拉加載更多數據設置
+	 * 
 	 * @param refreshView
 	 */
 	public void setPullRefreshListDriverLoadMoreData(PullToRefreshBase<ListView> refreshView)
@@ -292,8 +311,10 @@ public abstract class BaseActivity extends Activity
 		refreshView.getLoadingLayoutProxy().setReleaseLabel("釋放開始加載");
 		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最後加載時間:" + str);
 	}
+
 	/**
 	 * 上拉加載更多數據設置
+	 * 
 	 * @param refreshView
 	 */
 	public void setPullRefreshListUserLoadMoreData(PullToRefreshBase<ListView> refreshView)
@@ -305,4 +326,18 @@ public abstract class BaseActivity extends Activity
 		refreshView.getLoadingLayoutProxy().setReleaseLabel("释放开始加载");
 		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最后加载时间:" + str);
 	}
+
+	/**
+	 * 获取Android手机唯一标志串
+	 * 
+	 * @return DEVICE_ID
+	 */
+	public String getDeviceId()
+	{
+		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String DEVICE_ID = tm.getDeviceId();
+		PrintUtils.print("设备id=" + DEVICE_ID);
+		return DEVICE_ID;
+	}
+	
 }

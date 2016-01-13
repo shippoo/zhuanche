@@ -24,6 +24,7 @@ import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
+import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 import com.loopj.android.http.AsyncHttpClient;
@@ -131,6 +132,7 @@ public class DriverRegistUI extends BaseActivity implements OnClickListener
 		params.put(URLS.PASSWORD, password);
 		params.put("area", quhao.substring(1));
 		params.put(URLS.VERIFY_CODE, code);
+		params.put("receive_id", MD5Utils.encode(number));
 		mClient.post(url, params, new MyAsyncResponseHandler() {
 			
 			@Override

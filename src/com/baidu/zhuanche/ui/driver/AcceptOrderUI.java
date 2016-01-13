@@ -13,6 +13,7 @@ import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.DriverCenterOrderListBean.OrderBean;
+import com.baidu.zhuanche.bean.DriverHomeBean.DriverHomeOrder;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.utils.AtoolsUtil;
 import com.baidu.zhuanche.utils.DateFormatUtil;
@@ -42,23 +43,23 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 	private TextView		mTvGetOn;		// 上车地点
 	private TextView		mTvGetOff;		// 下车地点
 	private TextView		mTvLevel;		// 等级
-	private TextView		mTvCarPool;	// 类型
-	private TextView		mTvSeaport;	// 口岸
+	private TextView		mTvCarPool;		// 类型
+	private TextView		mTvSeaport;		// 口岸
 	private TextView		mTvPeopleCount; // 人数
 	private TextView		mTvXingLiCount; // 行李数
 	private TextView		mTvSignType;	// 签证类型
 	private TextView		mTvYuyuePrice;	// 预约价格
-	private TextView		mTvFee;		// 小费
-	private TextView		mTvHangBan;	// 航班号
-	private OrderBean		mOrderbean;
+	private TextView		mTvFee;			// 小费
+	private TextView		mTvHangBan;		// 航班号
+	private DriverHomeOrder	mOrderbean;
 	private TextView		mTvMobile;
-
+	private TextView		mTvDes;
 	@Override
 	public void init()
 	{
 		super.init();
 		Bundle bundle = getIntent().getBundleExtra(VALUE_PASS);
-		mOrderbean = (OrderBean) bundle.getSerializable("orderbean");
+		mOrderbean = (DriverHomeOrder) bundle.getSerializable("orderbean");
 	}
 
 	@Override
@@ -80,10 +81,11 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 		mTvFee.setText("￥" + mOrderbean.fee);
 		mTvYuyuePrice.setText("￥" + mOrderbean.budget);
 		mTvHangBan.setText("0B100");// 航班
-		mImageUtils.display(mIvPhoto, URLS.BASE + mOrderbean.icon);
-		mTvName.setText(mOrderbean.username);
-		mTvMobile.setText(mOrderbean.mobile);
-		
+		//mImageUtils.display(mIvPhoto, URLS.BASE + mOrderbean.icon);
+		//mTvName.setText(mOrderbean.username);
+		//mTvMobile.setText(mOrderbean.mobile);
+		mTvXingLiCount.setText(mOrderbean.luggage +"個");
+		mTvDes.setText(mOrderbean.remark);
 	}
 
 	@Override
@@ -128,6 +130,7 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 		mTvFee = (TextView) findViewById(R.id.acceptorder_tv_fee);
 		mTvHangBan = (TextView) findViewById(R.id.acceptorder_tv_hangban);
 		mTvMobile = (TextView) findViewById(R.id.acceptorder_tv_mobile);
+		mTvDes = (TextView) findViewById(R.id.acceptorder_tv_des);
 	}
 
 }

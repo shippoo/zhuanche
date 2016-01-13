@@ -49,7 +49,12 @@ public class AllOrderFragment extends BaseFragment implements OnRefreshListener<
 		mListView = (PullToRefreshListView) view.findViewById(R.id.order_listview);
 		return view;
 	}
-
+	@Override
+	public void onPause()
+	{
+		currentPage = 1;
+		super.onPause();
+	}
 	@Override
 	public void initData()
 	{

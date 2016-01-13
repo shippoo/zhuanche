@@ -19,12 +19,12 @@ public class Driver
 {
 	public String access_token;
 	public String password;
-	
-	
+	public String area;
 	public String autograph;
 	public String gender;//	2 女  1男   0不确定
 	public String id	;//1
 	public String icon;
+	public String star;
 	public String location;//	
 	public String loginip	;//192.168.1.186
 	public String logintime;//	1449459307

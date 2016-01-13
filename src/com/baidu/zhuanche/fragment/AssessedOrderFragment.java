@@ -54,7 +54,12 @@ public class AssessedOrderFragment extends BaseFragment implements OnRefreshList
 		mListView = (PullToRefreshListView) view.findViewById(R.id.order_listview);
 		return view;
 	}
-
+	@Override
+	public void onPause()
+	{
+		currentPage = 1;
+		super.onPause();
+	}
 	@Override
 	public void initData()
 	{

@@ -137,4 +137,5 @@ public abstract class BaseFragment extends Fragment
 		refreshView.getLoadingLayoutProxy().setReleaseLabel("釋放開始加載");
 		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最後加載時間:" + str);
 	}
+	
 }

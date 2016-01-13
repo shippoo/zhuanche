@@ -30,14 +30,11 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/error_tv_des"
                 style="@style/BasicTextStyle"
                 android:layout_marginTop="6dp"
-                android:text=".你的準駕證填寫有誤，請重新填寫！" />
-
-            <TextView
-                style="@style/BasicTextStyle"
-                android:layout_marginTop="6dp"
-                android:text=".你的車型不存在，請重新填寫！" />
+                android:gravity="center"
+                android:layout_width="180dp"/>
 
             <Button
                 android:id="@+id/error_bt_reedit"

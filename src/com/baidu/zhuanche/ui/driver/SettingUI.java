@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import cn.jpush.android.api.JPushInterface;
+
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.utils.DataCleanManager;
@@ -52,10 +54,12 @@ public class SettingUI extends BaseActivity implements OnClickListener, OnToggle
 		if (isReceiveDriver)
 		{
 			mTbToggle.toggleOn();
+			JPushInterface.resumePush(getApplicationContext());
 		}
 		else
 		{
 			mTbToggle.toggleOff();
+			JPushInterface.stopPush(getApplicationContext());
 		}
 		mTvCache.setText(Formatter.formatFileSize(this, getCache()));
 	}
@@ -111,15 +115,17 @@ public class SettingUI extends BaseActivity implements OnClickListener, OnToggle
 		else if (v == mBtLogout)
 		{
 			userLogout();
-		}         
+		}
 		else if (v == mContainerFanKui)
 		{
 			startActivity(FeedBackUI.class);
 		}
 		else if (v == mContainerUs)
 		{
-			startActivity(DriverAboutUsUI.class);
-		}else if(v == mContainerCheck){
+			startActivity(CopyOfFeedBackUI.class);
+		}
+		else if (v == mContainerCheck)
+		{
 			ToastUtils.makeShortText(this, "當前已經是最新版本！");
 		}
 	}
@@ -143,6 +149,14 @@ public class SettingUI extends BaseActivity implements OnClickListener, OnToggle
 	public void onToggle(boolean on)
 	{
 		isReceiveDriver = on;
+		if (on)
+		{
+			JPushInterface.resumePush(getApplicationContext());
+		}
+		else
+		{
+			JPushInterface.stopPush(getApplicationContext());
+		}
 	}
 
 }

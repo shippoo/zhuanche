@@ -226,7 +226,7 @@
                         style="@style/RightTextStyle"
                         android:layout_toRightOf="@id/ic_tv_title_carlevel"
                         android:background="@null"
-                        android:text="例如**1234" />
+                        android:hint="例如五人豪华型" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -257,6 +257,7 @@
                     <TextView
                         android:id="@+id/ic_tv_seaport"
                         style="@style/RightTextStyle"
+                        android:hint="例如文锦渡" 
                         android:layout_toRightOf="@id/ic_tv_title_seaport" />
 
                     <ImageView

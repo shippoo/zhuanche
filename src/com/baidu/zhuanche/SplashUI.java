@@ -4,6 +4,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import cn.jpush.android.api.JPushInterface;
+
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.ui.driver.DriverLoginUI;
 import com.baidu.zhuanche.ui.user.UserHomeUI;
@@ -34,5 +36,17 @@ public class SplashUI extends BaseActivity implements OnClickListener
 		}else if(v == mBtUser){
 			startActivityAndFinish(UserHomeUI.class);
 		}
+	}
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		JPushInterface.onResume(getApplicationContext());
+	}
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		JPushInterface.onPause(getApplicationContext());
 	}
 }

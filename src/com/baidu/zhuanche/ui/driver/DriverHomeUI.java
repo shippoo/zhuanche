@@ -2,7 +2,9 @@ package com.baidu.zhuanche.ui.driver;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,17 +16,20 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.base.MyBaseApdater;
-import com.baidu.zhuanche.bean.DriverCenterOrderListBean;
-import com.baidu.zhuanche.bean.DriverCenterOrderListBean.OrderBean;
+import com.baidu.zhuanche.bean.DriverHomeBean;
+import com.baidu.zhuanche.bean.DriverHomeBean.DriverHomeOrder;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AtoolsUtil;
 import com.baidu.zhuanche.utils.DateFormatUtil;
+import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.view.CircleImageView;
 import com.google.gson.Gson;
@@ -51,12 +56,19 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 {
 	private PullToRefreshListView	mListView;
 	private DriverOrderListAdapter	mAdapter;
-	private List<OrderBean>			mDatas		= new ArrayList<DriverCenterOrderListBean.OrderBean>();
+	private List<DriverHomeOrder>	mDatas		= new ArrayList<DriverHomeOrder>();
 	private int						currentPage	= 1;
+
+	@Override
+	public void init()
+	{
+		super.init();
+	}
 
 	@Override
 	public void initView()
 	{
+
 		setContentView(R.layout.ui_driverhome);
 		mListView = (PullToRefreshListView) findViewById(R.id.driverhome_listview);
 	}
@@ -65,12 +77,26 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 	public void initData()
 	{
 		super.initData();
+
 		mTvTitle.setText("首頁");
 		mListView.setMode(Mode.PULL_FROM_END);
 		mIvRightHeader.setVisibility(0);
 		mIvLeftHeader.setVisibility(8);
 		mIvRightHeader.setImageResource(R.drawable.picture_31);
+		Set<String> tags = new HashSet<String>();
 
+		tags.add(MD5Utils.encode(BaseApplication.getDriver().mobile));
+		JPushInterface.setAliasAndTags(this, "aligs", tags, new TagAliasCallback() {
+
+			@Override
+			public void gotResult(int arg0, String arg1, Set<String> arg2)
+			{
+				if (arg0 == 0)
+				{
+					// pushMsg(arg1, arg2);
+				}
+			}
+		});
 		mAdapter = new DriverOrderListAdapter(this, mDatas);
 		mListView.setAdapter(mAdapter);
 		setEmptyView(mListView, "沒有訂單列表數據");
@@ -79,15 +105,32 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 
 	}
 
-	public void loadMore()
+	protected void pushMsg(String alias, Set<String> tags)
 	{
-		String url = URLS.BASESERVER + URLS.Driver.orderList;
+		String url = URLS.BASESERVER + URLS.Driver.pushMessage;
 		RequestParams params = new RequestParams();
 		params.add(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
-		params.add("limit", "" + 10);
-		params.add(URLS.CURRENTPAGER, "" + currentPage);
+		params.add("tags", MD5Utils.encode(BaseApplication.getDriver().mobile));
 		mClient.post(url, params, new MyAsyncResponseHandler() {
 
+			@Override
+			public void success(String json)
+			{
+			}
+		});
+
+	}
+
+	public void loadMore()
+	{
+		String url = URLS.BASESERVER + URLS.Driver.getorderList;
+		RequestParams params = new RequestParams();
+		params.add(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
+		params.add("point", "43.123,123.12345");
+		params.add(URLS.CURRENTPAGER, "" + currentPage);
+		ToastUtils.makeShortText(this, "頁數=" + currentPage);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+			
 			@Override
 			public void success(String json)
 			{
@@ -99,10 +142,10 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 	protected void processJson(String json)
 	{
 		Gson gson = new Gson();
-		DriverCenterOrderListBean driverOrderListBean = gson.fromJson(json, DriverCenterOrderListBean.class);
-		if (driverOrderListBean.content != null && driverOrderListBean.content.size() > 0)
+		DriverHomeBean driverHomeBean = gson.fromJson(json, DriverHomeBean.class);
+		if (driverHomeBean.content != null && driverHomeBean.content.size() > 0)
 		{
-			mDatas.addAll(driverOrderListBean.content);
+			mDatas.addAll(driverHomeBean.content);
 			mAdapter.notifyDataSetChanged();
 			currentPage++;
 		}
@@ -120,10 +163,10 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 	}
 
 	/** 司机端订单适配器 */
-	class DriverOrderListAdapter extends MyBaseApdater<OrderBean>
+	class DriverOrderListAdapter extends MyBaseApdater<DriverHomeOrder>
 	{
 
-		public DriverOrderListAdapter(Context context, List<OrderBean> datas) {
+		public DriverOrderListAdapter(Context context, List<DriverHomeOrder> datas) {
 			super(context, datas);
 		}
 
@@ -159,7 +202,7 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 					startActivity(DriverUI.class);
 				}
 			});
-			OrderBean bean = (OrderBean) getItem(position);
+			DriverHomeOrder bean = (DriverHomeOrder) getItem(position);
 			holder.tvTime.setText(DateFormatUtil.getDateTimeStr(new Date(Long.parseLong(bean.time) * 1000)));
 			holder.tvGetOn.setText(bean.from);
 			holder.tvGetOff.setText(bean.to);
@@ -167,7 +210,8 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 			holder.tvLevel.setText(bean.cartype);
 			holder.tvPrice.setText(bean.budget);
 			holder.tvFee.setText(bean.fee);
-			mImageUtils.display(holder.ivPic, URLS.BASE + bean.icon);
+			holder.tvSpace.setText(AtoolsUtil.getSpace(bean.range));
+			//mImageUtils.display(holder.ivPic, URLS.BASE + bean.icon);
 			return convertView;
 		}
 	}
@@ -223,6 +267,6 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		{
 			loadMore();
 		}
-
 	}
+
 }

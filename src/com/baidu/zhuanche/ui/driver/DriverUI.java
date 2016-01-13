@@ -3,6 +3,7 @@ package com.baidu.zhuanche.ui.driver;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Bitmap;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.baidu.zhuanche.bean.DriverCenterOrderListBean;
 import com.baidu.zhuanche.bean.DriverCenterOrderListBean.OrderBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.ui.driver.CompleteUI.OnModifyListener;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.CircleImageView;
@@ -47,7 +49,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DriverUI extends BaseActivity implements OnClickListener, OnRefreshListener<ScrollView>
+public class DriverUI extends BaseActivity implements OnClickListener, OnRefreshListener<ScrollView>, OnModifyListener
 {
 	private NoScrollListView		mListView;
 	private PullToRefreshScrollView	mRefreshScrollView;
@@ -72,7 +74,6 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 		super.init();
 		driver = BaseApplication.getDriver();
 	}
-
 	@Override
 	public void initView()
 	{
@@ -95,6 +96,7 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 	public void initData()
 	{
 		super.initData();
+		CompleteUI.setOnModifyListener(this);
 		mTvTitle.setText("我");
 		mIvRightHeader.setVisibility(0);
 		mIvRightHeader.setImageResource(R.drawable.picture_19);
@@ -104,6 +106,7 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 		setEmptyView(mListView, "沒有訂單列表數據");
 		mImageUtils.display(mCivPhoto, URLS.BASE + driver.icon);
 		mTvName.setText(driver.username);
+		mRatingBar.setRating(Float.parseFloat(driver.star));
 		ToastUtils.showProgress(this);
 		// mRefreshScrollView.smoothScrollTo(0, 0);
 		loadMore();
@@ -249,5 +252,11 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 			loadMore();
 		}
 
+	}
+
+	@Override
+	public void onModify(Bitmap bitmap)
+	{
+		mCivPhoto.setImageBitmap(bitmap);
 	}
 }

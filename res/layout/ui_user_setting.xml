@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg"
+    android:descendantFocusability="beforeDescendants"
     android:orientation="vertical" >
 
     <include
@@ -60,11 +61,10 @@
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
-
     <RelativeLayout
-        android:layout_marginTop="20dp"
         android:id="@+id/setting_container_check"
-        style="@style/SettingContainerStyle" >
+        style="@style/SettingContainerStyle"
+        android:layout_marginTop="20dp" >
 
         <TextView
             android:id="@+id/set_text_06"
@@ -85,7 +85,7 @@
             style="@style/SettingTextStyle"
             android:text="关于我们" />
 
-        <ImageView style="@style/SettingRightImgStyle" />
+        <ImageView android:id="@+id/setting_iv" style="@style/SettingRightImgStyle" />
     </RelativeLayout>
 
     <View style="@style/DivideStyle" />
@@ -104,10 +104,10 @@
 
     <View style="@style/DivideStyle" />
 
-    <RelativeLayout 
+    <RelativeLayout
+        style="@style/SettingContainerStyle"
         android:layout_marginTop="40dp"
-        android:background="@null"
-        style="@style/SettingContainerStyle" >
+        android:background="@null" >
 
         <Button
             android:id="@+id/setting_bt_logout"

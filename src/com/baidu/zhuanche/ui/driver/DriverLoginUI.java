@@ -25,28 +25,28 @@ import com.baidu.zhuanche.bean.DriverBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
+import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 
-
 /**
- * @项目名: 	拼车
- * @包名:	com.baidu.zhuanche.ui.driver
- * @类名:	DriverLoginUI
- * @创建者:	陈选文
- * @创建时间:	2015-12-29	上午9:37:22 
- * @描述:	TODO
+ * @项目名: 拼车
+ * @包名: com.baidu.zhuanche.ui.driver
+ * @类名: DriverLoginUI
+ * @创建者: 陈选文
+ * @创建时间: 2015-12-29 上午9:37:22
+ * @描述: TODO
  * 
- * @svn版本:	$Rev$
- * @更新人:	$Author$
- * @更新时间:	$Date$
- * @更新描述:	TODO
+ * @svn版本: $Rev$
+ * @更新人: $Author$
+ * @更新时间: $Date$
+ * @更新描述: TODO
  */
 public class DriverLoginUI extends BaseActivity implements OnClickListener
 {
-	
+
 	private TextView		mTvQuhao;
 	private EditText		mEtNumber;
 	private EditText		mEtPassword;
@@ -91,8 +91,9 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		String lastPassword = mSpUtils.getString("driver_password", ""); // 上次的密码
 		mEtNumber.setText(lastMobile);
 		mEtPassword.setText(lastPassword);
-		if(!TextUtils.isEmpty(lastQuhao) && !TextUtils.isEmpty(lastMobile) && !TextUtils.isEmpty(lastPassword)){
-			mCbJizhu.setChecked(true); 
+		if (!TextUtils.isEmpty(lastQuhao) && !TextUtils.isEmpty(lastMobile) && !TextUtils.isEmpty(lastPassword))
+		{
+			mCbJizhu.setChecked(true);
 		}
 	}
 
@@ -116,8 +117,8 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		}
 		else if (v == mBtLogin)
 		{
-			//startActivityAndFinish(DriverHomeUI.class);
-			doClickLogin(); 
+			// startActivityAndFinish(DriverHomeUI.class);
+			doClickLogin();
 		}
 		else if (v == mTvWangji)
 		{
@@ -169,6 +170,7 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		String url = URLS.BASESERVER + URLS.Driver.login;
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
 		RequestParams params = new RequestParams();
+		params.add("receive_id", MD5Utils.encode(mNumber));
 		params.add("mobile", mNumber);
 		params.add("password", mPassword);
 		client.post(url, params, new MyAsyncResponseHandler() {
@@ -176,11 +178,14 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 			public void success(String json)
 			{
 				/** 是否保存账户信息 */
-				if(mCbJizhu.isChecked()){
+				if (mCbJizhu.isChecked())
+				{
 					mSpUtils.putString("driver_quhao", mQuhao);
 					mSpUtils.putString("driver_mobile", mNumber);
 					mSpUtils.putString("driver_password", mPassword);
-				}else {
+				}
+				else
+				{
 					mSpUtils.removeKey("driver_quhao");
 					mSpUtils.removeKey("driver_mobile");
 					mSpUtils.removeKey("driver_password");
@@ -200,13 +205,30 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		driver = driverBean.content.driver_data;
 		driver.access_token = driverBean.content.access_token;
 		driver.password = mPassword;
-		/*判段賬號是否禁用*/
-		if("0".equals(driver.status)){
+		BaseApplication.setDriver(driver);
+		
+		/* 判段賬號是否禁用 */
+		if ("0".equals(driver.status))
+		{
 			ToastUtils.makeShortText(this, "此帳號被禁用！");
 			return;
 		}
-		BaseApplication.setDriver(driver);
-		startActivityAndFinish(DriverHomeUI.class);
+		else if ("1".equals(driver.status))
+		{
+			startActivity(IdentityCheckUI.class);
+		}
+		else if ("2".equals(driver.status))
+		{
+			startActivity(IdentityCheckUI.class);
+		}
+		else if ("4".equals(driver.status))
+		{
+			startActivity(IdentityErrorUI.class);
+		}
+		else
+		{
+			startActivityAndFinish(DriverHomeUI.class);
+		}
+
 	}
 }
-

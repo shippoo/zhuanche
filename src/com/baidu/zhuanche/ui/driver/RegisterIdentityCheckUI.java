@@ -170,9 +170,9 @@ public class RegisterIdentityCheckUI extends BaseActivity implements OnClickList
 		mEtCarNum.setText(data.carid);
 		mTvSeaport.setText(data.seaport);
 		mEtCarpool.setText(data.type);
-		mImageUtils.display(mIvZjzh, URLS.BASESERVER + data.driverid_pic);
-		mImageUtils.display(mIvIdcard, URLS.BASESERVER +data.citizenid_pic);
-		mImageUtils.display(mIvCarNum, URLS.BASESERVER + data.carid_pic);
+		//mImageUtils.display(mIvZjzh, URLS.BASESERVER + data.driverid_pic);
+		//mImageUtils.display(mIvIdcard, URLS.BASESERVER +data.citizenid_pic);
+		//mImageUtils.display(mIvCarNum, URLS.BASESERVER + data.carid_pic);
 		/*設置不能輸入框不能用*/
 		enableView(false);
 		/*更新数据*/
