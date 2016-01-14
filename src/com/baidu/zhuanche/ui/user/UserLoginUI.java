@@ -1,7 +1,9 @@
 package com.baidu.zhuanche.ui.user;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -14,6 +16,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.QuhaoAdapter;
@@ -58,7 +63,11 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 	private QuhaoAdapter	mAdapter;
 	private String			mNumber;
 	private String			mQuhao;
-
+	@Override
+	public void init()
+	{
+		super.init();
+	}
 	@Override
 	public void initView()
 	{
@@ -118,7 +127,7 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 		}
 		else if (v == mTvWangji)
 		{
-			startActivity(UserFindPasswordUI.class);
+			startActivity(UserFindPwdUI.class);
 		}
 		else if (v == mTvRegist)
 		{
@@ -162,6 +171,7 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "请输入密码！");
 			return;
 		}
+		
 		ToastUtils.showProgress(this);
 		String url = URLS.BASESERVER + URLS.User.login;
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();

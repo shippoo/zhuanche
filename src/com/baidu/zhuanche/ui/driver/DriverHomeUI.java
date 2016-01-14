@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -16,10 +18,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
+import com.amap.api.location.AMapLocationListener;
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.adapter.DriverHomeOrderAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.base.MyBaseApdater;
@@ -27,6 +36,7 @@ import com.baidu.zhuanche.bean.DriverHomeBean;
 import com.baidu.zhuanche.bean.DriverHomeBean.DriverHomeOrder;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.ui.driver.AcceptOrderUI.OnReceiverOrderListener;
 import com.baidu.zhuanche.utils.AtoolsUtil;
 import com.baidu.zhuanche.utils.DateFormatUtil;
 import com.baidu.zhuanche.utils.MD5Utils;
@@ -52,17 +62,49 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DriverHomeUI extends BaseActivity implements OnClickListener, OnItemClickListener, OnRefreshListener<ListView>
+public class DriverHomeUI extends BaseActivity implements OnClickListener, OnItemClickListener, OnRefreshListener<ListView>, AMapLocationListener, OnReceiverOrderListener, com.baidu.zhuanche.adapter.DriverHomeOrderAdapter.OnReceiverOrderListener
 {
 	private PullToRefreshListView	mListView;
-	private DriverOrderListAdapter	mAdapter;
-	private List<DriverHomeOrder>	mDatas		= new ArrayList<DriverHomeOrder>();
-	private int						currentPage	= 1;
+	private DriverHomeOrderAdapter	mAdapter;
+	private List<DriverHomeOrder>	mDatas			= new ArrayList<DriverHomeOrder>();
+	private int						currentPage		= 1;
+	// 声明AMapLocationClient类对象
+	public AMapLocationClient		mLocationClient	= null;
+	// 声明定位回调监听器
+	public AMapLocationListener		mLocationListener;
+
+	public AMapLocationClientOption	mLocationOption	= null;
+	private double					mLatitude		= 0;
+	private double					mLongitude		= 0;
 
 	@Override
 	public void init()
 	{
 		super.init();
+		setDriverAligs();
+		// 初始化定位
+		mLocationClient = new AMapLocationClient(getApplicationContext());
+		// 设置定位回调监听
+		mLocationClient.setLocationListener(this);
+
+		// 初始化定位参数
+		mLocationOption = new AMapLocationClientOption();
+		// 设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+		mLocationOption.setLocationMode(AMapLocationMode.Hight_Accuracy);
+		// 设置是否返回地址信息（默认返回地址信息）
+		mLocationOption.setNeedAddress(true);
+		// 设置是否只定位一次,默认为false
+		mLocationOption.setOnceLocation(false);
+		// 设置是否强制刷新WIFI，默认为强制刷新
+		mLocationOption.setWifiActiveScan(true);
+		// 设置是否允许模拟位置,默认为false，不允许模拟位置
+		mLocationOption.setMockEnable(false);
+		// 设置定位间隔,单位毫秒,默认为2000ms
+		mLocationOption.setInterval(1000 * 60);
+		// 给定位客户端对象设置定位参数
+		mLocationClient.setLocationOption(mLocationOption);
+		// 启动定位
+		mLocationClient.startLocation();
 	}
 
 	@Override
@@ -77,34 +119,23 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 	public void initData()
 	{
 		super.initData();
-
 		mTvTitle.setText("首頁");
 		mListView.setMode(Mode.PULL_FROM_END);
 		mIvRightHeader.setVisibility(0);
 		mIvLeftHeader.setVisibility(8);
 		mIvRightHeader.setImageResource(R.drawable.picture_31);
-		Set<String> tags = new HashSet<String>();
-
-		tags.add(MD5Utils.encode(BaseApplication.getDriver().mobile));
-		JPushInterface.setAliasAndTags(this, "aligs", tags, new TagAliasCallback() {
-
-			@Override
-			public void gotResult(int arg0, String arg1, Set<String> arg2)
-			{
-				if (arg0 == 0)
-				{
-					// pushMsg(arg1, arg2);
-				}
-			}
-		});
-		mAdapter = new DriverOrderListAdapter(this, mDatas);
+		
+		mAdapter = new DriverHomeOrderAdapter(this, mDatas);
 		mListView.setAdapter(mAdapter);
 		setEmptyView(mListView, "沒有訂單列表數據");
 		ToastUtils.showProgress(this);
-		loadMore();
 
 	}
-
+	/**
+	 * 推送消息，暂时不用管测试用
+	 * @param alias
+	 * @param tags
+	 */
 	protected void pushMsg(String alias, Set<String> tags)
 	{
 		String url = URLS.BASESERVER + URLS.Driver.pushMessage;
@@ -118,7 +149,6 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 			{
 			}
 		});
-
 	}
 
 	public void loadMore()
@@ -126,11 +156,10 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		String url = URLS.BASESERVER + URLS.Driver.getorderList;
 		RequestParams params = new RequestParams();
 		params.add(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
-		params.add("point", "43.123,123.12345");
-		params.add(URLS.CURRENTPAGER, "" + currentPage);
-		ToastUtils.makeShortText(this, "頁數=" + currentPage);
+		params.add("point", mLongitude + "," + mLatitude);
+		params.add(URLS.CURRENTPAGER, "" +currentPage);
 		mClient.post(url, params, new MyAsyncResponseHandler() {
-			
+
 			@Override
 			public void success(String json)
 			{
@@ -157,65 +186,12 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 	{
 		super.initListener();
 		// mIvLeftHeader.setOnClickListener(this);
+		AcceptOrderUI.setOnReceiverOrderListener(this);
+		DriverHomeOrderAdapter.setOnReceiverOrderListener(this);
 		mIvRightHeader.setOnClickListener(this);
 		mListView.setOnItemClickListener(this);
 		mListView.setOnRefreshListener(this);
 	}
-
-	/** 司机端订单适配器 */
-	class DriverOrderListAdapter extends MyBaseApdater<DriverHomeOrder>
-	{
-
-		public DriverOrderListAdapter(Context context, List<DriverHomeOrder> datas) {
-			super(context, datas);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent)
-		{
-			ViewHolder holder = null;
-			if (convertView == null)
-			{
-				holder = new ViewHolder();
-				convertView = View.inflate(mContext, R.layout.item_driverhome_listview, null);
-				convertView.setTag(holder);
-				holder.ivPic = (CircleImageView) convertView.findViewById(R.id.item_driverhome_civ_photo);
-				holder.tvTime = (TextView) convertView.findViewById(R.id.driverhome_tv_time);
-				holder.tvGetOn = (TextView) convertView.findViewById(R.id.driverhome_tv_geton);
-				holder.tvGetOff = (TextView) convertView.findViewById(R.id.driverhome_tv_getoff);
-				holder.tvLevel = (TextView) convertView.findViewById(R.id.driverhome_tv_level);
-				holder.tvCarPool = (TextView) convertView.findViewById(R.id.driverhome_tv_carpool);
-				holder.tvPrice = (TextView) convertView.findViewById(R.id.driverhome_tv_price);
-				holder.tvFee = (TextView) convertView.findViewById(R.id.driverhome_tv_fee);
-				holder.tvSpace = (TextView) convertView.findViewById(R.id.driverhome_tv_distance);
-				holder.btAcceptOrder = (Button) convertView.findViewById(R.id.driverhome_bt_acceptorder);
-			}
-			else
-			{
-				holder = (ViewHolder) convertView.getTag();
-			}
-			holder.btAcceptOrder.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v)
-				{
-					startActivity(DriverUI.class);
-				}
-			});
-			DriverHomeOrder bean = (DriverHomeOrder) getItem(position);
-			holder.tvTime.setText(DateFormatUtil.getDateTimeStr(new Date(Long.parseLong(bean.time) * 1000)));
-			holder.tvGetOn.setText(bean.from);
-			holder.tvGetOff.setText(bean.to);
-			holder.tvCarPool.setText(AtoolsUtil.getCarPool(bean.carpool));
-			holder.tvLevel.setText(bean.cartype);
-			holder.tvPrice.setText(bean.budget);
-			holder.tvFee.setText(bean.fee);
-			holder.tvSpace.setText(AtoolsUtil.getSpace(bean.range));
-			//mImageUtils.display(holder.ivPic, URLS.BASE + bean.icon);
-			return convertView;
-		}
-	}
-
 	@Override
 	public void onClick(View v)
 	{
@@ -229,19 +205,7 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		}
 	}
 
-	private class ViewHolder
-	{
-		CircleImageView	ivPic;
-		TextView		tvTime;
-		TextView		tvGetOn;
-		TextView		tvGetOff;
-		TextView		tvLevel;
-		TextView		tvCarPool;
-		TextView		tvPrice;
-		TextView		tvFee;
-		TextView		tvSpace;
-		Button			btAcceptOrder;
-	}
+	
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -267,6 +231,54 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		{
 			loadMore();
 		}
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		mLocationClient.stopLocation();
+		mLocationClient.onDestroy();
+	}
+
+	@Override
+	public void onLocationChanged(AMapLocation amapLocation)
+	{
+		if (amapLocation != null)
+		{
+			if (amapLocation.getErrorCode() == 0)
+			{
+				mLatitude = amapLocation.getLatitude(); // 纬度
+				mLongitude = amapLocation.getLongitude();// 经度
+				loadMore();
+			}
+			else
+			{
+				loadMore();
+				// 显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+				ToastUtils.makeShortText(this, "无法定位！");
+				Log.e("AmapError", "location Error, ErrCode:"
+									+ amapLocation.getErrorCode() + ", errInfo:"
+									+ amapLocation.getErrorInfo());
+			}
+		}
+
+	}
+
+	@Override
+	public void onReceiverOrder(DriverHomeOrder order)
+	{
+		/**
+		 * 想要删掉不容易啊
+		 */
+		ListIterator<DriverHomeOrder> listIterator = mDatas.listIterator();
+		while(listIterator.hasNext()){
+			DriverHomeOrder next = listIterator.next();
+			if(next.sn.equals(order.sn)){
+				listIterator.remove();
+			}
+		}
+		mAdapter.notifyDataSetChanged();
 	}
 
 }

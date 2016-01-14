@@ -3,7 +3,11 @@ package com.baidu.zhuanche.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baidu.zhuanche.R;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -66,5 +70,11 @@ public class MyBaseApdater<ITEMBEANTYPE> extends BaseAdapter
 	{
 		// TODO
 		return null;
+	}
+	public void startActivity(Class clazz)
+	{
+		Intent intent = new Intent(mContext, clazz);
+		mContext.startActivity(intent);
+		((Activity) mContext).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 	}
 }

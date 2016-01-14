@@ -2,7 +2,9 @@ package com.baidu.zhuanche.ui.user;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.feezu.liuli.timeselector.TimeSelector;
 import org.feezu.liuli.timeselector.Utils.DateUtil;
@@ -15,6 +17,9 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.DialogAdapter;
@@ -31,6 +36,7 @@ import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.user.GetOffUI.OnGetOffLocationListener;
 import com.baidu.zhuanche.ui.user.GetOnUI.OnGetOnLocationListener;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
+import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -79,7 +85,12 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 	/** 下车地点 */
 	private RelativeLayout		mContainerGetOff;
 	private TextView			mTvGetOff;
-
+	@Override
+	public void init()
+	{
+		super.init();
+		setUserAligs();
+	}
 	@Override
 	public void initView()
 	{
@@ -121,6 +132,8 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mYuyueData = new Yuyue();
 		mBuilder = new Builder(this);
 		mClient = AsyncHttpClientUtil.getInstance();
+		
+		
 	}
 
 	@Override

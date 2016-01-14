@@ -200,7 +200,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="#ffffff"
+                android:background="@drawable/bg_bt_selector"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="接单"

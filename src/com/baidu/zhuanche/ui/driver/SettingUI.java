@@ -2,6 +2,7 @@ package com.baidu.zhuanche.ui.driver;
 
 import java.io.File;
 
+import android.os.Bundle;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -107,6 +108,7 @@ public class SettingUI extends BaseActivity implements OnClickListener, OnToggle
 		}
 		else if (v == mContainerPassword)
 		{
+			startActivity(DriverFindPasswordUI.class);
 		}
 		else if (v == mContainerCache)
 		{

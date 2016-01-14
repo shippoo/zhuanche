@@ -204,11 +204,11 @@ public class AtoolsUtil
 		}
 		else if ("2".equals(status))
 		{
-			text = "已付款";
+			text = "已付款";//去评价
 		}
 		else if ("3".equals(status))
 		{
-			text = "已完成";
+			text = "已完成";//看评价
 		}
 		else if ("4".equals(status))
 		{

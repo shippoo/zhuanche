@@ -24,7 +24,6 @@ import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.AtoolsUtil;
-import com.baidu.zhuanche.utils.ImageUtils;
 import com.baidu.zhuanche.utils.OrderUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.view.CircleImageView;

@@ -595,4 +595,45 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <!-- 去评价 -->
+
+    <RelativeLayout
+        android:id="@+id/item_container_assess"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" >
+
+        <Button
+            android:id="@+id/item_yuyue_bt_assess"
+            android:layout_width="70dp"
+            android:layout_height="22dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/btn_bg_normal_shaped"
+            android:focusable="false"
+            android:text="去评价"
+            android:textColor="@color/item_yuyue_textColor"
+            android:textSize="12sp" />
+    </RelativeLayout>
+    <!-- 看评价 -->
+
+    <RelativeLayout
+        android:id="@+id/item_container_lookassess"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" >
+
+        <Button
+            android:id="@+id/item_yuyue_bt_lookassess"
+            android:layout_width="70dp"
+            android:layout_height="22dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/btn_bg_normal_shaped"
+            android:focusable="false"
+            android:text="查看评价"
+            android:textColor="@color/item_yuyue_textColor"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
 </LinearLayout>

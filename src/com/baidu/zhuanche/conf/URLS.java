@@ -75,6 +75,9 @@ public interface URLS
 		String	getModify			= "Driver/Driver/getModify";
 		String	pushMessage			= "Driver/Driver/pushMessage";
 		String	getorderList		= "Driver/Driver/getorderList";
+		String	receiveOrder		= "Driver/Driver/receiveOrder";
+		String	findPassword		= "Driver/Login/findPassword";
+
 	}
 
 	String	MOBILE			= "mobile";		// 手机号码

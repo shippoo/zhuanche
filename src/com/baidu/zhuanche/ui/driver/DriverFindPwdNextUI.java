@@ -1,4 +1,4 @@
-package com.baidu.zhuanche.ui.user;
+package com.baidu.zhuanche.ui.driver;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
@@ -23,14 +22,14 @@ import com.loopj.android.http.RequestParams;
  * @类名:	UserFindPasswordUI
  * @创建者:	陈选文
  * @创建时间:	2015-12-29	上午10:11:55 
- * @描述:	用户找回密码界面
+ * @描述:	司機重置密码界面
  * 
  * @svn版本:	$Rev$
  * @更新人:	$Author$
  * @更新时间:	$Date$
  * @更新描述:	TODO
  */
-public class UserFindPasswordNextUI extends BaseActivity implements OnClickListener
+public class DriverFindPwdNextUI extends BaseActivity implements OnClickListener
 {
 
 	private EditText	mEtPassword;
@@ -58,7 +57,7 @@ public class UserFindPasswordNextUI extends BaseActivity implements OnClickListe
 	public void initData()
 	{
 		super.initData();
-		mTvTitle.setText("找回密码");
+		mTvTitle.setText("忘記密码");
 	}
 
 	@Override
@@ -93,9 +92,8 @@ public class UserFindPasswordNextUI extends BaseActivity implements OnClickListe
 			return;
 		}
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
-		String url = URLS.BASESERVER + URLS.User.findPassword;
+		String url = URLS.BASESERVER + URLS.Driver.findPassword;
 		RequestParams params = new RequestParams();
-		params.add(URLS.ACCESS_TOKEN, BaseApplication.getUser().access_token);
 		params.add("verify", mVerifyCode);
 		params.add("mobile", mMobile);
 		params.add("password", pwd);
@@ -108,7 +106,7 @@ public class UserFindPasswordNextUI extends BaseActivity implements OnClickListe
 				//加密后的新密码，这里没处理TODO
 				ToastUtils.makeShortText(getApplicationContext(), "修改成功！");
 				//跳转到登陆
-				startActivityAndFinish(UserLoginUI.class);
+				startActivityAndFinish(DriverLoginUI.class);
 			}
 		});
 		

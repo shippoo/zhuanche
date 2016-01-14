@@ -69,7 +69,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <!-- 用户端 -->
         <activity android:name=".ui.user.UserLoginSelectUI" />
         <activity android:name=".ui.user.UserLoginUI" />
@@ -78,21 +78,23 @@
         <activity android:name=".ui.user.SettingUI" />
         <activity android:name=".ui.user.YuYueDetailUI" />
         <activity android:name=".ui.user.UserRegistUI" />
+        <activity android:name=".ui.user.UserFindPwdNextUI"/>
+        <activity android:name=".ui.user.UserFindPwdUI"/>
         <activity
             android:name=".ui.user.YuyueUI"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".ui.user.UserHomeUI" />
         <activity android:name=".ui.user.UserMessageUI" />
         <activity android:name=".ui.user.UserFindPasswordUI" />
-        <activity android:name=".ui.user.UserFindPasswordNextUI" />
         <activity android:name=".ui.user.GetOnUI" />
         <activity android:name=".ui.user.GetOffUI" />
         <activity android:name=".ui.user.MyRouteUI" />
         <activity android:name=".ui.user.NewsListUI" />
-        <activity android:name=".ui.user.AboutUs"/>
+        <activity android:name=".ui.user.AboutUs" />
         <activity android:name=".ui.user.NewsDetailUI" />
-        <activity android:name=".ui.user.FeedBackUI"/>
-        <activity android:name=".ui.user.CopyOfFeedBackUI"/>
+        <activity android:name=".ui.user.FeedBackUI" />
+        <activity android:name=".ui.user.CopyOfFeedBackUI" />
+        <activity android:name=".ui.user.UserFindPasswordNextUI" />
         <!-- 司机端 -->
         <activity android:name=".ui.driver.DriverLoginUI" />
         <activity android:name=".ui.driver.DriverRegistUI" />
@@ -101,6 +103,8 @@
         <activity android:name=".ui.driver.DriverHomeUI" />
         <activity android:name=".ui.driver.DriverUI" />
         <activity android:name=".ui.driver.AcceptOrderUI" />
+        <activity android:name=".ui.driver.DriverFindPwdUI" />
+        <activity android:name=".ui.driver.DriverFindPwdNextUI" />
         <activity
             android:name=".ui.driver.IdentityCheckUI"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
@@ -120,12 +124,13 @@
         <activity android:name=".ui.driver.IdentityErrorUI" />
         <activity android:name=".ui.driver.RegisterIdentityCheckUI" />
         <activity android:name=".ui.driver.CompleteUI" />
-        <activity android:name=".ui.driver.CopyOfFeedBackUI"/>
+        <activity android:name=".ui.driver.CopyOfFeedBackUI" />
         <activity
             android:name=".ui.driver.ReIdentityCheckUI"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <!-- service -->
-        <service android:name=".service.MyService"/>
+        <service android:name=".service.MyService" />
+        <service android:name="com.amap.api.location.APSService" />
         <!-- 极光推送 -->
         <!-- Required SDK 核心功能 -->
         <!-- option since 2.0.5 可配置PushService，DaemonService,PushReceiver,AlarmReceiver的android:process参数 将JPush相关组件设置为一个独立进程 -->

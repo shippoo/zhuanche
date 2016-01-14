@@ -1,5 +1,6 @@
 package com.baidu.zhuanche.ui.driver;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -8,7 +9,11 @@ import android.widget.EditText;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
+import com.baidu.zhuanche.base.BaseApplication;
+import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.loopj.android.http.RequestParams;
 
 /**
  * @项目名: 拼车
@@ -28,6 +33,18 @@ public class DriverFindPasswordNextUI extends BaseActivity implements OnClickLis
 	private EditText	mEtPassword;
 	private EditText	mEtRePassword;
 	private Button		mBtConfirm;
+	private String		mCode;
+	private String		mMobile;
+
+	@Override
+	public void init()
+	{
+		super.init();
+		Intent intent = getIntent();
+		mCode = intent.getStringExtra("code");
+		mMobile = intent.getStringExtra("mobile");
+	}
+
 	@Override
 	public void initView()
 	{
@@ -41,7 +58,7 @@ public class DriverFindPasswordNextUI extends BaseActivity implements OnClickLis
 	public void initData()
 	{
 		super.initData();
-		mTvTitle.setText("找回密码");
+		mTvTitle.setText("找回密碼");
 	}
 
 	@Override
@@ -58,11 +75,14 @@ public class DriverFindPasswordNextUI extends BaseActivity implements OnClickLis
 		if (v == mIvLeftHeader)
 		{
 			finishActivity();
-		}else if(v == mBtConfirm){
+		}
+		else if (v == mBtConfirm)
+		{
 			doClickConfirm();
 		}
 	}
-	/**找回密码*/
+
+	/** 找回密码 */
 	private void doClickConfirm()
 	{
 		String pwd = mEtPassword.getText().toString();
@@ -75,7 +95,19 @@ public class DriverFindPasswordNextUI extends BaseActivity implements OnClickLis
 			ToastUtils.makeShortText(this, "两次输入密码不一致！");
 			return;
 		}
-		ToastUtils.makeShortText(this, "找回密码"); //TODO
+		String url = URLS.BASESERVER +URLS.Driver.findPassword;
+		RequestParams params = new RequestParams();
+		params.put(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
+		params.put(URLS.VERIFY_CODE,mCode);
+		params.put(URLS.MOBILE, mMobile);
+		params.put(URLS.PASSWORD, pwd);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+			
+			@Override
+			public void success(String json)
+			{
+				startActivity(DriverLoginUI.class);
+			}
+		});
 	}
-
 }

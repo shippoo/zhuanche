@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
@@ -30,7 +29,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间:	$Date$
  * @更新描述:	TODO
  */
-public class UserFindPasswordNextUI extends BaseActivity implements OnClickListener
+public class UserFindPwdNextUI extends BaseActivity implements OnClickListener
 {
 
 	private EditText	mEtPassword;
@@ -95,7 +94,6 @@ public class UserFindPasswordNextUI extends BaseActivity implements OnClickListe
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
 		String url = URLS.BASESERVER + URLS.User.findPassword;
 		RequestParams params = new RequestParams();
-		params.add(URLS.ACCESS_TOKEN, BaseApplication.getUser().access_token);
 		params.add("verify", mVerifyCode);
 		params.add("mobile", mMobile);
 		params.add("password", pwd);

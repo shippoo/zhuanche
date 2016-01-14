@@ -23,6 +23,10 @@ public class DriverHomeBean extends BaseBean
 	public List<DriverHomeOrder> content;
 	public class DriverHomeOrder implements Serializable
 	{
+		/**
+		 * 
+		 */
+		private static final long	serialVersionUID	= 1L;
 		public String	budget;			// 1500
 		public String	carpool;		// 1
 		public String	cartype;		// 1
@@ -49,5 +53,10 @@ public class DriverHomeBean extends BaseBean
 		public String	to_district;	//
 		public String	to_province;	//
 		public String	user_id;		// 1
+		public String   air_number;
+		public String   icon;
+		public String   username;
+		public String   mobile;
+		
 	}
 }

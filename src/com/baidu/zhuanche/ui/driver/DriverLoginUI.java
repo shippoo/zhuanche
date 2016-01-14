@@ -122,7 +122,7 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		}
 		else if (v == mTvWangji)
 		{
-			startActivity(DriverFindPasswordUI.class);
+			startActivity(DriverFindPwdUI.class);
 		}
 		else if (v == mTvRegist)
 		{

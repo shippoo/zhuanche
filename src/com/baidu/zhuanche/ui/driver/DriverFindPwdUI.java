@@ -30,20 +30,21 @@ import com.baidu.zhuanche.utils.UIUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 
+
 /**
- * @项目名: 拼车
- * @包名: com.baidu.zhuanche.ui.driver
- * @类名: DriverFindPasswordUI
- * @创建者: 陈选文
- * @创建时间: 2015-12-29 上午10:13:30
- * @描述: TODO
+ * @项目名: 	拼车
+ * @包名:	com.baidu.zhuanche.ui.user
+ * @类名:	UserFindPasswordUI
+ * @创建者:	陈选文
+ * @创建时间:	2015-12-29	上午10:11:55 
+ * @描述:	司机找回密码界面
  * 
- * @svn版本: $Rev$
- * @更新人: $Author$
- * @更新时间: $Date$
- * @更新描述: TODO
+ * @svn版本:	$Rev$
+ * @更新人:	$Author$
+ * @更新时间:	$Date$
+ * @更新描述:	TODO
  */
-public class DriverFindPasswordUI extends BaseActivity implements OnClickListener
+public class DriverFindPwdUI extends BaseActivity implements OnClickListener
 {
 	private EditText		mEtNumber;
 	private TextView		mTvQuhao;
@@ -59,20 +60,20 @@ public class DriverFindPasswordUI extends BaseActivity implements OnClickListene
 	@Override
 	public void initView()
 	{
-		setContentView(R.layout.ui_driver_findpassword);
-		mContainerQuhao = (LinearLayout) findViewById(R.id.df_container_quhao);
-		mTvQuhao = (TextView) findViewById(R.id.df_tv_quhao);
-		mEtNumber = (EditText) findViewById(R.id.df_et_number);
-		mEtCode = (EditText) findViewById(R.id.df_et_yanzhengma);
-		mBtGetCode = (Button) findViewById(R.id.df_bt_yanzhengma);
-		mBtNext = (Button) findViewById(R.id.df_bt_next);
+		setContentView(R.layout.ui_user_findpassword);
+		mContainerQuhao = (LinearLayout) findViewById(R.id.uf_container_quhao);
+		mTvQuhao = (TextView) findViewById(R.id.uf_tv_quhao);
+		mEtNumber = (EditText) findViewById(R.id.uf_et_number);
+		mEtCode = (EditText) findViewById(R.id.uf_et_yanzhengma);
+		mBtGetCode = (Button) findViewById(R.id.uf_bt_yanzhengma);
+		mBtNext = (Button) findViewById(R.id.uf_bt_next);
 	}
 
 	@Override
 	public void initData()
 	{
 		super.initData();
-		mTvTitle.setText("找回密码");
+		mTvTitle.setText("忘記密码");
 		mDatas = new ArrayList<String>();
 		mDatas.add("+86");
 		mDatas.add("+852");
@@ -130,7 +131,7 @@ public class DriverFindPasswordUI extends BaseActivity implements OnClickListene
 			return;
 		}
 		// 传送数据过去 TODO
-		Intent intent = new Intent(this, DriverFindPasswordNextUI.class);
+		Intent intent = new Intent(this, DriverFindPwdNextUI.class);
 		intent.putExtra("code", mVerifyCode);
 		intent.putExtra("mobile", number);
 		startActivity(intent);
@@ -148,7 +149,7 @@ public class DriverFindPasswordUI extends BaseActivity implements OnClickListene
 			return;
 		}
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
-		String url = URLS.BASESERVER + URLS.Driver.verify;
+		String url = URLS.BASESERVER + URLS.User.verify;
 		RequestParams params = new RequestParams();
 		params.put(URLS.MOBILE, number);
 		ToastUtils.showProgress(this);
@@ -187,5 +188,9 @@ public class DriverFindPasswordUI extends BaseActivity implements OnClickListene
 		});
 		builder.show();
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 }

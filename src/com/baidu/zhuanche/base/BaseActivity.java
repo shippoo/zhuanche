@@ -1,7 +1,9 @@
 package com.baidu.zhuanche.base;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,6 +22,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
+
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.DriverBean;
@@ -28,9 +33,11 @@ import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.ImageUtils;
+import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.SPUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.baidu.zhuanche.utils.UIUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -336,8 +343,42 @@ public abstract class BaseActivity extends Activity
 	{
 		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		String DEVICE_ID = tm.getDeviceId();
-		PrintUtils.print("设备id=" + DEVICE_ID);
 		return DEVICE_ID;
 	}
-	
+	/**
+	 * 为用户端设置标签
+	 */
+	public void setUserAligs(){
+		Set<String> tags = new HashSet<String>();
+		tags.add(MD5Utils.encode(BaseApplication.getUser().mobile));
+		JPushInterface.setAliasAndTags(this, "aligs", tags, new TagAliasCallback() {
+
+			@Override
+			public void gotResult(int arg0, String arg1, Set<String> arg2)
+			{
+				if (arg0 != 0)
+				{
+					ToastUtils.makeShortText(UIUtils.getContext(), "设置用户别名失败！");
+				}
+			}
+		});
+	}
+	/**
+	 * 为司机端设置标签
+	 */
+	public void setDriverAligs(){
+		Set<String> tags = new HashSet<String>();
+		tags.add(MD5Utils.encode(BaseApplication.getDriver().mobile));
+		JPushInterface.setAliasAndTags(this, "aligs", tags, new TagAliasCallback() {
+
+			@Override
+			public void gotResult(int arg0, String arg1, Set<String> arg2)
+			{
+				if (arg0 != 0)
+				{
+					ToastUtils.makeShortText(UIUtils.getContext(), "设置司机别名失败！");
+				}
+			}
+		});
+	}
 }
