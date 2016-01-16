@@ -28,22 +28,25 @@ public interface URLS
 	 */
 	interface User
 	{
-		String	login			= "User/Login/login";
-		String	register		= "User/Login/register";
-		String	verify			= "User/Login/verify";
-		String	enum_			= "User/User/enum";
-		String	orderlist		= "User/User/orderList";		// 订单列表
-		String	logout			= "User/Login/logout";
-		String	findPassword	= "User/Login/findPassword";
-		String	modifyIcon		= "User/User/modifyIcon";		// 修改头像
-		String	modifyUser		= "User/User/modifyUser";
-		String	hotCity			= "User/User/hotCity";			// 热门城市
-		String	addFee			= "User/User/addFee";
-		String	makeOrder		= "User/User/makeOrder";		// 用戶预约接口
-		String	index			= "User/Login/index";
-		String	artilce_list	= "User/Login/artilce_list";
-		String	myMessage		= "User/User/myMessage";
-		String	cleanMessage	= "User/User/cleanMessage";
+		String	login				= "User/Login/login";
+		String	register			= "User/Login/register";
+		String	verify				= "User/Login/verify";
+		String	enum_				= "User/User/enum";
+		String	orderlist			= "User/User/orderList";		// 订单列表
+		String	logout				= "User/Login/logout";
+		String	findPassword		= "User/Login/findPassword";
+		String	modifyIcon			= "User/User/modifyIcon";		// 修改头像
+		String	modifyUser			= "User/User/modifyUser";
+		String	hotCity				= "User/User/hotCity";			// 热门城市
+		String	addFee				= "User/User/addFee";
+		String	makeOrder			= "User/User/makeOrder";		// 用戶预约接口
+		String	index				= "User/Login/index";
+		String	artilce_list		= "User/Login/artilce_list";
+		String	myMessage			= "User/User/myMessage";
+		String	cleanMessage		= "User/User/cleanMessage";
+		String	orderCancel			= "User/User/orderCancel";
+		String	addDriverComment	= "User/User/addDriverComment";
+		String	commentDetail		= "User/User/commentDetail";
 	}
 
 	/**
@@ -77,7 +80,7 @@ public interface URLS
 		String	getorderList		= "Driver/Driver/getorderList";
 		String	receiveOrder		= "Driver/Driver/receiveOrder";
 		String	findPassword		= "Driver/Login/findPassword";
-
+		String	orderDetail			= "Driver/Driver/orderDetail";
 	}
 
 	String	MOBILE			= "mobile";		// 手机号码
@@ -90,4 +93,5 @@ public interface URLS
 	String	ICON			= "icon";
 	String	CURRENTPAGER	= "currentpager";	// 当前页
 	String	TYPE			= "type";			// 枚舉值類型
+	String	CARPOOL			= "carpool";
 }

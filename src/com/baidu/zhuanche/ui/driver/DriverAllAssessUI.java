@@ -3,7 +3,6 @@ package com.baidu.zhuanche.ui.driver;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
@@ -112,6 +111,7 @@ public class DriverAllAssessUI extends BaseActivity implements OnClickListener, 
 		mTvName.setText(mDriverInfo.name);
 		mTvIdCard.setText(mDriverInfo.citizenid);
 		mImageUtils.display(mCivPhoto, URLS.BASE + mDriverInfo.icon);
+		mTvCarName.setText(mDriverInfo.type);
 	}
 
 	@Override

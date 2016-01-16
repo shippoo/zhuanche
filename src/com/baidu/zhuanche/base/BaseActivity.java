@@ -101,6 +101,7 @@ public abstract class BaseActivity extends Activity
 	protected void onResume()
 	{
 		allActivitys.add(this);
+		JPushInterface.onResume(this);
 		super.onResume();
 	}
 
@@ -154,7 +155,12 @@ public abstract class BaseActivity extends Activity
 			mTimer = null;
 		}
 	}
-
+	@Override
+	protected void onPause()
+	{
+		JPushInterface.onPause(this);
+		super.onPause();
+	}
 	@Override
 	public void onBackPressed()
 	{
@@ -189,7 +195,7 @@ public abstract class BaseActivity extends Activity
 		finish();
 		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 	}
-
+	
 	/**
 	 * 开启一个新界面
 	 * 
@@ -318,7 +324,19 @@ public abstract class BaseActivity extends Activity
 		refreshView.getLoadingLayoutProxy().setReleaseLabel("釋放開始加載");
 		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最後加載時間:" + str);
 	}
-
+	/**
+	 * 上拉加載更多數據設置
+	 * 
+	 * @param refreshView
+	 */
+	public void setPullRefreshListDriverData(PullToRefreshBase<ListView> refreshView)
+	{
+		String str = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+		refreshView.getLoadingLayoutProxy().setRefreshingLabel("正在刷新");
+		refreshView.getLoadingLayoutProxy().setPullLabel("下拉以刷新");
+		refreshView.getLoadingLayoutProxy().setReleaseLabel("放開以刷新");
+		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最後刷新時間:" + str);
+	}
 	/**
 	 * 上拉加載更多數據設置
 	 * 
@@ -369,6 +387,7 @@ public abstract class BaseActivity extends Activity
 	public void setDriverAligs(){
 		Set<String> tags = new HashSet<String>();
 		tags.add(MD5Utils.encode(BaseApplication.getDriver().mobile));
+		PrintUtils.print("司機別名=" + MD5Utils.encode(BaseApplication.getDriver().mobile));
 		JPushInterface.setAliasAndTags(this, "aligs", tags, new TagAliasCallback() {
 
 			@Override

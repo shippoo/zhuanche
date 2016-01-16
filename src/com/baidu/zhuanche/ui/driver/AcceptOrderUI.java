@@ -12,6 +12,7 @@ import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.DriverHomeBean.DriverHomeOrder;
+import com.baidu.zhuanche.bean.OrderDetailBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
@@ -72,6 +73,27 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 	{
 		super.initData();
 		mTvTitle.setText("接單詳細");
+		ToastUtils.showProgress(this);
+		String url = URLS.BASESERVER + URLS.Driver.orderDetail;
+		RequestParams params = new RequestParams();
+		params.put(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
+		params.put("sn", mOrderbean.sn);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+			
+			@Override
+			public void success(String json)
+			{
+				processJson(json);
+			}
+		});
+		
+		
+		
+		
+	}
+
+	public void setData()
+	{
 		mTvTime.setText(DateFormatUtil.getDateTimeStr(new Date(Long.parseLong(mOrderbean.time) * 1000)));
 		float price = Float.parseFloat(mOrderbean.budget) + Float.parseFloat(mOrderbean.fee);
 		mTvPrice.setText("￥" + price);
@@ -91,6 +113,13 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 		mTvMobile.setText(mOrderbean.mobile);
 		mTvXingLiCount.setText(mOrderbean.luggage + "個");
 		mTvDes.setText(mOrderbean.remark);
+	}
+
+	protected void processJson(String json)
+	{
+		OrderDetailBean orderDetailBean = mGson.fromJson(json, OrderDetailBean.class);
+		mOrderbean = orderDetailBean.content;
+		setData();
 	}
 
 	@Override
@@ -131,7 +160,8 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 				ToastUtils.makeShortText(UIUtils.getContext(), "接单成功！");
 				mBtOrder.setEnabled(false);
 				mBtOrder.setSelected(true);
-				if(mListener != null){
+				if (mListener != null)
+				{
 					mListener.onReceiverOrder(mOrderbean);
 				}
 			}

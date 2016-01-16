@@ -40,7 +40,7 @@ public class NewsDetailUI extends BaseActivity implements OnClickListener
 		super.initData();
 		mTvTitle.setText("新闻详情");
 		
-		mWebView.loadUrl("https://www.baidu.com/");
+		mWebView.loadUrl("http://192.168.1.142:8080/news.html");
 		mWebView.setWebViewClient(new WebViewClient(){
 			
 			@Override

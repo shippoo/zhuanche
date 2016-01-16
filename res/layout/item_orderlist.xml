@@ -532,7 +532,7 @@
                     android:src="@drawable/page_34" />
 
                 <TextView
-                    android:id="@+id/item_yuyue_qianzheng1"
+                    android:id="@+id/item_yuyue_tv_drivername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -558,13 +558,13 @@
                     android:src="@drawable/page_43" />
 
                 <TextView
-                    android:id="@+id/item_yuyue_fee1"
+                    android:id="@+id/item_yuyue_tv_carid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="13dp"
                     android:layout_toRightOf="@+id/list_image_111"
-                    android:text="东风日产"
+                    android:text=""
                     android:textColor="@color/item_yuyue_textColor"
                     android:textSize="12sp" />
             </RelativeLayout>
@@ -635,5 +635,25 @@
             android:textColor="@color/item_yuyue_textColor"
             android:textSize="12sp" />
     </RelativeLayout>
+<!-- 已取消 -->
 
+    <RelativeLayout
+        android:id="@+id/item_container_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" >
+
+        <Button
+            android:id="@+id/item_yuyue_bt_cancel"
+            android:layout_width="70dp"
+            android:layout_height="22dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:enabled="false"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/btn_bg_normal_shaped"
+            android:focusable="false"
+            android:text="已取消"
+            android:textColor="@color/item_yuyue_textColor"
+            android:textSize="12sp" />
+    </RelativeLayout>
 </LinearLayout>

@@ -215,7 +215,7 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		}
 		else if ("1".equals(driver.status))
 		{
-			startActivity(IdentityCheckUI.class);
+			startActivity(ReIdentityCheckUI.class);
 		}
 		else if ("2".equals(driver.status))
 		{

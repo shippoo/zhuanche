@@ -56,7 +56,6 @@
             style="@style/BasicTextStyle"
             android:layout_alignLeft="@id/allassess_tv_carnum"
             android:layout_below="@id/allassess_tv_carnum"
-            android:layout_toLeftOf="@id/assess_image_03"
             android:text="身份证："
             android:textSize="12sp" />
 

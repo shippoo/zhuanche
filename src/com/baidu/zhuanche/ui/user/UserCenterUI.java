@@ -1,8 +1,8 @@
 package com.baidu.zhuanche.ui.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,7 +41,7 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 	private User			mUser;
 	private TextView		mTvNumber;
 	private TextView		mTvName;
-	private List<OrderBean>	mDatas;
+	private List<OrderBean>	mDatas ;
 	private OrderAdapter	mOrderAdapter; //订单适配器
 
 	@Override
@@ -57,16 +57,24 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		mListView = (ListView) findViewById(R.id.uc_listview);
 		mListView.addHeaderView(headerView);
 	}
-
+	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		mImageUtils.display(mCivPic, URLS.BASE + mUser.icon);
+	}
 	@Override
 	public void initData()
 	{
 		super.initData();
+		mDatas  = new ArrayList<OrderListBean.OrderBean>();
 		mTvTitle.setText("个人中心");
 		mUser = BaseApplication.getUser();
 		mImageUtils.display(mCivPic, URLS.BASE + mUser.icon);
 		mTvNumber.setText(AtoolsUtil.mobile4(mUser.mobile));
 		mTvName.setText(mUser.username);
+		mOrderAdapter = new OrderAdapter(this, mDatas);
+		mListView.setAdapter(mOrderAdapter);
 		setEmptyView(mListView, "没有订单数据！");
 		/*
 		 * 去网络上加载订单列表数据,加载时显示进度条 加载完成后隐藏进度条
@@ -100,10 +108,11 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 	{
 		Gson gson = new Gson();
 		OrderListBean bean = gson.fromJson(json, OrderListBean.class);
-		mDatas = bean.content;
+		mDatas.addAll(bean.content);
 		OrderUtil.sortOrder(mDatas);
-		mOrderAdapter = new OrderAdapter(this, mDatas);
-		mListView.setAdapter(mOrderAdapter);
+		//mOrderAdapter = new OrderAdapter(this, mDatas);
+		//mListView.setAdapter(mOrderAdapter);
+		mOrderAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -142,12 +151,14 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
-		OrderBean orderBean = mDatas.get(position);
-		Intent intent = new Intent(this, YuYueDetailUI.class);
+		if(position == 0){
+			return;
+		}
+		OrderBean orderBean = mDatas.get(position - 1);
 		Bundle bundle = new Bundle();
+		bundle.putInt("position", position -1);
 		bundle.putSerializable(MyConstains.ITEMBEAN, orderBean);
-		startActivity(intent);
-		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+		startActivity(YuYueDetailUI.class,bundle);
 	}
 
 	

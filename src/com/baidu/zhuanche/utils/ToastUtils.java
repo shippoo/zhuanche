@@ -27,6 +27,11 @@ public class ToastUtils
 		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 	}
 
+	public static void makeShortText(String text)
+	{
+		Toast.makeText(UIUtils.getContext(), text, Toast.LENGTH_SHORT).show();
+	}
+
 	public static void makeLongText(Context context, String text)
 	{
 		Toast.makeText(context, text, Toast.LENGTH_LONG).show();
@@ -35,14 +40,17 @@ public class ToastUtils
 	public static void showProgress(Context context)
 	{
 		mPd = new ProgressDialog(context);
+		mPd.setCanceledOnTouchOutside(false);
 		mPd.show();
 	}
+
 	public static void closeProgress()
 	{
-		if(mPd != null){
+		if (mPd != null)
+		{
 			mPd.dismiss();
 			mPd = null;
 		}
-		
+
 	}
 }

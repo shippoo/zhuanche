@@ -95,6 +95,8 @@
         <activity android:name=".ui.user.FeedBackUI" />
         <activity android:name=".ui.user.CopyOfFeedBackUI" />
         <activity android:name=".ui.user.UserFindPasswordNextUI" />
+        <activity android:name=".ui.user.AssessDetailUI"/>
+        <activity android:name=".ui.user.LookAssessUI"/>
         <!-- 司机端 -->
         <activity android:name=".ui.driver.DriverLoginUI" />
         <activity android:name=".ui.driver.DriverRegistUI" />
@@ -128,6 +130,7 @@
         <activity
             android:name=".ui.driver.ReIdentityCheckUI"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity android:name=".ui.driver.DriverCenterOrderDetailUI"/>
         <!-- service -->
         <service android:name=".service.MyService" />
         <service android:name="com.amap.api.location.APSService" />

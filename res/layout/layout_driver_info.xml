@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
-    
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="75dp" >
 
-        <ImageView
+        <com.baidu.zhuanche.view.CircleImageView
             android:id="@+id/layout_driver_iv_pic"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -39,7 +39,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/assess_text_04"
+            android:id="@+id/layout_driver_tv_carid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -49,49 +49,25 @@
             android:textColor="#666666"
             android:textSize="12sp" />
 
-        <ImageView
-            android:id="@+id/assess_image_03"
+        <RatingBar
+            android:id="@+id/layout_driver_ratingbar1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_driver_tv_car_name"
-            android:layout_toRightOf="@+id/layout_driver_tv_car_name"
-            android:src="@drawable/yuping" />
-	
-        <TextView
-            android:id="@+id/layout_driver_tv_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/assess_image_03"
-            android:layout_alignLeft="@+id/assess_text_04"
-            android:text="4.9"
-            android:textColor="#F7F7F7"
-            android:textSize="10sp" />
-		<RatingBar 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:progressDrawable="@drawable/layerlist_ratingbar_bg"
-		    android:numStars="5"
-		    android:isIndicator="true"
-		    android:layout_toLeftOf="@id/assess_image_03"
-		    android:layout_below="@id/layout_driver_tv_car_name"/>
-        <TextView
-            android:id="@+id/layout_driver_tv_ordercount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/assess_image_03"
-            android:layout_alignRight="@+id/assess_text_04"
-            android:text="185单"
-            android:textColor="#666666"
-            android:textSize="10sp" />
+            android:layout_below="@id/layout_driver_tv_carid"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/layout_driver_iv_pic"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:progressDrawable="@drawable/layerlist_ratingbar_bg" />
 
         <ImageView
             android:id="@+id/layout_driver_iv_call"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="14dp"
             android:src="@drawable/phonelin" />
     </RelativeLayout>
-	
+
 </LinearLayout>

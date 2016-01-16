@@ -335,6 +335,10 @@ public class ReIdentityCheckUI extends BaseActivity implements OnClickListener
 						|| TextUtils.isEmpty(citizenid) || TextUtils.isEmpty(type) || TextUtils.isEmpty(level)
 						|| TextUtils.isEmpty(seaport) || carnum == null || zjzh == null || idcard == null;
 		boolean imgEmpty =  carnum == null || zjzh == null || idcard == null;
+		if(imgEmpty){
+			ToastUtils.makeShortText(this, "請選擇照片！");
+			return;
+		}
 		if (TextUtils.isEmpty(name))
 		{
 			ToastUtils.makeShortText(this, "請填寫姓名！");
@@ -575,6 +579,8 @@ public class ReIdentityCheckUI extends BaseActivity implements OnClickListener
 			mBtCancel = (Button) mDialog.findViewById(R.id.dialog_cancel);
 			mBtOK = (Button) mDialog.findViewById(R.id.dialog_ok);
 			mListView = (ListView) mDialog.findViewById(R.id.dialog_listview);
+			TextView title = (TextView) mDialog.findViewById(R.id.dialog_title);
+			title.setText("车级别");
 			// 设置点击事件
 			mBtCancel.setOnClickListener(this);
 			mBtOK.setOnClickListener(new OnClickListener() {

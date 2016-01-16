@@ -1,26 +1,16 @@
 package com.baidu.zhuanche.ui.driver;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -31,21 +21,17 @@ import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.DriverHomeOrderAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
-import com.baidu.zhuanche.base.MyBaseApdater;
 import com.baidu.zhuanche.bean.DriverHomeBean;
 import com.baidu.zhuanche.bean.DriverHomeBean.DriverHomeOrder;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.driver.AcceptOrderUI.OnReceiverOrderListener;
-import com.baidu.zhuanche.utils.AtoolsUtil;
-import com.baidu.zhuanche.utils.DateFormatUtil;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
-import com.baidu.zhuanche.view.CircleImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.RequestParams;
 
@@ -62,7 +48,12 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DriverHomeUI extends BaseActivity implements OnClickListener, OnItemClickListener, OnRefreshListener<ListView>, AMapLocationListener, OnReceiverOrderListener, com.baidu.zhuanche.adapter.DriverHomeOrderAdapter.OnReceiverOrderListener
+public class DriverHomeUI extends BaseActivity	implements
+												OnClickListener,
+												OnItemClickListener,
+												AMapLocationListener,
+												OnReceiverOrderListener,
+												com.baidu.zhuanche.adapter.DriverHomeOrderAdapter.OnReceiverOrderListener
 {
 	private PullToRefreshListView	mListView;
 	private DriverHomeOrderAdapter	mAdapter;
@@ -120,19 +111,21 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 	{
 		super.initData();
 		mTvTitle.setText("首頁");
-		mListView.setMode(Mode.PULL_FROM_END);
+		mListView.setMode(Mode.BOTH);
 		mIvRightHeader.setVisibility(0);
 		mIvLeftHeader.setVisibility(8);
 		mIvRightHeader.setImageResource(R.drawable.picture_31);
-		
+
 		mAdapter = new DriverHomeOrderAdapter(this, mDatas);
 		mListView.setAdapter(mAdapter);
 		setEmptyView(mListView, "沒有訂單列表數據");
 		ToastUtils.showProgress(this);
 
 	}
+
 	/**
 	 * 推送消息，暂时不用管测试用
+	 * 
 	 * @param alias
 	 * @param tags
 	 */
@@ -157,7 +150,7 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		RequestParams params = new RequestParams();
 		params.add(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
 		params.add("point", mLongitude + "," + mLatitude);
-		params.add(URLS.CURRENTPAGER, "" +currentPage);
+		params.add(URLS.CURRENTPAGER, "" + currentPage);
 		mClient.post(url, params, new MyAsyncResponseHandler() {
 
 			@Override
@@ -167,7 +160,22 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 			}
 		});
 	}
+	public void refresh()
+	{
+		String url = URLS.BASESERVER + URLS.Driver.getorderList;
+		RequestParams params = new RequestParams();
+		params.add(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
+		params.add("point", mLongitude + "," + mLatitude);
+		params.add(URLS.CURRENTPAGER, "" + 1);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
 
+			@Override
+			public void success(String json)
+			{
+				processRefreshJson(json);
+			}
+		});
+	}
 	protected void processJson(String json)
 	{
 		Gson gson = new Gson();
@@ -180,7 +188,19 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		}
 		mListView.onRefreshComplete();
 	}
-
+	protected void processRefreshJson(String json)
+	{
+		Gson gson = new Gson();
+		DriverHomeBean driverHomeBean = gson.fromJson(json, DriverHomeBean.class);
+		if (driverHomeBean.content != null && driverHomeBean.content.size() > 0)
+		{
+			mDatas.clear();
+			mDatas.addAll(driverHomeBean.content);
+			mAdapter.notifyDataSetChanged();
+			currentPage++;
+		}
+		mListView.onRefreshComplete();
+	}
 	@Override
 	public void initListener()
 	{
@@ -190,8 +210,27 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		DriverHomeOrderAdapter.setOnReceiverOrderListener(this);
 		mIvRightHeader.setOnClickListener(this);
 		mListView.setOnItemClickListener(this);
-		mListView.setOnRefreshListener(this);
+		mListView.setOnRefreshListener(new OnRefreshListener2() {
+
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase refreshView)
+			{
+				setPullRefreshListDriverData(refreshView);
+				currentPage = 1;
+				mListView.postDelayed(new Refresh(), 1000);
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase refreshView)
+			{
+
+				setPullRefreshListDriverLoadMoreData(refreshView);
+				mListView.postDelayed(new LoadMore(), 1000);
+			}
+
+		});
 	}
+
 	@Override
 	public void onClick(View v)
 	{
@@ -205,22 +244,13 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		}
 	}
 
-	
-
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
 		// TODO 这里需要传值，将本条目的值传过去
 		Bundle bundle = new Bundle();
-		bundle.putSerializable("orderbean", mDatas.get(position));
+		bundle.putSerializable("orderbean", mDatas.get(position - 1));
 		startActivity(AcceptOrderUI.class, bundle);
-	}
-
-	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView)
-	{
-		setPullRefreshListDriverLoadMoreData(refreshView);
-		mListView.postDelayed(new LoadMore(), 1000);
 	}
 
 	private class LoadMore implements Runnable
@@ -232,7 +262,15 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 			loadMore();
 		}
 	}
+	private class Refresh implements Runnable
+	{
 
+		@Override
+		public void run()
+		{
+			refresh();
+		}
+	}
 	@Override
 	protected void onDestroy()
 	{
@@ -272,9 +310,11 @@ public class DriverHomeUI extends BaseActivity implements OnClickListener, OnIte
 		 * 想要删掉不容易啊
 		 */
 		ListIterator<DriverHomeOrder> listIterator = mDatas.listIterator();
-		while(listIterator.hasNext()){
+		while (listIterator.hasNext())
+		{
 			DriverHomeOrder next = listIterator.next();
-			if(next.sn.equals(order.sn)){
+			if (next.sn.equals(order.sn))
+			{
 				listIterator.remove();
 			}
 		}

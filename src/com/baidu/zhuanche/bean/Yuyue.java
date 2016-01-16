@@ -21,6 +21,10 @@ public class Yuyue
 	public String	signtype;		// 签证类型
 	public String	time;			// 时间
 	public String	seaport;		// 港口
-	public Location	getOnLocation;	// 上车地点
-	public Location	getOffLocation; // 下车地点
+	public Location	getOnLocation = new Location();	// 上车地点
+	public Location	getOffLocation = new Location(); // 下车地点
+	public String   peopleCount;
+	public String   xingliCount;
+	public String   fee;
+	public String   des;
 }

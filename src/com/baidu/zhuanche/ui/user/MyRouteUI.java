@@ -31,6 +31,7 @@ import com.amap.api.services.route.RouteSearch.DriveRouteQuery;
 import com.amap.api.services.route.RouteSearch.OnRouteSearchListener;
 import com.amap.api.services.route.WalkRouteResult;
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.bean.OrderListBean.OrderBean;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.utils.AMapUtil;
@@ -80,7 +81,8 @@ public class MyRouteUI extends Activity implements OnPoiSearchListener, OnRouteS
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ui_myroute);
-		mOrderBean = (OrderBean) getIntent().getSerializableExtra(MyConstains.ITEMBEAN);
+		Bundle bundle = getIntent().getBundleExtra(BaseActivity.VALUE_PASS);
+		mOrderBean = (OrderBean) bundle.getSerializable(MyConstains.ITEMBEAN);
 		mMapView = (MapView) findViewById(R.id.myroute_mapview);
 		mAMap = mMapView.getMap();
 		mMapView.onCreate(savedInstanceState);

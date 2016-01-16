@@ -31,6 +31,7 @@ public class AllAssessBean extends BaseBean
 		public String id;//	1
 		public String name;//	陈锦健
 		public String icon;
+		public String type;
 	}
 	public class Assess
 	{

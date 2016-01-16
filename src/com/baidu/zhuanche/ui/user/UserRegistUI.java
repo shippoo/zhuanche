@@ -103,24 +103,31 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 		else if (v == mBtGetCode)
 		{
 			doClickGetCode();
-		}else if(v == mBtRegist){
+		}
+		else if (v == mBtRegist)
+		{
 			doClickRegist();
-		}else if(v == mIvLeftHeader){
+		}
+		else if (v == mIvLeftHeader)
+		{
 			finishActivity();
 		}
 	}
-	/**注册*/
+
+	/** 注册 */
 	private void doClickRegist()
 	{
-		String quhao = mTvQuhao.getText().toString(); //TODO 区号
+		String quhao = mTvQuhao.getText().toString(); // TODO 区号
 		String number = mEtNumber.getText().toString().trim();
 		String code = mEtCode.getText().toString().trim();
 		String password = mEtPassword.getText().toString().trim();
-		if(TextUtils.isEmpty(number) || TextUtils.isEmpty(code) || TextUtils.isEmpty(password) ){
+		if (TextUtils.isEmpty(number) || TextUtils.isEmpty(code) || TextUtils.isEmpty(password))
+		{
 			ToastUtils.makeShortText(this, "请完善信息！");
 			return;
 		}
-		if(!code.equals(mVerifyCode)){
+		if (!code.equals(mVerifyCode))
+		{
 			ToastUtils.makeShortText(this, "验证码不对！");
 			return;
 		}
@@ -132,12 +139,12 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 		params.put(URLS.VERIFY_CODE, code);
 		params.put("receive_id", MD5Utils.encode(number));
 		client.post(url, params, new MyAsyncResponseHandler() {
-			
+
 			@Override
 			public void success(String json)
 			{
 				ToastUtils.makeShortText(getApplicationContext(), "注册成功！");
-				/**跳转到登陆*/
+				/** 跳转到登陆 */
 				startActivityAndFinish(UserLoginUI.class);
 			}
 		});
@@ -162,8 +169,8 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 			@Override
 			public void success(String json)
 			{
-				
-				/** 获取验证码,并未验证码赋值*/
+
+				/** 获取验证码,并未验证码赋值 */
 				try
 				{
 					JSONObject content = JsonUtils.getContent(json);

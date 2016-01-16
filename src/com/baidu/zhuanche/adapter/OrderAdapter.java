@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -23,16 +24,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.base.MyBaseApdater;
+import com.baidu.zhuanche.bean.OrderListBean.DriverInfo;
 import com.baidu.zhuanche.bean.OrderListBean.OrderBean;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.ui.user.AssessDetailUI;
+import com.baidu.zhuanche.ui.user.LookAssessUI;
 import com.baidu.zhuanche.ui.user.MyRouteUI;
 import com.baidu.zhuanche.ui.user.YuYueDetailUI;
+import com.baidu.zhuanche.ui.user.YuYueDetailUI.OnAddFeeListener;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
+import com.baidu.zhuanche.utils.AtoolsUtil;
+import com.baidu.zhuanche.utils.DateFormatUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.OrderUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
@@ -53,13 +61,14 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class OrderAdapter extends MyBaseApdater<OrderBean>
+public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeListener
 {
 	private User	mUser;
 
 	public OrderAdapter(Context context, List<OrderBean> dataSource) {
 		super(context, dataSource);
 		mUser = BaseApplication.getUser();
+		YuYueDetailUI.setOnAddFeeListener(this);
 	}
 
 	@Override
@@ -89,14 +98,21 @@ public class OrderAdapter extends MyBaseApdater<OrderBean>
 			holder.btPay = (Button) convertView.findViewById(R.id.item_yuyue_fukuang);
 			// 去评价按钮
 			holder.btGoAssess = (Button) convertView.findViewById(R.id.item_yuyue_bt_assess);
-			//查看评价
+			// 查看评价
 			holder.btLookAssess = (Button) convertView.findViewById(R.id.item_yuyue_bt_lookassess);
+			//已取消按鈕
+			holder.btCancel = (Button) convertView.findViewById(R.id.item_yuyue_bt_cancel);
 			// 显示或者隐藏的容器
 			holder.container_orderDetail = (LinearLayout) convertView.findViewById(R.id.item_yuyue_ll_order_detail);
 			holder.container_daijiedan = (RelativeLayout) convertView.findViewById(R.id.item_yuyue_status_daijiedan);
 			holder.container_yiyueyue = (LinearLayout) convertView.findViewById(R.id.item_yuyue_container_yiyuyue);
 			holder.container_goAssess = (RelativeLayout) convertView.findViewById(R.id.item_container_assess);
 			holder.container_lookAssess = (RelativeLayout) convertView.findViewById(R.id.item_container_lookassess);
+			holder.container_cancel = (RelativeLayout) convertView.findViewById(R.id.item_container_cancel);
+			
+			holder.tvDriverName = (TextView) convertView.findViewById(R.id.item_yuyue_tv_drivername);
+			holder.tvCarId = (TextView) convertView.findViewById(R.id.item_yuyue_tv_carid);
+			
 		}
 		else
 		{
@@ -112,7 +128,15 @@ public class OrderAdapter extends MyBaseApdater<OrderBean>
 		holder.tvXcPosition.setText(bean.to);
 		holder.tvBudget.setText(bean.budget + "元");
 		holder.tvFee.setText(bean.fee + "元");
-
+		holder.tvTime.setText(AtoolsUtil.unixTimeToLocalTime(bean.time));
+		DriverInfo driverInfo = bean.d_del;
+		
+		if(!TextUtils.isEmpty(driverInfo.name)){
+			holder.tvDriverName.setText(driverInfo.name);
+		}
+		if(!TextUtils.isEmpty(driverInfo.carid)){
+			holder.tvDriverName.setText(driverInfo.carid);
+		}
 		/** 箭头点击事件 */
 		holder.ivArrow.setOnClickListener(new MyOnClickLsterner(holder));
 		// 预约中状态 ，显示加小费容器
@@ -122,6 +146,7 @@ public class OrderAdapter extends MyBaseApdater<OrderBean>
 			holder.container_yiyueyue.setVisibility(8);
 			holder.container_goAssess.setVisibility(8);
 			holder.container_lookAssess.setVisibility(8);
+			holder.container_cancel.setVisibility(8);
 		}
 		else if ("1".equals(bean.status))
 		{
@@ -129,6 +154,7 @@ public class OrderAdapter extends MyBaseApdater<OrderBean>
 			holder.container_yiyueyue.setVisibility(0);
 			holder.container_goAssess.setVisibility(8);
 			holder.container_lookAssess.setVisibility(8);
+			holder.container_cancel.setVisibility(8);
 		}
 		else if ("2".equals(bean.status))
 		{
@@ -136,6 +162,7 @@ public class OrderAdapter extends MyBaseApdater<OrderBean>
 			holder.container_yiyueyue.setVisibility(8);
 			holder.container_goAssess.setVisibility(0);
 			holder.container_lookAssess.setVisibility(8);
+			holder.container_cancel.setVisibility(8);
 		}
 		else if ("3".equals(bean.status)) // 查看评价
 		{
@@ -143,7 +170,24 @@ public class OrderAdapter extends MyBaseApdater<OrderBean>
 			holder.container_yiyueyue.setVisibility(8);
 			holder.container_goAssess.setVisibility(8);
 			holder.container_lookAssess.setVisibility(0);
+			holder.container_cancel.setVisibility(8);
 		}
+		else if("4".equals(bean.status)){// 4 已取消
+			holder.container_daijiedan.setVisibility(8);
+			holder.container_yiyueyue.setVisibility(8);
+			holder.container_goAssess.setVisibility(8);
+			holder.container_lookAssess.setVisibility(8);
+			holder.container_cancel.setVisibility(8);
+			holder.container_cancel.setVisibility(0);
+		}
+		else if("5".equals(bean.status)){
+			holder.container_daijiedan.setVisibility(8);
+			holder.container_yiyueyue.setVisibility(8);
+			holder.container_goAssess.setVisibility(0);
+			holder.container_lookAssess.setVisibility(8);
+			holder.container_cancel.setVisibility(8);
+		}
+		// 5 待评价 线下支付 等待评价 和2一样
 		/** 小费按钮点击事件 */
 		holder.btAddFee.setOnClickListener(new OnClickListener() {
 
@@ -203,9 +247,19 @@ public class OrderAdapter extends MyBaseApdater<OrderBean>
 		holder.btPay.setOnClickListener(new MyOnClickLsterner(mContext, holder, bean));
 		/** 行程点击事件 */
 		holder.btLook.setOnClickListener(new MyOnClickLsterner(mContext, holder, bean));
-		/** 去评价点击事件 */ // TODO
-		/** 查看评价点击事件 */  //TODO
+		/** 去评价点击事件 */
+		holder.btGoAssess.setOnClickListener(new MyOnClickLsterner(mContext, holder, bean,position));
+		/** 查看评价点击事件 */
+		holder.btLookAssess.setOnClickListener(new MyOnClickLsterner(mContext, holder, bean));
 		return convertView;
+	}
+
+	@Override
+	public void onAddFee(OrderBean orderBean,int position)
+	{
+		mDataSource.set(position, orderBean);
+		notifyDataSetChanged();
+		ToastUtils.makeShortText(UIUtils.getContext(), "小费信息添加成功！");
 	}
 
 }
@@ -262,6 +316,13 @@ class MyOnClickLsterner implements OnClickListener
 		mHolder = holder;
 		mOrderBean = bean;
 	}
+	private int position;
+	public MyOnClickLsterner(Context context, OrderViewHolder holder, OrderBean bean, int position) {
+		mContext = context;
+		mHolder = holder;
+		mOrderBean = bean;
+		position = position;
+	}
 
 	@Override
 	public void onClick(View v)
@@ -272,19 +333,31 @@ class MyOnClickLsterner implements OnClickListener
 		}
 		else if (v == mHolder.btPay)
 		{
-			Intent intent = new Intent(mContext, YuYueDetailUI.class);
 			Bundle bundle = new Bundle();
 			bundle.putSerializable(MyConstains.ITEMBEAN, mOrderBean);
-			intent.putExtra(MyConstains.ITEMBEAN, bundle);
-			mContext.startActivity(intent);
-			((Activity) mContext).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+			startActivity(YuYueDetailUI.class, bundle);
 		}
 		else if (v == mHolder.btLook)
 		{ // 查看我的行程
-			Intent intent = new Intent(mContext, MyRouteUI.class);
-			intent.putExtra(MyConstains.ITEMBEAN, mOrderBean);
-			mContext.startActivity(intent);
-			((Activity) mContext).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+			Bundle bundle = new Bundle();
+			bundle.putSerializable(MyConstains.ITEMBEAN, mOrderBean);
+			startActivity(MyRouteUI.class, bundle);
+
+		}
+		else if (v == mHolder.btGoAssess)
+		{
+			// 去评价
+			Bundle bundle = new Bundle();
+			bundle.putInt("position", position);
+			bundle.putSerializable(MyConstains.ITEMBEAN, mOrderBean);
+			startActivity(AssessDetailUI.class, bundle);
+		}
+		else if (v == mHolder.btLookAssess)
+		{
+			// 查看评价
+			Bundle bundle = new Bundle();
+			bundle.putSerializable(MyConstains.ITEMBEAN, mOrderBean);
+			startActivity(LookAssessUI.class, bundle);
 		}
 	}
 
@@ -295,6 +368,18 @@ class MyOnClickLsterner implements OnClickListener
 		mIsShow = !mIsShow;
 	}
 
+	/**
+	 * 开启一个新界面,并携带数据
+	 * 
+	 * @param clazz
+	 */
+	public void startActivity(Class clazz, Bundle bundle)
+	{
+		Intent intent = new Intent(mContext, clazz);
+		intent.putExtra(BaseActivity.VALUE_PASS, bundle);
+		mContext.startActivity(intent);
+		((Activity) mContext).overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+	}
 }
 
 class OrderViewHolder
@@ -315,7 +400,10 @@ class OrderViewHolder
 	Button			btGoAssess;			// 去评价
 	Button			btLookAssess;			// 查看评价
 	ImageView		ivArrow;				// 箭头
-
+	Button 			btCancel;
+	TextView		tvDriverName;
+	TextView		tvCarId;
+	RelativeLayout	container_cancel;		//已取消
 	RelativeLayout	container_daijiedan;	// 待接单状态
 	LinearLayout	container_yiyueyue;	// 已预约状态
 	LinearLayout	container_orderDetail;	// 详情

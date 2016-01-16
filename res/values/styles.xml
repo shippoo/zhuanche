@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -40,7 +40,7 @@
         <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
     </style>
 
-    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.RadioButton">
         <item name="android:button">@drawable/checkbox_style</item>
         <item name="android:width">25dp </item>
         <item name="android:height">25dp</item>
@@ -231,6 +231,32 @@
         <item name="android:layout_marginLeft">15dp</item>
         <item name="android:layout_marginRight">15dp</item>
         <item name="android:background">@drawable/bg_bt_selector</item>
+    </style>
+    <!-- 支付左侧字体样式 -->
+    <style name="PayLeftFontStyle" parent="@style/BasicTextStyle">
+        <item name="android:drawableLeft">@drawable/weixin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:text">微信支付</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="PayRightButtonStyle" parent="@style/CustomCheckboxAssess">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="GreenButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:background">@drawable/btn_bg_page_green</item>
+        <item name="android:layout_margin">20dp</item>
+        <item name="android:textColor">@color/textcolor_selector</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>

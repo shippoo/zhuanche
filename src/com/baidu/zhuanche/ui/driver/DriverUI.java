@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
@@ -22,9 +25,11 @@ import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.DriverCenterOrderListBean;
 import com.baidu.zhuanche.bean.DriverCenterOrderListBean.OrderBean;
+import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.driver.CompleteUI.OnModifyListener;
+import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.CircleImageView;
@@ -49,7 +54,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DriverUI extends BaseActivity implements OnClickListener, OnRefreshListener<ScrollView>, OnModifyListener
+public class DriverUI extends BaseActivity implements OnClickListener, OnRefreshListener<ScrollView>, OnModifyListener, OnItemClickListener
 {
 	private NoScrollListView		mListView;
 	private PullToRefreshScrollView	mRefreshScrollView;
@@ -170,6 +175,7 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 		mRefreshScrollView.setOnRefreshListener(this);
 		mScrollView = mRefreshScrollView.getRefreshableView();
 		mCivPhoto.setOnClickListener(this);
+		mListView.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -258,5 +264,13 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 	public void onModify(Bitmap bitmap)
 	{
 		mCivPhoto.setImageBitmap(bitmap);
+	}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	{
+		OrderBean orderBean = mDatas.get(position);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(MyConstains.ITEMBEAN, orderBean);
+		startActivity(DriverCenterOrderDetailUI.class,bundle);
 	}
 }

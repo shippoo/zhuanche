@@ -178,6 +178,10 @@ public abstract class MyAsyncResponseHandler extends AsyncHttpResponseHandler
 					ToastUtils.makeShortText(UIUtils.getContext(), "认证信息已存在！");
 					return;
 				}
+				if(49003 == code){
+					ToastUtils.makeShortText(UIUtils.getContext(), "数据重复提交！");
+					return;
+				}
 				if (50001 == code)
 				{
 					ToastUtils.makeShortText(UIUtils.getContext(), "账号被禁用！");

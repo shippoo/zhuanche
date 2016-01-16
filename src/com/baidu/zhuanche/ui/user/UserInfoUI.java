@@ -206,6 +206,7 @@ public class UserInfoUI extends BaseActivity implements OnClickListener, OnModif
 			e.printStackTrace();
 		}
 	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
