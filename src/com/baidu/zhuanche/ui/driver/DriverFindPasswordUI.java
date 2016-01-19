@@ -72,7 +72,7 @@ public class DriverFindPasswordUI extends BaseActivity implements OnClickListene
 	public void initData()
 	{
 		super.initData();
-		mTvTitle.setText("找回密码");
+		mTvTitle.setText("修改密碼");
 		mDatas = new ArrayList<String>();
 		mDatas.add("+86");
 		mDatas.add("+852");
@@ -121,12 +121,12 @@ public class DriverFindPasswordUI extends BaseActivity implements OnClickListene
 		String number = mEtNumber.getText().toString().trim();
 		if (TextUtils.isEmpty(code) || TextUtils.isEmpty(number))
 		{
-			ToastUtils.makeShortText(this, "请完善信息!");
+			ToastUtils.makeShortText(this, "請完善信息!");
 			return;
 		}
 		if (TextUtils.isEmpty(mVerifyCode))
 		{
-			ToastUtils.makeShortText(this, "请先获取验证码!");
+			ToastUtils.makeShortText(this, "請先獲取驗證碼!");
 			return;
 		}
 		// 传送数据过去 TODO
@@ -147,6 +147,7 @@ public class DriverFindPasswordUI extends BaseActivity implements OnClickListene
 			ToastUtils.makeShortText(this, "请输入手机号码！");
 			return;
 		}
+		showTimeCountDown(mBtGetCode);
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
 		String url = URLS.BASESERVER + URLS.Driver.verify;
 		RequestParams params = new RequestParams();

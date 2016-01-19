@@ -8,6 +8,18 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="18" />
 
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- 高德地图权限 -->
@@ -78,8 +90,8 @@
         <activity android:name=".ui.user.SettingUI" />
         <activity android:name=".ui.user.YuYueDetailUI" />
         <activity android:name=".ui.user.UserRegistUI" />
-        <activity android:name=".ui.user.UserFindPwdNextUI"/>
-        <activity android:name=".ui.user.UserFindPwdUI"/>
+        <activity android:name=".ui.user.UserFindPwdNextUI" />
+        <activity android:name=".ui.user.UserFindPwdUI" />
         <activity
             android:name=".ui.user.YuyueUI"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
@@ -95,8 +107,8 @@
         <activity android:name=".ui.user.FeedBackUI" />
         <activity android:name=".ui.user.CopyOfFeedBackUI" />
         <activity android:name=".ui.user.UserFindPasswordNextUI" />
-        <activity android:name=".ui.user.AssessDetailUI"/>
-        <activity android:name=".ui.user.LookAssessUI"/>
+        <activity android:name=".ui.user.AssessDetailUI" />
+        <activity android:name=".ui.user.LookAssessUI" />
         <!-- 司机端 -->
         <activity android:name=".ui.driver.DriverLoginUI" />
         <activity android:name=".ui.driver.DriverRegistUI" />
@@ -130,9 +142,9 @@
         <activity
             android:name=".ui.driver.ReIdentityCheckUI"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity android:name=".ui.driver.DriverCenterOrderDetailUI"/>
+        <activity android:name=".ui.driver.DriverCenterOrderDetailUI" />
         <!-- service -->
-        <service android:name=".service.DriverService"/>
+        <service android:name=".service.DriverService" />
         <service android:name=".service.MyService" />
         <service android:name="com.amap.api.location.APSService" />
         <!-- 极光推送 -->
@@ -243,6 +255,11 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="ef3b4bb2d8d41675b6d497d5" />
+
+        <!-- 支付宝 -->
+        <activity
+            android:name="com.alipay.android.app.sdk.WapPayActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

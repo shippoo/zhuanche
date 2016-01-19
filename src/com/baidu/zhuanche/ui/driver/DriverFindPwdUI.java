@@ -148,6 +148,7 @@ public class DriverFindPwdUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "请输入手机号码！");
 			return;
 		}
+		showTimeCountDown(mBtGetCode);
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
 		String url = URLS.BASESERVER + URLS.User.verify;
 		RequestParams params = new RequestParams();

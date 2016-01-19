@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ import cn.jpush.android.api.TagAliasCallback;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.helper.CountDownButtonHelper;
+import com.baidu.zhuanche.helper.CountDownButtonHelper.OnFinishListener;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.service.DriverService;
 import com.baidu.zhuanche.service.MyService;
@@ -373,6 +376,18 @@ public abstract class BaseActivity extends Activity
 				}
 			}
 		});
+	}
+	public void showTimeCountDown(final Button bt){
+		CountDownButtonHelper helper = new CountDownButtonHelper(bt,"发送验证码", 60, 1);
+		helper.setOnFinishListener(new OnFinishListener() {
+			
+			@Override
+			public void finish()
+			{
+				bt.setText("点击获取验证码");
+			}
+		});
+		helper.start();
 	}
 	/**
 	 * 为司机端设置标签

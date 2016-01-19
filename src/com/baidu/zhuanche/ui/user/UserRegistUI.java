@@ -16,11 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.helper.CountDownButtonHelper;
+import com.baidu.zhuanche.helper.CountDownButtonHelper.OnFinishListener;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
@@ -132,7 +135,7 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 			return;
 		}
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
-		String url = URLS.BASESERVER + URLS.User.login;
+		String url = URLS.BASESERVER + URLS.User.register;
 		RequestParams params = new RequestParams();
 		params.put(URLS.MOBILE, number);
 		params.put(URLS.PASSWORD, password);
@@ -149,7 +152,6 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 			}
 		});
 	}
-
 	/** 获取验证码 */
 	private void doClickGetCode()
 	{
@@ -159,6 +161,7 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "请输入手机号码！");
 			return;
 		}
+		showTimeCountDown(mBtGetCode);
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
 		String url = URLS.BASESERVER + URLS.User.verify;
 		RequestParams params = new RequestParams();
@@ -170,6 +173,7 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 			public void success(String json)
 			{
 
+			
 				/** 获取验证码,并未验证码赋值 */
 				try
 				{

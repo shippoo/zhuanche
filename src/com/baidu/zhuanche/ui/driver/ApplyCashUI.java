@@ -124,7 +124,7 @@ public class ApplyCashUI extends BaseActivity implements OnClickListener
 			@Override
 			public void success(String json)
 			{
-				ToastUtils.makeShortText(UIUtils.getContext(),"提現成功！");
+				ToastUtils.makeShortText(UIUtils.getContext(),"申请提現成功！");
 				float money = Float.parseFloat(mEtMoney.getText().toString().trim());
 				mCanCash = "" +( Float.parseFloat(mCanCash) - money - (money * 0.05));
 				mTvCanWithDrwa.setText("￥" + mCanCash);

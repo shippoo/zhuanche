@@ -21,10 +21,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
@@ -117,7 +115,8 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		super.initData();
 		mTvTitle.setText("完善資料");
 		mDriver = BaseApplication.getDriver();
-		mTvMainQuhao.setText(TextUtils.isEmpty(mDriver.area) ? "" : "+" + mDriver.area);
+		enable(false);
+		mTvMainQuhao.setText(TextUtils.isEmpty(mDriver.area) ? "+86" : "+" + mDriver.area);
 		mTvMobile.setText(mDriver.mobile);
 		ToastUtils.showProgress(this);
 		String url = URLS.BASESERVER + URLS.Driver.getModify;
@@ -140,7 +139,16 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 			}
 		});
 	}
-
+	private void enable(boolean enabled){
+		mCivPic.setEnabled(enabled);
+		mEtName.setEnabled(enabled);
+		mTvSex.setEnabled(enabled);
+		mContainerQuhao.setEnabled(enabled);
+		mContainerSex.setEnabled(enabled);
+		mEtBackupMobile.setEnabled(enabled);
+		mBtConfirm.setText(enabled ? "確定" : "編輯");
+	}
+	
 	protected void processDefaultJson(String json) throws JSONException
 	{
 		JSONObject content = JsonUtils.getContent(json);
@@ -205,7 +213,11 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		{
 			try
 			{
-				confirm();
+				if(mBtConfirm.getText().equals("確定")){
+					confirm();
+				}else {
+					enable(true);
+				}
 			}
 			catch (FileNotFoundException e)
 			{
@@ -219,22 +231,34 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 	private void confirm() throws FileNotFoundException
 	{
 		/* 判段值不能为空 */
-		String username = mEtName.getText().toString().trim();
+		final String username = mEtName.getText().toString().trim();
 		String gender = selectedSexPosition + "";
 		String area1 = mTvQuhao.getText().toString().replace("+", "");
 		String mobile1 = mEtBackupMobile.getText().toString().trim();
 		boolean b = TextUtils.isEmpty(username)
 					|| TextUtils.isEmpty(gender) || TextUtils.isEmpty(area1) || TextUtils.isEmpty(mobile1);
+		if( TextUtils.isEmpty(mobile1)){
+			ToastUtils.makeShortText(this, "請輸入備用手機號碼！");
+			return;
+		}
+		if(TextUtils.isEmpty(area1)){
+			ToastUtils.makeShortText(this, "請選擇備用區號！");
+			return;
+		}
+		if(TextUtils.isEmpty(gender)){
+			ToastUtils.makeShortText(this, "請選擇性別！");
+			return;
+		}
 		if (b)
 		{
-			ToastUtils.makeShortText(this, "请完善资料！");
+			ToastUtils.makeShortText(this, "請完善資料！");
 			return;
 		}
 		/* 爲bitmap創建文件 */
 		File dirFile = new File(Environment.getExternalStorageDirectory(), "/myHead/");
 		File headFile = new File(dirFile, mHeadName);
 		if(!headFile.exists()){
-			ToastUtils.makeShortText(this, "上傳圖片不存在！");
+			ToastUtils.makeShortText(this, "請重新上傳圖片！");
 			return;
 		}
 		String url = URLS.BASESERVER + URLS.Driver.modifyDriver;
@@ -254,7 +278,7 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 				if (mListener != null)
 				{
 					if(head != null){
-						mListener.onModify(head);
+						mListener.onModify(head,username);
 					}
 				}
 				finishActivity();
@@ -269,7 +293,7 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 	 * 修改成功之後的接口回調
 	 */
 	public interface OnModifyListener{
-		void onModify(Bitmap bitmap);
+		void onModify(Bitmap bitmap,String name);
 	}
 	/** 区号选择 */
 	private void doClickQuhao()

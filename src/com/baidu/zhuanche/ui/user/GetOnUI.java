@@ -51,13 +51,13 @@ import com.baidu.zhuanche.utils.ToastUtils;
  */
 public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 {
-	private MapView						mMapView;
-	private AMap						mAMap;
-	private ImageView					mIvLeftArrow;
-	private SearchView					mSearchView;
-	private GeocodeSearch				mGeocoderSearch;
-	private ProgressDialog				mPogressDialog	= null;
-	private MarkerOptions				mMarkerOptions;
+	private MapView							mMapView;
+	private AMap							mAMap;
+	private ImageView						mIvLeftArrow;
+	private SearchView						mSearchView;
+	private GeocodeSearch					mGeocoderSearch;
+	private ProgressDialog					mPogressDialog	= null;
+	private MarkerOptions					mMarkerOptions;
 	private static OnGetOnLocationListener	mLocationListener;
 
 	@Override
@@ -68,6 +68,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 		mMapView = (MapView) findViewById(R.id.geton_mapview);
 		mIvLeftArrow = (ImageView) findViewById(R.id.geton_iv_leftarrow);
 		mSearchView = (SearchView) findViewById(R.id.geton_searchview);
+		//mSearchView.setIconifiedByDefault(false);
 		mMapView.onCreate(savedInstanceState);
 		initActivity();
 		initEvent();
@@ -115,9 +116,9 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 				return false;
 			}
 		});
-		/**菜单左侧图标点击事件*/
+		/** 菜单左侧图标点击事件 */
 		mIvLeftArrow.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v)
 			{
@@ -137,7 +138,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 		mSearchView.setSubmitButtonEnabled(true);
 		mMarkerOptions = new MarkerOptions();
 		mMarkerOptions.title("你的位置");
-		//mMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+		// mMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 		mMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pass));
 		/** 通过反射修改searchview 改变其样式 */
 		try
@@ -216,7 +217,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 					location.latLng = new LatLng(query.getPoint().getLatitude(), query.getPoint().getLongitude());
 					mLocationListener.onGetOnLocation(location);
 				}
-				
+
 			}
 			else
 			{
@@ -303,26 +304,31 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 			mPogressDialog.dismiss();
 		}
 	}
-	/**隐藏软键盘**/
-	public void hideSoftBoard(){
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
-		//得到InputMethodManager的实例 
-		if (imm.isActive()) { 
-			//如果开启 
-			imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS); 
-			//关闭软键盘，开启方法相同，这个方法是切换开启与关闭状态的 
-		} 
+
+	/** 隐藏软键盘 **/
+	public void hideSoftBoard()
+	{
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		// 得到InputMethodManager的实例
+		if (imm.isActive())
+		{
+			// 如果开启
+			imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);
+			// 关闭软键盘，开启方法相同，这个方法是切换开启与关闭状态的
+		}
 	}
+
 	/** 这个方法在这个类废弃 */
 	@Deprecated
 	@Override
 	public void initView()
 	{
 	}
+
 	@Override
 	public void onBackPressed()
 	{
-		//super.onBackPressed();
+		// super.onBackPressed();
 		finishActivity();
 	}
 }

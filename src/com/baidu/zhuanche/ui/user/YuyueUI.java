@@ -365,12 +365,13 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		params.put("budget", mYuyueData.budget);
 		params.put("fee", mYuyueData.fee);
 		params.put("remark", mYuyueData.des);
+		params.put("point", mYuyueData.getOnLocation.latLng.longitude+"," + mYuyueData.getOnLocation.latLng.latitude);
 		mClient.post(url, params, new MyAsyncResponseHandler() {
 
 			@Override
 			public void success(String json)
 			{
-				ToastUtils.makeShortText("接单成功！");
+				ToastUtils.makeShortText("预约成功！");
 				mYuyueData = new Yuyue();
 				clearData();
 			}

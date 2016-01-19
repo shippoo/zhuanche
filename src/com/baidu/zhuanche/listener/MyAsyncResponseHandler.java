@@ -150,7 +150,7 @@ public abstract class MyAsyncResponseHandler extends AsyncHttpResponseHandler
 				}
 				if (46001 == code)
 				{
-					ToastUtils.makeShortText(UIUtils.getContext(), "账号不存在！");
+					ToastUtils.makeShortText(UIUtils.getContext(), "用户不存在！");
 					return;
 				}
 				if (46002 == code)

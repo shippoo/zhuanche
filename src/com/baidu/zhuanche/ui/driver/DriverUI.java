@@ -261,9 +261,10 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 	}
 
 	@Override
-	public void onModify(Bitmap bitmap)
+	public void onModify(Bitmap bitmap,String name)
 	{
 		mCivPhoto.setImageBitmap(bitmap);
+		mTvName.setText(name);
 	}
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)

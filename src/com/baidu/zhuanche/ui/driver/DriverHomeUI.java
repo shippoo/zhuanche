@@ -23,6 +23,7 @@ import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.DriverHomeBean;
 import com.baidu.zhuanche.bean.DriverHomeBean.DriverHomeOrder;
+import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.driver.AcceptOrderUI.OnReceiverOrderListener;
@@ -91,13 +92,18 @@ public class DriverHomeUI extends BaseActivity	implements
 		// 设置是否允许模拟位置,默认为false，不允许模拟位置
 		mLocationOption.setMockEnable(false);
 		// 设置定位间隔,单位毫秒,默认为2000ms
-		mLocationOption.setInterval(1000 * 60);
+		mLocationOption.setInterval(MyConstains.TIME_LOCATION);
 		// 给定位客户端对象设置定位参数
 		mLocationClient.setLocationOption(mLocationOption);
 		// 启动定位
 		mLocationClient.startLocation();
 	}
-
+	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		mLocationClient.startLocation();
+	}
 	@Override
 	public void initView()
 	{
@@ -294,7 +300,6 @@ public class DriverHomeUI extends BaseActivity	implements
 			{
 				loadMore();
 				// 显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-				ToastUtils.makeShortText(this, "无法定位！");
 				Log.e("AmapError", "location Error, ErrCode:"
 									+ amapLocation.getErrorCode() + ", errInfo:"
 									+ amapLocation.getErrorInfo());

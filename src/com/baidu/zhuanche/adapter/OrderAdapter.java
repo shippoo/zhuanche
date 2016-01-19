@@ -74,11 +74,6 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent)
 	{
-		if(position == 0){
-			TextView view = new TextView(mContext);
-			view.setText("hahahah");
-			return view;
-		}
 		OrderViewHolder holder = null;
 		if (convertView == null)
 		{

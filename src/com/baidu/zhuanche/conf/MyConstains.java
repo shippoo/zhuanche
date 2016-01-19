@@ -16,9 +16,10 @@ package com.baidu.zhuanche.conf;
 public interface MyConstains
 {
 
-	String	SPFILENAME	= "zhuanche";		// sp名称
-	String	ITEMBEAN	= "itembean";		// 订单列表数据传递
+	String	SPFILENAME		= "zhuanche";		// sp名称
+	String	ITEMBEAN		= "itembean";		// 订单列表数据传递
 
-	long	TIME_DELAY	= 1000 * 60 * 1;	// 10分種
-	long	TIME_PERIOD	= 1000 * 60 * 20;
+	long	TIME_DELAY		= 1000 * 60 * 10;	// 10分種
+	long	TIME_PERIOD		= 1000 * 60 * 20;
+	long	TIME_LOCATION	= 1000 * 60 * 20;
 }

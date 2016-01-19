@@ -73,7 +73,7 @@ public class UserFindPasswordUI extends BaseActivity implements OnClickListener
 	public void initData()
 	{
 		super.initData();
-		mTvTitle.setText("找回密码");
+		mTvTitle.setText("修改密码");
 		mDatas = new ArrayList<String>();
 		mDatas.add("+86");
 		mDatas.add("+852");
@@ -148,6 +148,7 @@ public class UserFindPasswordUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "请输入手机号码！");
 			return;
 		}
+		showTimeCountDown(mBtGetCode);
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
 		String url = URLS.BASESERVER + URLS.User.verify;
 		RequestParams params = new RequestParams();
