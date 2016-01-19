@@ -6,11 +6,15 @@ import java.util.List;
 
 import org.feezu.liuli.timeselector.TimeSelector;
 import org.feezu.liuli.timeselector.Utils.DateUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,12 +24,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.adapter.DialogGetSeaportAdapter;
 import com.baidu.zhuanche.adapter.DialogSignAdapter;
 import com.baidu.zhuanche.adapter.LevelAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.CartTypeBean;
 import com.baidu.zhuanche.bean.CartTypeBean.LevelBean;
+import com.baidu.zhuanche.bean.GetSeaPortBean;
+import com.baidu.zhuanche.bean.GetSeaport;
 import com.baidu.zhuanche.bean.Location;
 import com.baidu.zhuanche.bean.Sex;
 import com.baidu.zhuanche.bean.User;
@@ -36,6 +43,8 @@ import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.user.GetOffUI.OnGetOffLocationListener;
 import com.baidu.zhuanche.ui.user.GetOnUI.OnGetOnLocationListener;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
+import com.baidu.zhuanche.utils.JsonUtils;
+import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -65,10 +74,10 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 	private AsyncHttpClient		mClient	= AsyncHttpClientUtil.getInstance();
 	/** 级别容器 */
 	private RelativeLayout		mContainerLevel;
-	private TextView			mTvLevel;
+	private EditText			mEtLevel;
 	/** 类型容器 */
 	private RelativeLayout		mContainerType;
-	private TextView			mTvType;
+	private EditText			mEtType;
 	/** 签证类型 */
 	private RelativeLayout		mContainerSignType;
 	private TextView			mTvSignType;
@@ -80,10 +89,14 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 	private TextView			mTvPort;
 	/** 上车地点 */
 	private RelativeLayout		mContainerGetOn;
-	private TextView			mTvGetOn;
+	private EditText			mEtGetOn;
 	/** 下车地点 */
 	private RelativeLayout		mContainerGetOff;
-	private TextView			mTvGetOff;
+	private EditText			mEtGetOff;
+
+	/** 估价 */
+	private RelativeLayout		mContainerBudget;
+	private TextView			mTvBudget;
 	private Button				mBtYuyue;
 	private EditText			mEtPeopleCount;
 	private EditText			mEtXingLiCount;
@@ -106,10 +119,10 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mGroupView.addView(view);
 		// 级别
 		mContainerLevel = (RelativeLayout) view.findViewById(R.id.yuyueContainer_level);
-		mTvLevel = (TextView) view.findViewById(R.id.yuyue_tv_level);
+		mEtLevel = (EditText) view.findViewById(R.id.yuyue_et_level);
 		// 类型
 		mContainerType = (RelativeLayout) view.findViewById(R.id.yuyueContainer_type);
-		mTvType = (TextView) view.findViewById(R.id.yuyue_tv_type);
+		mEtType = (EditText) view.findViewById(R.id.yuyue_et_type);
 		// 签证类型
 		mContainerSignType = (RelativeLayout) view.findViewById(R.id.yuyueContainer_signtype);
 		mTvSignType = (TextView) view.findViewById(R.id.yuyue_tv_signtype);
@@ -121,12 +134,14 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mTvPort = (TextView) view.findViewById(R.id.yuyue_tv_port);
 		// 上车地点
 		mContainerGetOn = (RelativeLayout) view.findViewById(R.id.yuyueContainer_geton);
-		mTvGetOn = (TextView) view.findViewById(R.id.yuyue_tv_geton);
+		mEtGetOn = (EditText) view.findViewById(R.id.yuyue_et_geton);
 		// 下车地点
 		mContainerGetOff = (RelativeLayout) view.findViewById(R.id.yuyueContainer_getoff);
-		mTvGetOff = (TextView) view.findViewById(R.id.yuyue_tv_getoff);
-
-		mBtYuyue = (Button)findViewById(R.id.home_bt_yuyue);
+		mEtGetOff = (EditText) view.findViewById(R.id.yuyue_et_getoff);
+		// 估价
+		mContainerBudget = (RelativeLayout) view.findViewById(R.id.yuyue_container_budget);
+		mTvBudget = (TextView) view.findViewById(R.id.yuyue_tv_price);
+		mBtYuyue = (Button) findViewById(R.id.home_bt_yuyue);
 		mEtPeopleCount = (EditText) view.findViewById(R.id.childer_et_peopleCount);
 		mEtXingLiCount = (EditText) view.findViewById(R.id.childer_et_luggageCount);
 		mEtDes = (EditText) view.findViewById(R.id.yuyue_tv_des);
@@ -161,6 +176,12 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mContainerGetOn.setOnClickListener(this);
 		mContainerGetOff.setOnClickListener(this);
 		mBtYuyue.setOnClickListener(this);
+
+		mEtLevel.addTextChangedListener(new BudgetListener(1));
+		mEtType.addTextChangedListener(new BudgetListener(2));
+		mEtGetOff.addTextChangedListener(new BudgetListener(3));
+		mEtGetOn.addTextChangedListener(new BudgetListener(4));
+		
 	}
 
 	@Override
@@ -205,6 +226,70 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		else if (v == mBtYuyue)
 		{
 			yuyueOrder();
+		}
+		else if (v == mContainerBudget)
+		{
+			getBudget();
+		}
+	}
+
+	private void getBudget()
+	{
+		if (TextUtils.isEmpty(mYuyueData.cartype))
+		{
+			ToastUtils.makeShortText("请选择车级别！");
+			return;
+		}
+		if (TextUtils.isEmpty(mYuyueData.carpool))
+		{
+			ToastUtils.makeShortText("请选择车类型！");
+			return;
+		}
+		Location offLocation = mYuyueData.getOffLocation;
+		Location onLocation = mYuyueData.getOnLocation;
+		if (TextUtils.isEmpty(offLocation.address))
+		{
+			ToastUtils.makeShortText("请选择下车地点！");
+			return;
+		}
+		if (TextUtils.isEmpty(onLocation.address))
+		{
+			ToastUtils.makeShortText("请选择上车地点！");
+			return;
+		}
+		String url = URLS.BASESERVER + URLS.User.budget;
+		RequestParams params = new RequestParams();
+		params.put(URLS.ACCESS_TOKEN, mUser.access_token);
+		params.put("from_province", mYuyueData.getOnLocation.province);
+		params.put("from_city", mYuyueData.getOnLocation.city);
+		params.put("from_district", mYuyueData.getOnLocation.district);
+		params.put("to_province", mYuyueData.getOffLocation.province);
+		params.put("to__city", mYuyueData.getOffLocation.city);
+		params.put("to_district", mYuyueData.getOffLocation.district);
+		params.put("cartype", mYuyueData.cartype);
+		params.put("carpool", mYuyueData.carpool);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+
+			@Override
+			public void success(String json)
+			{
+				processBudgetJson(json);
+			}
+		});
+	}
+
+	protected void processBudgetJson(String json)
+	{
+		try
+		{
+			JSONObject jsonObject = JsonUtils.getContent(json);
+			String budget = jsonObject.getString("budget");
+			mYuyueData.budget = budget;
+			mTvBudget.setText(budget + "元");
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
 		}
 	}
 
@@ -262,9 +347,9 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		String url = URLS.BASESERVER + URLS.User.makeOrder;
 		RequestParams params = new RequestParams();
 		params.put(URLS.ACCESS_TOKEN, mUser.access_token);
-		params.put(URLS.CARTYPE,mYuyueData.cartype);
+		params.put(URLS.CARTYPE, mYuyueData.cartype);
 		params.put(URLS.CARPOOL, mYuyueData.carpool);
-		params.put("from",mYuyueData.getOnLocation.address );
+		params.put("from", mYuyueData.getOnLocation.address);
 		params.put("from_province", mYuyueData.getOnLocation.province);
 		params.put("from_city", mYuyueData.getOnLocation.city);
 		params.put("from_district", mYuyueData.getOnLocation.district);
@@ -273,33 +358,41 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		params.put("to_city", mYuyueData.getOffLocation.city);
 		params.put("to_district", mYuyueData.getOffLocation.district);
 		params.put("count", mYuyueData.peopleCount);
-		params.put("luggage",mYuyueData.xingliCount);
+		params.put("luggage", mYuyueData.xingliCount);
 		params.put("is_hk", mYuyueData.signtype);
 		params.put("time", mYuyueData.time);
 		params.put("seaport", mYuyueData.seaport);
-		params.put("budget", "6666");
+		params.put("budget", mYuyueData.budget);
 		params.put("fee", mYuyueData.fee);
 		params.put("remark", mYuyueData.des);
 		mClient.post(url, params, new MyAsyncResponseHandler() {
-			
+
 			@Override
 			public void success(String json)
 			{
 				ToastUtils.makeShortText("接单成功！");
 				mYuyueData = new Yuyue();
+				clearData();
 			}
 		});
+	}
+
+	protected void clearData()
+	{
+		
 	}
 
 	/** 级别 */
 	private void doClickLevel()
 	{
+		AsyncHttpClient client = AsyncHttpClientUtil.getInstance(this);
 		String url = URLS.BASESERVER + URLS.User.enum_;
 		RequestParams params = new RequestParams();
-		params.put(URLS.ACCESS_TOKEN, mUser.access_token);
+		PrintUtils.print("level=" + mUser.access_token);
+		params.put(URLS.ACCESS_TOKEN, BaseApplication.getUser().access_token);
 		params.put("type", URLS.CARTYPE);
 		ToastUtils.showProgress(this);
-		mClient.post(url, params, new MyAsyncResponseHandler() {
+		client.post(url, params, new MyAsyncResponseHandler() {
 
 			@Override
 			public void success(String json)
@@ -315,7 +408,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 					{
 						LevelBean bean = datas.get(which);
 						mYuyueData.cartype = bean.value;
-						mTvLevel.setText(bean.name);
+						mEtLevel.setText(bean.name);
 					}
 				});
 				mBuilder.show();
@@ -337,7 +430,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			public void onClick(DialogInterface dialog, int which)
 			{
 				Sex sex = (Sex) adapter.getItem(which);
-				mTvType.setText(sex.name);
+				mEtType.setText(sex.name);
 				mYuyueData.carpool = sex.value;
 			}
 		});
@@ -386,20 +479,53 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 	/** 口岸 */
 	private void doClickPort()
 	{
-		List<Sex> dataSource = new ArrayList<Sex>();
-		dataSource.add(new Sex("皇岗", "0"));
-		dataSource.add(new Sex("深圳湾", "1"));
-		dataSource.add(new Sex("文锦渡", "2"));
-		dataSource.add(new Sex("沙头角", "3"));
-		final DialogSignAdapter adapter = new DialogSignAdapter(this, dataSource);
+		if (TextUtils.isEmpty(mYuyueData.time))
+		{
+			ToastUtils.makeShortText("请选择时间");
+			return;
+		}
+		ToastUtils.showProgress(this);
+		String url = URLS.BASESERVER + URLS.User.getSeaport;
+		RequestParams params = new RequestParams();
+		params.put(URLS.ACCESS_TOKEN, BaseApplication.getUser().access_token);
+		params.put("time", mYuyueData.time);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+
+			@Override
+			public void success(String json)
+			{
+				processJson(json);
+			}
+		});
+	}
+	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		mUser = BaseApplication.getUser();
+	}
+	protected void processJson(String json)
+	{
+		List<GetSeaport> dataSource = new ArrayList<GetSeaport>();
+		GetSeaPortBean seaPortBean = mGson.fromJson(json, GetSeaPortBean.class);
+		dataSource = seaPortBean.content;
+		GetSeaport sear= new GetSeaport();
+		sear.eid = "0";
+		sear.name = "不限定口岸";
+		//dataSource.add(sear);
+		PrintUtils.print(dataSource.get(0).toString());
+		if(isListEmpty(dataSource)){
+			return;
+		}
+		final DialogGetSeaportAdapter adapter = new DialogGetSeaportAdapter(this, dataSource);
 		mBuilder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				Sex sex = (Sex) adapter.getItem(which);
+				GetSeaport sex = (GetSeaport) adapter.getItem(which);
 				mTvPort.setText(sex.name);
-				mYuyueData.seaport = sex.value;
+				mYuyueData.seaport = sex.eid;
 			}
 		});
 		mBuilder.show();
@@ -409,13 +535,48 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 	public void onGetOnLocation(Location location)
 	{
 		mYuyueData.getOnLocation = location;
-		mTvGetOn.setText(location.address);
+		mEtGetOn.setText(location.address);
 	}
 
 	@Override
 	public void onGetOffLocation(Location location)
 	{
 		mYuyueData.getOffLocation = location;
-		mTvGetOff.setText(location.address);
+		mEtGetOff.setText(location.address);
+	}
+
+	private class BudgetListener implements TextWatcher
+	{
+		private int	index;
+
+		public BudgetListener(int i) {
+			index = i;
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after)
+		{
+			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count)
+		{
+			if (TextUtils.isEmpty(s)) { return; }
+			if (TextUtils.isEmpty(mYuyueData.cartype)) { return; }
+			if (TextUtils.isEmpty(mYuyueData.carpool)) { return; }
+			Location offLocation = mYuyueData.getOffLocation;
+			Location onLocation = mYuyueData.getOnLocation;
+			if (TextUtils.isEmpty(offLocation.address)) { return; }
+			if (TextUtils.isEmpty(onLocation.address)) { return; }
+			getBudget();
+		}
+
+		@Override
+		public void afterTextChanged(Editable s)
+		{
+
+		}
+
 	}
 }

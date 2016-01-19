@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.baidu.zhuanche.R;
@@ -38,7 +40,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class NewsListUI extends BaseActivity implements OnClickListener, OnRefreshListener<ListView>
+public class NewsListUI extends BaseActivity implements OnClickListener, OnRefreshListener<ListView>, OnItemClickListener
 {
 	private Cate					mCate;
 	private PullToRefreshListView	mListView;
@@ -108,6 +110,7 @@ public class NewsListUI extends BaseActivity implements OnClickListener, OnRefre
 	{
 		mIvLeftHeader.setOnClickListener(this);
 		mListView.setOnRefreshListener(this);
+		mListView.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -142,5 +145,14 @@ public class NewsListUI extends BaseActivity implements OnClickListener, OnRefre
 			loadMore();
 		}
 
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	{
+		Bundle bundle = new Bundle();
+		Article article = mDatas.get(position);
+		bundle.putString("id", article.id);
+		startActivity(NewsDetailUI.class,bundle);
 	}
 }

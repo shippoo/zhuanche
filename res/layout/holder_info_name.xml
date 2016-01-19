@@ -27,13 +27,13 @@
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/page_pic" />
+                android:src="@drawable/name" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@id/iv_left"
                 android:text="昵称"
                 android:textColor="@color/info_textColor"

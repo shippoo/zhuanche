@@ -10,6 +10,8 @@ import android.os.Message;
 import android.os.SystemClock;
 
 import com.baidu.zhuanche.base.BaseApplication;
+import com.baidu.zhuanche.bean.Driver;
+import com.baidu.zhuanche.bean.DriverBean;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.bean.UserBean;
 import com.baidu.zhuanche.conf.MyConstains;
@@ -35,7 +37,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class MyService extends Service
+public class DriverService extends Service
 {
 	private Handler mHandler = new Handler(){
 
@@ -45,7 +47,7 @@ public class MyService extends Service
 			switch (msg.what)
 			{
 				case 0:
-					lianjieUser();
+					lianjieDriver();
 					break;
 
 				default:
@@ -79,12 +81,12 @@ public class MyService extends Service
 		}).start();
 	}
 
-	public void lianjieUser()
+	public void lianjieDriver()
 	{
-		String url = URLS.BASESERVER + URLS.User.login;
+		String url = URLS.BASESERVER + URLS.Driver.login;
 		RequestParams params = new RequestParams();
-		params.add("mobile", BaseApplication.getUser().mobile);
-		params.add("password", BaseApplication.getUser().password);
+		params.add("mobile", BaseApplication.getDriver().mobile);
+		params.add("password", BaseApplication.getDriver().password);
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance(UIUtils.getContext());
 		client.post(url, params, new AsyncHttpResponseHandler() {
 			
@@ -93,17 +95,13 @@ public class MyService extends Service
 			{
 				String json = new String(arg2);
 				Gson gson = new Gson();
-				UserBean userBean = gson.fromJson(json, UserBean.class);
+				DriverBean driverBean = gson.fromJson(json, DriverBean.class);
 				// 保存全局用戶信息
-				PrintUtils.print("后台1 = " + BaseApplication.getUser().access_token);
-				String password = BaseApplication.getUser().password;
-				User user = userBean.content.member_data;
-				user.password = password;
-				user.access_token = userBean.content.access_token;
-				
-				BaseApplication.setUser(user);
-				PrintUtils.print("后台2 = " + userBean.content.access_token);
-				
+				String password = BaseApplication.getDriver().password;
+				Driver driver = driverBean.content.driver_data;
+				driver.password = password;
+				driver.access_token = driverBean.content.access_token;
+				BaseApplication.setDriver(driver);
 			}
 			
 			@Override

@@ -74,6 +74,11 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent)
 	{
+		if(position == 0){
+			TextView view = new TextView(mContext);
+			view.setText("hahahah");
+			return view;
+		}
 		OrderViewHolder holder = null;
 		if (convertView == null)
 		{
@@ -259,7 +264,6 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 	{
 		mDataSource.set(position, orderBean);
 		notifyDataSetChanged();
-		ToastUtils.makeShortText(UIUtils.getContext(), "小费信息添加成功！");
 	}
 
 }

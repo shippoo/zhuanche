@@ -23,7 +23,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/page_pic" />
+            android:src="@drawable/user" />
 
         <TextView
             android:layout_width="wrap_content"

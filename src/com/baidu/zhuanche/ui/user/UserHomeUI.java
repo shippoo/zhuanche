@@ -5,10 +5,8 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
@@ -31,10 +29,6 @@ import com.baidu.zhuanche.holder.UserHomePicHolder;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.view.NoScrolledGridView;
 import com.google.gson.Gson;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 /**
  * @项目名: 拼车
@@ -169,7 +163,10 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				startActivity(NewsDetailUI.class);
+				Bundle bundle = new Bundle();
+				Article article = mListDatas.get(position - 1);
+				bundle.putString("id", article.id);
+				startActivity(NewsDetailUI.class,bundle);
 			}
 		});
 	}

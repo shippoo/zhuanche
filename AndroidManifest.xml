@@ -132,6 +132,7 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".ui.driver.DriverCenterOrderDetailUI"/>
         <!-- service -->
+        <service android:name=".service.DriverService"/>
         <service android:name=".service.MyService" />
         <service android:name="com.amap.api.location.APSService" />
         <!-- 极光推送 -->

@@ -40,7 +40,8 @@ public class ToastUtils
 	public static void showProgress(Context context)
 	{
 		mPd = new ProgressDialog(context);
-		mPd.setCanceledOnTouchOutside(false);
+		mPd.setCanceledOnTouchOutside(true);
+		mPd.setCancelable(true);
 		mPd.show();
 	}
 

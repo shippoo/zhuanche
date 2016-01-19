@@ -8,6 +8,7 @@ import java.util.Set;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.bean.UserBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.service.MyService;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
@@ -209,6 +211,8 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 		user.access_token = userBean.content.access_token;
 		user.password = mPassword;
 		BaseApplication.setUser(user);
+		Intent service = new Intent(this, MyService.class);
+		startService(service);
 		startActivityAndFinish(YuyueUI.class);
 	}
 }

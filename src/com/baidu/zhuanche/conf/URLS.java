@@ -35,7 +35,7 @@ public interface URLS
 		String	orderlist			= "User/User/orderList";		// 订单列表
 		String	logout				= "User/Login/logout";
 		String	findPassword		= "User/Login/findPassword";
-		String	modifyIcon			= "User/User/modifyIcon";		// 修改头像
+		String	modifyIcon			= "User/User/modifyIcon";		// 修改 头像
 		String	modifyUser			= "User/User/modifyUser";
 		String	hotCity				= "User/User/hotCity";			// 热门城市
 		String	addFee				= "User/User/addFee";
@@ -47,6 +47,10 @@ public interface URLS
 		String	orderCancel			= "User/User/orderCancel";
 		String	addDriverComment	= "User/User/addDriverComment";
 		String	commentDetail		= "User/User/commentDetail";
+		String	getSeaport			= "User/User/getSeaport";
+		String	budget				= "User/User/budget";
+		String	article_detail		= "User/Login/article_detail";
+		//http://192.168.1.12/pinche/index.php/User/Login/article_detail
 	}
 
 	/**

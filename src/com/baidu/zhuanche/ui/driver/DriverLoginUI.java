@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +25,7 @@ import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.DriverBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.service.DriverService;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
@@ -227,6 +229,7 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		}
 		else
 		{
+			startService(new Intent(this, DriverService.class));
 			startActivityAndFinish(DriverHomeUI.class);
 		}
 

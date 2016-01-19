@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,28 +20,25 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
 import com.baidu.zhuanche.R;
-import com.baidu.zhuanche.bean.Driver;
-import com.baidu.zhuanche.bean.DriverBean;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.service.DriverService;
+import com.baidu.zhuanche.service.MyService;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.ImageUtils;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.SPUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
-import com.baidu.zhuanche.utils.UIUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.RequestParams;
 
 /**
  * @创建者 Administrator
@@ -145,14 +141,11 @@ public abstract class BaseActivity extends Activity
 	public void exit()
 	{
 		BaseApplication.setUser(new User());
+		stopService(new Intent(this, DriverService.class));
+		stopService(new Intent(this, MyService.class));
 		for (BaseActivity activity : allActivitys)
 		{
 			activity.finish();
-		}
-		if (mTimer != null)
-		{
-			mTimer.cancel();
-			mTimer = null;
 		}
 	}
 	@Override
@@ -376,7 +369,7 @@ public abstract class BaseActivity extends Activity
 			{
 				if (arg0 != 0)
 				{
-					ToastUtils.makeShortText(UIUtils.getContext(), "设置用户别名失败！");
+					PrintUtils.print("设置用户别名失败！");
 				}
 			}
 		});
@@ -395,7 +388,7 @@ public abstract class BaseActivity extends Activity
 			{
 				if (arg0 != 0)
 				{
-					ToastUtils.makeShortText(UIUtils.getContext(), "设置司机别名失败！");
+					PrintUtils.print("设置司机别名失败！");
 				}
 			}
 		});

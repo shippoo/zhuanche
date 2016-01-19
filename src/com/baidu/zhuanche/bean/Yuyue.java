@@ -27,4 +27,5 @@ public class Yuyue
 	public String   xingliCount;
 	public String   fee;
 	public String   des;
+	public String	budget;
 }

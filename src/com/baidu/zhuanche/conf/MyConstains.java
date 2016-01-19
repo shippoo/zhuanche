@@ -20,5 +20,5 @@ public interface MyConstains
 	String	ITEMBEAN	= "itembean";		// 订单列表数据传递
 
 	long	TIME_DELAY	= 1000 * 60 * 1;	// 10分種
-	long	TIME_PERIOD	= 1000 * 60 * 1;
+	long	TIME_PERIOD	= 1000 * 60 * 20;
 }

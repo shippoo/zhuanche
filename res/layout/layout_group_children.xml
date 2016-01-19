@@ -38,10 +38,12 @@
             android:layout_marginRight="20dp"
             android:src="@drawable/page_05" />
 
-        <TextView
-            android:id="@+id/yuyue_tv_level"
+        <EditText
+            android:id="@+id/yuyue_et_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
             android:layout_centerVertical="true"
             android:layout_marginLeft="24dp"
             android:layout_toRightOf="@+id/yuyue_tv_levellevel"
@@ -81,10 +83,12 @@
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
         
-        <TextView
-            android:id="@+id/yuyue_tv_type"
+        <EditText
+            android:id="@+id/yuyue_et_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@null"
+             android:enabled="false"
             android:layout_centerVertical="true"
             android:layout_marginLeft="24dp"
             android:layout_toRightOf="@+id/yuyue_tv_typetype"
@@ -382,9 +386,11 @@
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
         
-        <TextView
-            android:id="@+id/yuyue_tv_geton"
+        <EditText
+            android:id="@+id/yuyue_et_geton"
             android:layout_width="wrap_content"
+            android:background="@null"
+             android:enabled="false"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="24dp"
@@ -428,15 +434,18 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
+            android:background="@null"
             android:layout_toRightOf="@+id/imageView15"
             android:text="下车地点"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
         
-        <TextView
-            android:id="@+id/yuyue_tv_getoff"
+        <EditText
+            android:id="@+id/yuyue_et_getoff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@null"
+             android:enabled="false"
             android:layout_centerVertical="true"
             android:layout_marginLeft="24dp"
             android:layout_toRightOf="@+id/children_text10"
@@ -460,7 +469,7 @@
         android:src="@drawable/page_19" />
 
     <RelativeLayout
-        android:id="@+id/relativeLayout120"
+        android:id="@+id/yuyue_container_budget"
         android:layout_width="match_parent"
         android:layout_height="38dp" >
 
@@ -493,7 +502,6 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="30dp"
             android:layout_toRightOf="@+id/children_text11"
-            android:text="800"
             android:textSize="14sp" />
     </RelativeLayout>
 
