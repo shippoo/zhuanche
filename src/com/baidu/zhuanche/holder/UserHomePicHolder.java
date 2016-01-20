@@ -111,7 +111,7 @@ public class UserHomePicHolder extends BaseHolder<List<Banner>> implements OnTou
 	}
 
 	class AutoScrollTask implements Runnable
-	{
+	{                                                                      
 		public void start()
 		{
 			UIUtils.getMainThreadHandler().removeCallbacks(this);

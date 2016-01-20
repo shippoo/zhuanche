@@ -66,6 +66,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 		mMapView = (MapView) findViewById(R.id.getoff_mapview);
 		mIvLeftArrow = (ImageView) findViewById(R.id.getoff_iv_leftarrow);
 		mSearchView = (SearchView) findViewById(R.id.getoff_searchview);
+		mSearchView.setIconifiedByDefault(false);
 		mMapView.onCreate(savedInstanceState);
 		initActivity();
 		initEvent();

@@ -505,6 +505,69 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
+    <!-- hangbanhao -->
+     <ImageView
+        android:id="@+id/imageView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/page_19" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout121"
+        android:layout_width="match_parent"
+        android:layout_height="38dp" >
+
+        <ImageView
+            android:id="@+id/imageView191"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/page_16" />
+
+        <TextView
+            android:id="@+id/children_text121"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/imageView191"
+            android:text="航班号"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+        
+        <EditText
+            android:id="@+id/yuyue_et_airnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="30dp"
+            android:layout_toRightOf="@+id/children_text121"
+            android:background="@null"
+            android:ems="10"
+            android:hint="请输入航班号"
+            android:inputType="number"
+            android:textSize="14sp" />
+        
+    </RelativeLayout>
+    <!-- hangbanhao -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <ImageView
         android:id="@+id/imageView18"
         android:layout_width="wrap_content"

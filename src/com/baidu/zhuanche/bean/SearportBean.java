@@ -23,6 +23,7 @@ public class SearportBean extends BaseBean
 	public List<SearPort> content;
 	public class SearPort{
 		public String name;
+		public String eid;
 		public String value;
 	}
 }

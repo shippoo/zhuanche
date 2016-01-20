@@ -92,6 +92,7 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 			holder.tvFee = (TextView) convertView.findViewById(R.id.item_yuyue_fee);
 			holder.ivArrow = (ImageView) convertView.findViewById(R.id.item_yuyue_iv_arrow);
 			holder.btLook = (Button) convertView.findViewById(R.id.item_yuyue_look);
+			holder.tvSign = (TextView) convertView.findViewById(R.id.item_yuyue_qianzheng);
 			// 加小费容器
 			holder.btAddFee = (Button) convertView.findViewById(R.id.item_yuyue_addFee);
 			// 去付款按钮
@@ -129,13 +130,21 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 		holder.tvBudget.setText(bean.budget + "元");
 		holder.tvFee.setText(bean.fee + "元");
 		holder.tvTime.setText(AtoolsUtil.unixTimeToLocalTime(bean.time));
+//		String sign = "";
+//		if(bean.is_hk != null && bean.is_hk.size() > 0){
+//			for(String s : bean.is_hk){
+//				sign += s +",";
+//			}
+//			sign = sign.substring(0,sign.length() - 1);
+//		}
+		holder.tvSign.setText(bean.is_hk);
 		DriverInfo driverInfo = bean.d_del;
 		
 		if(!TextUtils.isEmpty(driverInfo.name)){
 			holder.tvDriverName.setText(driverInfo.name);
 		}
 		if(!TextUtils.isEmpty(driverInfo.carid)){
-			holder.tvDriverName.setText(driverInfo.carid);
+			holder.tvCarId.setText(driverInfo.carid);
 		}
 		/** 箭头点击事件 */
 		holder.ivArrow.setOnClickListener(new MyOnClickLsterner(holder));
@@ -383,6 +392,7 @@ class MyOnClickLsterner implements OnClickListener
 
 class OrderViewHolder
 {
+	TextView        tvSign;
 	TextView		tvTime;				// 08:00
 	TextView		tvStatus;				// 订单状态
 	TextView		tvLevel;				// 乘车级别 豪华5人座

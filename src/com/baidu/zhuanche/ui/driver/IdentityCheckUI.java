@@ -405,8 +405,8 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		params.put("driverid", driverid);
 		params.put("citizenid", citizenid);
 		params.put("type", type);
-		params.put("cartype", mLevelDatas.get(selectedLevelPosition).value);
-		params.put("seaport", mSeaportDatas.get(selectedSeaportPosition).value);
+		params.put("cartype", mLevelDatas.get(selectedLevelPosition).eid);
+		params.put("seaport", mSeaportDatas.get(selectedSeaportPosition).eid);
 		params.put("carid_pic", mCarnumFile);
 		params.put("driverid_pic", mZjzhFile);
 		params.put("citizenid_pic", mIdcardFile);

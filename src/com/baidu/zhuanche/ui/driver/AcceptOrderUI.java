@@ -3,6 +3,7 @@ package com.baidu.zhuanche.ui.driver;
 import java.util.Date;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -103,8 +104,8 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 		mTvCarPool.setText(AtoolsUtil.getCarPool(mOrderbean.carpool));
 		mTvSeaport.setText(mOrderbean.seaport + "口岸");
 		mTvPeopleCount.setText(mOrderbean.count + "人");
-		mTvXingLiCount.setText("無");// 行李數 //TODO
-		mTvSignType.setText("回鄉證/團簽");// 簽證類型
+		mTvXingLiCount.setText(TextUtils.isEmpty(mOrderbean.luggage)? "無" : mOrderbean.luggage);// 行李數 //TODO
+		mTvSignType.setText(mOrderbean.is_hk);// 簽證類型
 		mTvFee.setText("￥" + mOrderbean.fee);
 		mTvYuyuePrice.setText("￥" + mOrderbean.budget);
 		mTvHangBan.setText(mOrderbean.air_number);// 航班

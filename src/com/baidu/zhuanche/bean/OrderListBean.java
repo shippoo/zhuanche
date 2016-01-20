@@ -42,7 +42,7 @@ public class OrderListBean extends BaseBean implements Serializable
 		public String				to;											// 香港特别行政区国际机场
 		public String				driver_id;
 		public String				is_hk;
-		public DriverInfo				d_del;
+		public DriverInfo			d_del;
 	}
 
 	public class DriverInfo implements Serializable
@@ -56,8 +56,8 @@ public class OrderListBean extends BaseBean implements Serializable
 		public String				carid;						// rhjg
 		public String				citizenid;					// fhjjhg
 		public String				icon;						// /pinche/Upload/icon/member/20160112/20160112110136_97835.jpg
-		public String				id;							// 5
-		public String				mobile;						// 13652304622
+		public String				id;						// 5
+		public String				mobile;					// 13652304622
 		public String				mobile1;					// 15580714398
 		public String				name;						// fhkf
 		public String				star;						// 0

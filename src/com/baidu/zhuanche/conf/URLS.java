@@ -15,11 +15,13 @@ package com.baidu.zhuanche.conf;
  */
 public interface URLS
 {
-	String	BASE		= "http://192.168.1.12";
+	String	BASE		= "http://gjxc.fanc.com.cn";
+	// String BASE = "http://192.168.1.12";
 	/**
 	 * 基地址
 	 */
-	String	BASESERVER	= BASE + "/pinche/index.php/";
+	//String	BASESERVER	= BASE + "/pinche/index.php/";
+	String	BASESERVER	= BASE + "/index.php/";
 
 	/**
 	 * 
@@ -50,7 +52,7 @@ public interface URLS
 		String	getSeaport			= "User/User/getSeaport";
 		String	budget				= "User/User/budget";
 		String	article_detail		= "User/Login/article_detail";
-		//http://192.168.1.12/pinche/index.php/User/Login/article_detail
+		// http://192.168.1.12/pinche/index.php/User/Login/article_detail
 	}
 
 	/**

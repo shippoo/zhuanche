@@ -83,6 +83,9 @@ public class MyRouteUI extends Activity implements OnPoiSearchListener, OnRouteS
 		setContentView(R.layout.ui_myroute);
 		Bundle bundle = getIntent().getBundleExtra(BaseActivity.VALUE_PASS);
 		mOrderBean = (OrderBean) bundle.getSerializable(MyConstains.ITEMBEAN);
+		if(mOrderBean.seaport.equals("不指定")){
+			mOrderBean.seaport = "皇岗";
+		}
 		mMapView = (MapView) findViewById(R.id.myroute_mapview);
 		mAMap = mMapView.getMap();
 		mMapView.onCreate(savedInstanceState);
@@ -320,7 +323,7 @@ public class MyRouteUI extends Activity implements OnPoiSearchListener, OnRouteS
 		if (mProgDialog == null) mProgDialog = new ProgressDialog(this);
 		mProgDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		mProgDialog.setIndeterminate(false);
-		mProgDialog.setCancelable(false);
+		mProgDialog.setCancelable(true);
 		mProgDialog.setMessage("正在搜索...");
 		// mProgDialog.setMessage("正在搜索:\n" + keyWord);
 		mProgDialog.show();

@@ -12,17 +12,21 @@ import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.autonavi.amap.mapcore.TextTextureGenerator;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.DialogGetSeaportAdapter;
 import com.baidu.zhuanche.adapter.DialogSignAdapter;
@@ -117,6 +121,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mGroupView = (LinearLayout) findViewById(R.id.yuyue_groupview);
 		View view = View.inflate(this, R.layout.layout_group_children, null);
 		mGroupView.addView(view);
+		mEtAriNumber = (EditText) view.findViewById(R.id.yuyue_et_airnumber);
 		// 级别
 		mContainerLevel = (RelativeLayout) view.findViewById(R.id.yuyueContainer_level);
 		mEtLevel = (EditText) view.findViewById(R.id.yuyue_et_level);
@@ -157,6 +162,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mIvRightHeader.setImageResource(R.drawable.page_02);
 		mTvTitle.setText("预约");
 		mYuyueData = new Yuyue();
+		
 		mBuilder = new Builder(this);
 	}
 
@@ -176,14 +182,57 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mContainerGetOn.setOnClickListener(this);
 		mContainerGetOff.setOnClickListener(this);
 		mBtYuyue.setOnClickListener(this);
-
+		mEtPeopleCount.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count)
+			{
+				if(!TextUtils.isEmpty(s)){
+					int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);
+					int p2 = Integer.parseInt(mEtPeopleCount.getText().toString().trim());
+					if(p2 > p1){
+						ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
+					}
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after)
+			{
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s)
+			{
+				if(!TextUtils.isEmpty(s)){
+					int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);
+					int p2 = Integer.parseInt(mEtPeopleCount.getText().toString().trim());
+					if(p2 > p1){
+						ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
+					}
+				}
+			}
+		});
+		mEtPeopleCount.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus)
+			{
+				if(hasFocus){
+					panDuan(1);
+				}
+				if(!hasFocus && !TextUtils.isEmpty(mEtPeopleCount.getText().toString().trim())){
+					panDuan(2);
+				}
+			}
+		});
 		mEtLevel.addTextChangedListener(new BudgetListener(1));
 		mEtType.addTextChangedListener(new BudgetListener(2));
 		mEtGetOff.addTextChangedListener(new BudgetListener(3));
 		mEtGetOn.addTextChangedListener(new BudgetListener(4));
-		
-	}
 
+	}
 	@Override
 	public void onClick(View v)
 	{
@@ -205,7 +254,9 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		}
 		else if (v == mContainerSignType)
 		{
-			doClickSignType();
+			// doClickSignType();
+			doClickSign();
+			//doClickCanCancelSign();
 		}
 		else if (v == mContainerTime)
 		{
@@ -230,7 +281,31 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		else if (v == mContainerBudget)
 		{
 			getBudget();
+		}else if(v == mEtPeopleCount){
+			//panDuan();
 		}
+	}
+
+	
+
+	private void panDuan(int index)
+	{
+		if(1 == index){
+			if(TextUtils.isEmpty(mYuyueData.cartype)){
+				mEtPeopleCount.setText("");
+				mEtPeopleCount.setEnabled(false);
+				ToastUtils.makeShortText("请先选择车级别！");
+				return;
+			}
+		}else if(2 == index){
+			int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);
+			int p2 = Integer.parseInt(mEtPeopleCount.getText().toString().trim());
+			if(p2 > p1){
+				mEtPeopleCount.setText("");
+				ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
+			}
+		}
+		
 	}
 
 	private void getBudget()
@@ -264,7 +339,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		params.put("from_city", mYuyueData.getOnLocation.city);
 		params.put("from_district", mYuyueData.getOnLocation.district);
 		params.put("to_province", mYuyueData.getOffLocation.province);
-		params.put("to__city", mYuyueData.getOffLocation.city);
+		params.put("to_city", mYuyueData.getOffLocation.city);
 		params.put("to_district", mYuyueData.getOffLocation.district);
 		params.put("cartype", mYuyueData.cartype);
 		params.put("carpool", mYuyueData.carpool);
@@ -319,11 +394,11 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			ToastUtils.makeShortText("请输入行李数");
 			return;
 		}
-		else if (TextUtils.isEmpty(mYuyueData.signtype))
-		{
-			ToastUtils.makeShortText("请选择签证类型");
-			return;
-		}
+//		else if (TextUtils.isEmpty(mYuyueData.signtype))
+//		{
+//			ToastUtils.makeShortText("请选择签证类型");
+//			return;
+//		}
 		else if (TextUtils.isEmpty(mYuyueData.time))
 		{
 			ToastUtils.makeShortText("请选择时间");
@@ -344,6 +419,41 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			ToastUtils.makeShortText("请选择下车地点");
 			return;
 		}
+		List<String> signs = mYuyueData.signs;
+		String sign1 = "";
+		String[] items = new String[] { "自由行", "团签", "回乡证", "护照" };
+		for(int i = 0; i < 4; i++){
+			if(items[i].equals(signs.get(i))){
+			sign1 += items[i] + ",";	
+			}
+		}
+//		for(String s : signs){
+//			if(s.equals("1")){
+//				sign1 += items[0] + ",";
+//			}else if(s.equals("2")){
+//				sign1 += items[1] + ",";
+//			} else if( s.equals("3")){
+//				sign1 += items[2] + ",";
+//			}else if(s.equals("4")){
+//				sign1 += items[3] + ",";
+//			}
+//		}
+		PrintUtils.print("yyd = " + mYuyueData.signs);
+		if(!TextUtils.isEmpty(sign1)){
+			sign1 = sign1.substring(0, sign1.length() -1);
+		}
+		PrintUtils.print("a = " + sign1);
+		if(TextUtils.isEmpty(sign1)){
+			ToastUtils.makeShortText("请选择签证类型");
+			return;
+		}
+		PrintUtils.print("b = " + sign1);
+		int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);
+		int p2 = Integer.parseInt(mEtPeopleCount.getText().toString().trim());
+		if(p2 > p1){
+			ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
+			return;
+		}
 		String url = URLS.BASESERVER + URLS.User.makeOrder;
 		RequestParams params = new RequestParams();
 		params.put(URLS.ACCESS_TOKEN, mUser.access_token);
@@ -359,28 +469,30 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		params.put("to_district", mYuyueData.getOffLocation.district);
 		params.put("count", mYuyueData.peopleCount);
 		params.put("luggage", mYuyueData.xingliCount);
-		params.put("is_hk", mYuyueData.signtype);
+		params.put("is_hk", sign1);
 		params.put("time", mYuyueData.time);
 		params.put("seaport", mYuyueData.seaport);
 		params.put("budget", mYuyueData.budget);
 		params.put("fee", mYuyueData.fee);
 		params.put("remark", mYuyueData.des);
-		params.put("point", mYuyueData.getOnLocation.latLng.longitude+"," + mYuyueData.getOnLocation.latLng.latitude);
+		params.put("point", mYuyueData.getOnLocation.latLng.longitude + "," + mYuyueData.getOnLocation.latLng.latitude);
+		params.put("air_number", mEtAriNumber.getText().toString());
 		mClient.post(url, params, new MyAsyncResponseHandler() {
 
 			@Override
 			public void success(String json)
 			{
 				ToastUtils.makeShortText("预约成功！");
-				mYuyueData = new Yuyue();
-				clearData();
+				//mYuyueData = new Yuyue();
+				//clearData();
+				startActivity(UserCenterUI.class);
 			}
 		});
 	}
 
 	protected void clearData()
 	{
-		
+
 	}
 
 	/** 级别 */
@@ -408,8 +520,11 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 					public void onClick(DialogInterface dialog, int which)
 					{
 						LevelBean bean = datas.get(which);
-						mYuyueData.cartype = bean.value;
+						mYuyueData.cartype = bean.eid;
+						mYuyueData.maxPeopleCount = bean.value;     
 						mEtLevel.setText(bean.name);
+						mEtPeopleCount.setEnabled(true);
+						
 					}
 				});
 				mBuilder.show();
@@ -437,7 +552,6 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		});
 		mBuilder.show();
 	}
-
 	/** 签证类型 */
 	private void doClickSignType()
 	{
@@ -458,6 +572,86 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			}
 		});
 		mBuilder.show();
+	}
+
+	private String	sign	= "";
+
+	private EditText	mEtAriNumber;
+
+	private void doClickSign()
+	{
+
+		final String[] items = new String[] { "自由行", "团签", "回乡证", "护照" };
+		boolean[] checkeItems = new boolean[] { false, false, false, false };
+		PrintUtils.print("str1 = " + mYuyueData.signs.toString());
+		for (int i = 0; i < mYuyueData.signs.size(); i++)
+		{
+			if (mYuyueData.signs.get(i).equals(items[i]))
+			{
+				checkeItems[i] = true;
+			}else {
+				checkeItems[i] = false;
+			}
+		}
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setMultiChoiceItems(items, checkeItems, new OnMultiChoiceClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which, boolean isChecked)
+			{
+//				if (isChecked)
+//				{
+//					sign += items[which] + " ";
+//					mTvSignType.setText(sign);
+//					mYuyueData.signs.add(items[which]);
+//				}
+//				else
+//				{
+//					sign = sign.replace(items[which], "");
+//					mYuyueData.signs.remove(items[which]);
+//					mTvSignType.setText(sign);
+//				}
+				for(int i = 0 ; i< 4; i ++){
+					if(i == which && isChecked){
+						if(!sign.contains(items[which])){
+							sign += items[which] + " ";
+							mTvSignType.setText(sign);
+							mYuyueData.signs.set(which,items[which]);
+						}
+					}else if(i == which && !isChecked){
+						if(sign.contains(items[which])){
+							sign = sign.replace(items[which], "");
+							mYuyueData.signs.set(which,which+"");
+							mTvSignType.setText(sign);
+						}
+					}
+				}
+				PrintUtils.print("str2 = " + mYuyueData.signs.toString());
+			}
+
+		});
+		// builder.setNegativeButton("取消", new DialogInterface.OnClickListener()
+		// {
+		//
+		// @Override
+		// public void onClick(DialogInterface dialog, int which)
+		// {
+		//
+		// dialog.dismiss();
+		// }
+		// });
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				PrintUtils.print("str3 = " + mYuyueData.signs.toString());
+				dialog.dismiss();
+			}
+
+		});
+		builder.show();        
+
 	}
 
 	/** 时间 */
@@ -499,25 +693,25 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			}
 		});
 	}
+
 	@Override
 	protected void onRestart()
 	{
 		super.onRestart();
 		mUser = BaseApplication.getUser();
 	}
+
 	protected void processJson(String json)
 	{
 		List<GetSeaport> dataSource = new ArrayList<GetSeaport>();
 		GetSeaPortBean seaPortBean = mGson.fromJson(json, GetSeaPortBean.class);
 		dataSource = seaPortBean.content;
-		GetSeaport sear= new GetSeaport();
+		GetSeaport sear = new GetSeaport();
 		sear.eid = "0";
 		sear.name = "不限定口岸";
-		//dataSource.add(sear);
+		dataSource.add(sear);
 		PrintUtils.print(dataSource.get(0).toString());
-		if(isListEmpty(dataSource)){
-			return;
-		}
+		if (isListEmpty(dataSource)) { return; }
 		final DialogGetSeaportAdapter adapter = new DialogGetSeaportAdapter(this, dataSource);
 		mBuilder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 
@@ -557,7 +751,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		@Override
 		public void beforeTextChanged(CharSequence s, int start, int count, int after)
 		{
-			
+
 		}
 
 		@Override

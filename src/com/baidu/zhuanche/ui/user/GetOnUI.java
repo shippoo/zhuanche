@@ -2,9 +2,12 @@ package com.baidu.zhuanche.ui.user;
 
 import java.lang.reflect.Field;
 
+import org.apache.http.util.LangUtils;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -12,9 +15,16 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMap.OnMapLongClickListener;
 import com.amap.api.maps.AMap.OnMarkerClickListener;
+import com.amap.api.maps.AMap.OnMyLocationChangeListener;
+import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -33,6 +43,7 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.bean.Location;
+import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.utils.AMapUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
 
@@ -49,7 +60,7 @@ import com.baidu.zhuanche.utils.ToastUtils;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
+public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AMapLocationListener
 {
 	private MapView							mMapView;
 	private AMap							mAMap;
@@ -60,20 +71,65 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 	private MarkerOptions					mMarkerOptions;
 	private static OnGetOnLocationListener	mLocationListener;
 
+	// 声明AMapLocationClient类对象
+	public AMapLocationClient				mLocationClient	= null;
+	// 声明定位回调监听器
+	public AMapLocationListener				mLocationListener1;
+
+	public AMapLocationClientOption			mLocationOption	= null;
+	private double							mLatitude		= 0;
+	private double							mLongitude		= 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ui_geton);
+
+		init1();
+
 		mMapView = (MapView) findViewById(R.id.geton_mapview);
 		mIvLeftArrow = (ImageView) findViewById(R.id.geton_iv_leftarrow);
 		mSearchView = (SearchView) findViewById(R.id.geton_searchview);
-		//mSearchView.setIconifiedByDefault(false);
+		mSearchView.setIconifiedByDefault(false);
 		mMapView.onCreate(savedInstanceState);
 		initActivity();
 		initEvent();
 	}
 
+	private void init1()
+	{
+		// 初始化定位
+		mLocationClient = new AMapLocationClient(getApplicationContext());
+		// 设置定位回调监听
+		mLocationClient.setLocationListener(this);
+
+		// 初始化定位参数
+		mLocationOption = new AMapLocationClientOption();
+		// 设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+		mLocationOption.setLocationMode(AMapLocationMode.Hight_Accuracy);
+		// 设置是否返回地址信息（默认返回地址信息）
+		mLocationOption.setNeedAddress(true);
+		// 设置是否只定位一次,默认为false
+		mLocationOption.setOnceLocation(false);
+		// 设置是否强制刷新WIFI，默认为强制刷新
+		mLocationOption.setWifiActiveScan(true);
+		// 设置是否允许模拟位置,默认为false，不允许模拟位置
+		mLocationOption.setMockEnable(false);
+		// 设置定位间隔,单位毫秒,默认为2000ms
+		mLocationOption.setInterval(MyConstains.TIME_LOCATION);
+		// 给定位客户端对象设置定位参数
+		mLocationClient.setLocationOption(mLocationOption);
+		// 启动定位
+		mLocationClient.startLocation();
+
+	}
+	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		mLocationClient.startLocation();
+	}
 	private void initEvent()
 	{
 		mGeocoderSearch.setOnGeocodeSearchListener(this);
@@ -324,11 +380,38 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener
 	public void initView()
 	{
 	}
-
+	
 	@Override
 	public void onBackPressed()
 	{
 		// super.onBackPressed();
 		finishActivity();
+	}
+	@Override
+	public void onLocationChanged(AMapLocation amapLocation)
+	{
+		if (amapLocation != null)
+		{
+			if (amapLocation.getErrorCode() == 0)
+			{
+				mLatitude = amapLocation.getLatitude(); // 纬度
+				mLongitude = amapLocation.getLongitude();// 经度
+				//ToastUtils.makeShortText(mLatitude +"," + mLongitude);
+//				mAMap.getMyLocation().setLongitude(mLongitude);
+//				mAMap.getMyLocation().setLatitude(mLatitude);
+				LatLng latLng = new LatLng(mLatitude, mLongitude);
+				CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+				mAMap.moveCamera(update);
+				
+			}
+			else
+			{
+				// 显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+				Log.e("AmapError", "location Error, ErrCode:"
+									+ amapLocation.getErrorCode() + ", errInfo:"
+									+ amapLocation.getErrorInfo());
+			}
+		}
+
 	}
 }
