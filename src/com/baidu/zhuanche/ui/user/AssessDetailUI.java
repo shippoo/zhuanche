@@ -138,6 +138,7 @@ public class AssessDetailUI extends BaseActivity implements OnClickListener
 			return;
 		}
 		String url = URLS.BASESERVER + URLS.User.addDriverComment;
+		ToastUtils.showProgress(this);
 		RequestParams params = new RequestParams();
 		params.put(URLS.ACCESS_TOKEN, user.access_token);
 		params.put("driver_id", mOrderBean.d_del.id);
@@ -149,18 +150,25 @@ public class AssessDetailUI extends BaseActivity implements OnClickListener
 			@Override
 			public void success(String json)
 			{
-				if(mAddFeeListener != null){
+				if(mOnAssessListener != null){
 					mOrderBean.status = "3";
-					mAddFeeListener.onAddFee(mOrderBean, position);
+					mOnAssessListener.onAssess(mOrderBean);
 				}
 				mAssessRationBar.setEnabled(false);
 				mEtAssess.setEnabled(false);
 				mBtSubmit.setEnabled(false);
 				mBtSubmit.setText("评价成功！");
+				
 			}
 		});
 	}
-
+	public static OnAssessListener mOnAssessListener;
+	public static void setOnAssessListener(OnAssessListener onAssessListener){
+		mOnAssessListener = onAssessListener;
+	}
+	public interface OnAssessListener{
+		void onAssess(OrderBean orderBean);
+	}
 	@Override
 	public void onBackPressed()
 	{
@@ -226,16 +234,7 @@ public class AssessDetailUI extends BaseActivity implements OnClickListener
 			mDialog.show();
 		}
 	}
-	private static OnAddFeeListener	mAddFeeListener;
-	public static void setOnAddFeeListener(OnAddFeeListener addFeeListener)
-	{
-		mAddFeeListener = addFeeListener;
-	}
 
-	public interface OnAddFeeListener
-	{
-		void onAddFee(OrderBean orderBean, int position);
-	}
 	private Dialog	mDialog;
 	private int		position;
 

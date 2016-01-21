@@ -55,7 +55,7 @@ public class HotAskAdapter extends MyBaseApdater<Article>
 		}
 		Article bean = (Article) getItem(position);
 		holder.tvTitle.setText(bean.title);
-		holder.tvText.setText(bean.content);
+		holder.tvText.setText(bean.description);
 		ImageUtils imageUtils = new ImageUtils(mContext);
 		imageUtils.display(holder.ivIcon, URLS.BASE + bean.img);
 		return convertView;

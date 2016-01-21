@@ -177,19 +177,19 @@ public class DriverCenterOrderDetailUI extends BaseActivity implements OnClickLi
 		String text = "接单";
 		if ("0".equals(status))
 		{
-			text = "接单";
+			text = "预约中";
 		}
 		else if ("1".equals(status))
 		{
-			text = "待出发";
+			text = "已预约";
 		}
 		else if ("2".equals(status))
 		{
-			text = "待付款";
+			text = "已付款";
 		}
 		else if ("3".equals(status))
 		{
-			text = "待评价";
+			text = "已完成";
 		}
 		else if ("4".equals(status))
 		{

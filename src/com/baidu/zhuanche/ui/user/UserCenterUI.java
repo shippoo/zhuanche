@@ -40,16 +40,17 @@ import com.loopj.android.http.RequestParams;
 public class UserCenterUI extends BaseActivity implements OnClickListener, OnItemClickListener, OnRefreshListener<ListView>
 {
 
-	private PullToRefreshListView	mListView;
-	private RelativeLayout			mContainerSetting;	// 设置
-	private RelativeLayout			mContainerMsg;		// 我的消息
-	private CircleImageView			mCivPic;
-	private User					mUser;
-	private TextView				mTvNumber;
-	private TextView				mTvName;
-	private List<OrderBean>			mDatas;
-	private OrderAdapter			mOrderAdapter;		// 订单适配器
-	private int  					currentpage = 1;
+	private ListView		mListView;
+	private RelativeLayout	mContainerSetting;	// 设置
+	private RelativeLayout	mContainerMsg;		// 我的消息
+	private CircleImageView	mCivPic;
+	private User			mUser;
+	private TextView		mTvNumber;
+	private TextView		mTvName;
+	private List<OrderBean>	mDatas;
+	private OrderAdapter	mOrderAdapter;		// 订单适配器
+	private int				currentpage	= 1;
+
 	// private RelativeLayout mListEmptyView;
 	@Override
 	public void initView()
@@ -62,14 +63,17 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		mCivPic = (CircleImageView) headerView.findViewById(R.id.uc_civ_pic);
 		mTvNumber = (TextView) headerView.findViewById(R.id.uc_tv_number);
 		mTvName = (TextView) headerView.findViewById(R.id.uc_tv_username);
-		mListView = (PullToRefreshListView) findViewById(R.id.uc_listview);
-		
-		mListView.setMode(Mode.PULL_FROM_END);
-		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
-		//layoutParams.
-		headerView.setLayoutParams(layoutParams);
-		ListView lv = mListView.getRefreshableView();
-		lv.addHeaderView(headerView);
+		mListView = (ListView) findViewById(R.id.uc_listview);
+
+		// mListView.setMode(Mode.PULL_FROM_END);
+		// AbsListView.LayoutParams layoutParams = new
+		// AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+		// AbsListView.LayoutParams.WRAP_CONTENT);
+		// layoutParams.
+		// headerView.setLayoutParams(layoutParams);
+		// ListView lv = mListView.getRefreshableView();
+		// lv.addHeaderView(headerView);
+		mListView.addHeaderView(headerView);
 	}
 
 	@Override
@@ -129,14 +133,15 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 	{
 		Gson gson = new Gson();
 		OrderListBean bean = gson.fromJson(json, OrderListBean.class);
-		if(!isListEmpty(bean.content)){
+		if (!isListEmpty(bean.content))
+		{
 			mDatas.addAll(bean.content);
 			OrderUtil.sortOrder(mDatas);
 			currentpage++;
 			mOrderAdapter.notifyDataSetChanged();
-			
+
 		}
-		mListView.onRefreshComplete();
+		// mListView.onRefreshComplete();
 		// mOrderAdapter = new OrderAdapter(this, mDatas);
 		// mListView.setAdapter(mOrderAdapter);
 	}
@@ -150,7 +155,7 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		mCivPic.setOnClickListener(this);
 		mListView.setOnItemClickListener(this);
 		mIvLeftHeader.setOnClickListener(this);
-		mListView.setOnRefreshListener(this);
+		// mListView.setOnRefreshListener(this);
 	}
 
 	@Override
@@ -180,7 +185,7 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		if (position == 0) { return; }
 		OrderBean orderBean = mDatas.get(position - 1);
 		Bundle bundle = new Bundle();
-		bundle.putInt("position", position);
+		bundle.putInt("position", position - 1);
 		bundle.putSerializable(MyConstains.ITEMBEAN, orderBean);
 		startActivity(YuYueDetailUI.class, bundle);
 	}
@@ -191,14 +196,16 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		setPullRefreshListUserLoadMoreData(refreshView);
 		mListView.postDelayed(new LoadMoreTask(), 1000);
 	}
-	private class LoadMoreTask implements Runnable{
+
+	private class LoadMoreTask implements Runnable
+	{
 
 		@Override
 		public void run()
 		{
 			loadMore();
 		}
-		
+
 	}
 
 }

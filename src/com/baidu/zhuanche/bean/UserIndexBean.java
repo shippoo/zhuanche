@@ -53,6 +53,7 @@ public class UserIndexBean extends BaseBean
 		public String				img;						// /pinche/Upload/image/20160106/20160106102850_16580.png
 		public String				status;					// 1
 		public String				title;						// 阿萨达速度1
+		public String				description;
 	}
 
 	public class Banner

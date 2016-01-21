@@ -191,7 +191,18 @@ public abstract class BaseActivity extends Activity
 		finish();
 		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 	}
-	
+	/**
+	 * 开启一个新界面,并且结束当前界面
+	 * 
+	 * @param clazz
+	 */
+	public void startActivityAndFinish(Class clazz, Bundle bundle)
+	{
+		Intent intent = new Intent(this, clazz);
+		intent.putExtra(VALUE_PASS, bundle);
+		startActivity(intent);
+		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
+	}
 	/**
 	 * 开启一个新界面
 	 * 

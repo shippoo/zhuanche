@@ -222,7 +222,7 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 			// 去评价
 			Bundle bundle = new Bundle();
 			bundle.putSerializable(MyConstains.ITEMBEAN, mOrderBean);
-			startActivity(AssessDetailUI.class, bundle);
+			startActivityAndFinish(AssessDetailUI.class, bundle);
 		}
 		else if (mBtStatus.getText().equals("查看评价"))
 		{

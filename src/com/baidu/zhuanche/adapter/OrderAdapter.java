@@ -34,6 +34,7 @@ import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.user.AssessDetailUI;
+import com.baidu.zhuanche.ui.user.AssessDetailUI.OnAssessListener;
 import com.baidu.zhuanche.ui.user.LookAssessUI;
 import com.baidu.zhuanche.ui.user.MyRouteUI;
 import com.baidu.zhuanche.ui.user.YuYueDetailUI;
@@ -61,7 +62,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeListener
+public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeListener, OnAssessListener
 {
 	private User	mUser;
 
@@ -69,6 +70,7 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 		super(context, dataSource);
 		mUser = BaseApplication.getUser();
 		YuYueDetailUI.setOnAddFeeListener(this);
+		AssessDetailUI.setOnAssessListener(this);
 	}
 
 	@Override
@@ -266,6 +268,26 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 	@Override
 	public void onAddFee(OrderBean orderBean,int position)
 	{
+		
+		int index = 0;
+		for(int i = 0 ; i < mDataSource.size(); i++){
+			if((mDataSource.get(i).sn).equals(orderBean.sn)){
+				index = i;
+			}
+		}
+		mDataSource.set(index, orderBean);
+		notifyDataSetChanged();
+	}
+
+	@Override
+	public void onAssess(OrderBean orderBean)
+	{
+		int position = 0;
+		for(int i = 0 ; i < mDataSource.size(); i++){
+			if((mDataSource.get(i).sn).equals(orderBean.sn)){
+				position = i;
+			}
+		}
 		mDataSource.set(position, orderBean);
 		notifyDataSetChanged();
 	}
