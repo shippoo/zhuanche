@@ -65,14 +65,13 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 		mContainerPic = (FrameLayout) headerView.findViewById(R.id.uh_container_pic);
 		mContainerLogin = (LinearLayout) headerView.findViewById(R.id.home_container_guojingxiaoche);
 		mGridView = (NoScrolledGridView) headerView.findViewById(R.id.uh_gridview);
-		/** 为pulltorefreshListview添加头 */
 		//mListView.setMode(Mode.PULL_FROM_END);
 //		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
 //		headerView.setLayoutParams(layoutParams);
 //		ListView lv = mListView.getRefreshableView();
 //		lv.addHeaderView(headerView);
 		mListView.addHeaderView(headerView);
-		mListView.setAdapter(null); // TODO 显示头视图的作用？
+		mListView.setAdapter(null); 
 	}
 
 	@Override
