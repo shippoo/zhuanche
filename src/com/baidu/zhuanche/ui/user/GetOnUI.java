@@ -85,7 +85,6 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ui_geton);
-
 		init1();
 
 		mMapView = (MapView) findViewById(R.id.geton_mapview);
@@ -244,6 +243,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 		{
 			ToastUtils.makeShortText(this, "抱歉，查询失败！");
 		}
+		closeInputMethod();
 	}
 
 	/**
@@ -272,6 +272,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 					location.district = address.getDistrict();
 					location.latLng = new LatLng(query.getPoint().getLatitude(), query.getPoint().getLongitude());
 					mLocationListener.onGetOnLocation(location);
+					closeInputMethod();
 				}
 
 			}

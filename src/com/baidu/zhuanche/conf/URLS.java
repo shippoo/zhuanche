@@ -20,7 +20,7 @@ public interface URLS
 	/**
 	 * 基地址
 	 */
-	//String	BASESERVER	= BASE + "/pinche/index.php/";
+	// String BASESERVER = BASE + "/pinche/index.php/";
 	String	BASESERVER	= BASE + "/index.php/";
 
 	/**
@@ -87,6 +87,7 @@ public interface URLS
 		String	receiveOrder		= "Driver/Driver/receiveOrder";
 		String	findPassword		= "Driver/Login/findPassword";
 		String	orderDetail			= "Driver/Driver/orderDetail";
+		String	cleanWithdraw		= "Driver/Driver/cleanWithdraw";
 	}
 
 	String	MOBILE			= "mobile";		// 手机号码

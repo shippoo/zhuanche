@@ -27,29 +27,28 @@ import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.AtoolsUtil;
 import com.baidu.zhuanche.utils.OrderUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
-import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.CircleImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 
-public class UserCenterUI extends BaseActivity implements OnClickListener, OnItemClickListener, OnRefreshListener<ListView>
+public class UserCenterUI extends BaseActivity implements OnClickListener, OnItemClickListener, OnRefreshListener2<ListView>
 {
 
-	private ListView		mListView;
-	private RelativeLayout	mContainerSetting;	// 设置
-	private RelativeLayout	mContainerMsg;		// 我的消息
-	private CircleImageView	mCivPic;
-	private User			mUser;
-	private TextView		mTvNumber;
-	private TextView		mTvName;
-	private List<OrderBean>	mDatas;
-	private OrderAdapter	mOrderAdapter;		// 订单适配器
-	private int				currentpage	= 1;
+	private PullToRefreshListView	mListView;
+	private RelativeLayout			mContainerSetting;	// 设置
+	private RelativeLayout			mContainerMsg;		// 我的消息
+	private CircleImageView			mCivPic;
+	private User					mUser;
+	private TextView				mTvNumber;
+	private TextView				mTvName;
+	private List<OrderBean>			mDatas;
+	private OrderAdapter			mOrderAdapter;		// 订单适配器
+	private int						currentpage	= 1;
 
 	// private RelativeLayout mListEmptyView;
 	@Override
@@ -63,17 +62,16 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		mCivPic = (CircleImageView) headerView.findViewById(R.id.uc_civ_pic);
 		mTvNumber = (TextView) headerView.findViewById(R.id.uc_tv_number);
 		mTvName = (TextView) headerView.findViewById(R.id.uc_tv_username);
-		mListView = (ListView) findViewById(R.id.uc_listview);
+		mListView = (PullToRefreshListView) findViewById(R.id.uc_listview);
 
-		// mListView.setMode(Mode.PULL_FROM_END);
-		// AbsListView.LayoutParams layoutParams = new
-		// AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
-		// AbsListView.LayoutParams.WRAP_CONTENT);
-		// layoutParams.
-		// headerView.setLayoutParams(layoutParams);
-		// ListView lv = mListView.getRefreshableView();
-		// lv.addHeaderView(headerView);
-		mListView.addHeaderView(headerView);
+		mListView.setMode(Mode.BOTH);
+		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+																			AbsListView.LayoutParams.WRAP_CONTENT);
+		headerView.setLayoutParams(layoutParams);
+		ListView lv = mListView.getRefreshableView();
+		lv.addHeaderView(headerView);
+		// mListView.scrollBy(0, -1);
+
 	}
 
 	@Override
@@ -141,7 +139,7 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 			mOrderAdapter.notifyDataSetChanged();
 
 		}
-		// mListView.onRefreshComplete();
+		mListView.onRefreshComplete();
 		// mOrderAdapter = new OrderAdapter(this, mDatas);
 		// mListView.setAdapter(mOrderAdapter);
 	}
@@ -155,7 +153,16 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		mCivPic.setOnClickListener(this);
 		mListView.setOnItemClickListener(this);
 		mIvLeftHeader.setOnClickListener(this);
-		// mListView.setOnRefreshListener(this);
+		mListView.setOnRefreshListener(this);
+		// mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		//
+		// @Override
+		// public void onRefresh(PullToRefreshBase<ListView> refreshView)
+		// {
+		// setPullRefreshListUserLoadMoreData(refreshView);
+		// mListView.postDelayed(new LoadMoreTask(), 1000);
+		// }
+		// });
 	}
 
 	@Override
@@ -183,18 +190,11 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
 		if (position == 0) { return; }
-		OrderBean orderBean = mDatas.get(position - 1);
+		OrderBean orderBean = mDatas.get(position - 2);
 		Bundle bundle = new Bundle();
-		bundle.putInt("position", position - 1);
+		bundle.putInt("position", position - 2);
 		bundle.putSerializable(MyConstains.ITEMBEAN, orderBean);
 		startActivity(YuYueDetailUI.class, bundle);
-	}
-
-	@Override
-	public void onRefresh(PullToRefreshBase<ListView> refreshView)
-	{
-		setPullRefreshListUserLoadMoreData(refreshView);
-		mListView.postDelayed(new LoadMoreTask(), 1000);
 	}
 
 	private class LoadMoreTask implements Runnable
@@ -206,6 +206,21 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 			loadMore();
 		}
 
+	}
+
+	@Override
+	public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView)
+	{
+		setPullRefreshListUserRefresh(refreshView);
+		currentpage = 1;
+		mListView.postDelayed(new LoadMoreTask(), 1000);
+	}
+
+	@Override
+	public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView)
+	{
+		setPullRefreshListUserLoadMoreData(refreshView);
+		mListView.postDelayed(new LoadMoreTask(), 1000);
 	}
 
 }

@@ -16,6 +16,7 @@ import com.baidu.zhuanche.bean.WithDrawRecordBean.WithDraw;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
+import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -40,8 +41,8 @@ import com.loopj.android.http.RequestParams;
 public class WithDrawRecordUI extends BaseActivity implements OnClickListener, OnRefreshListener<ListView>
 {
 	private PullToRefreshListView	mListView;
-	//private List<String>			mDatas;
-	private List<WithDraw>			mDatas = new ArrayList<WithDrawRecordBean.WithDraw>();
+	// private List<String> mDatas;
+	private List<WithDraw>			mDatas		= new ArrayList<WithDrawRecordBean.WithDraw>();
 	private WidthDrawRecordAdapter	mAdapter;
 	private int						currentPage	= 1;
 
@@ -82,7 +83,8 @@ public class WithDrawRecordUI extends BaseActivity implements OnClickListener, O
 	{
 		Gson gson = new Gson();
 		WithDrawRecordBean withDrawRecordBean = gson.fromJson(json, WithDrawRecordBean.class);
-		if( withDrawRecordBean.content != null && withDrawRecordBean.content.size() > 0){
+		if (withDrawRecordBean.content != null && withDrawRecordBean.content.size() > 0)
+		{
 			mDatas.addAll(withDrawRecordBean.content);
 			mAdapter.notifyDataSetChanged();
 			currentPage++;
@@ -97,6 +99,7 @@ public class WithDrawRecordUI extends BaseActivity implements OnClickListener, O
 		mIvRightHeader.setOnClickListener(this);
 		mListView.setMode(Mode.PULL_FROM_END);
 		mListView.setOnRefreshListener(this);
+		mIvRightHeader.setOnClickListener(this);
 	}
 
 	@Override
@@ -116,8 +119,31 @@ public class WithDrawRecordUI extends BaseActivity implements OnClickListener, O
 		{
 			doClickRightMenu();
 		}
+		else if (v == mIvRightHeader)
+		{
+			deleteAllData();
+		}
 	}
-	/**清空记录*/
+
+	private void deleteAllData()
+	{
+		String url = URLS.BASESERVER + URLS.Driver.cleanWithdraw;
+		RequestParams params = new RequestParams();
+		params.add("id", "" + 0);
+		params.add(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+			
+			@Override
+			public void success(String json)
+			{
+				ToastUtils.makeShortText("清除成功！");
+				mDatas.clear();
+				mAdapter.notifyDataSetChanged();
+			}
+		});
+	}
+
+	/** 清空记录 */
 	private void doClickRightMenu()
 	{
 		mDatas.clear();
@@ -131,11 +157,11 @@ public class WithDrawRecordUI extends BaseActivity implements OnClickListener, O
 		/** 上拉加载数据设置 */
 		setPullRefreshListDriverLoadMoreData(refreshView);
 		mListView.postDelayed(new MyTask(), 1000);
-		
+
 	}
 
-	
-	class MyTask implements Runnable{
+	class MyTask implements Runnable
+	{
 
 		@Override
 		public void run()
@@ -152,8 +178,8 @@ public class WithDrawRecordUI extends BaseActivity implements OnClickListener, O
 					processJson(json);
 				}
 			});
-			
+
 		}
-		
+
 	}
 }

@@ -33,6 +33,8 @@ import com.baidu.zhuanche.service.MyService;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.baidu.zhuanche.view.DAlertDialog;
+import com.baidu.zhuanche.view.DToastView;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;

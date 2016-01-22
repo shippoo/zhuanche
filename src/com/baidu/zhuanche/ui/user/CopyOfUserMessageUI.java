@@ -3,25 +3,28 @@ package com.baidu.zhuanche.ui.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.UserMsgAdapter;
-import com.baidu.zhuanche.adapter.UserMsgRefreshAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.Msg;
 import com.baidu.zhuanche.bean.UserMsgBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.utils.DateFormatUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.utils.UIUtils;
-import com.baidu.zhuanche.zlist.widget.ZListView;
-import com.baidu.zhuanche.zlist.widget.ZListView.IXListViewListener;
+import com.baidu.zhuanche.view.EmptyView;
 import com.loopj.android.http.RequestParams;
 
 /**
@@ -38,18 +41,17 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class UserMessageUI extends BaseActivity implements OnClickListener, IXListViewListener
+public class CopyOfUserMessageUI extends BaseActivity implements OnClickListener, OnItemClickListener
 {
-	private ZListView				mListView;
-	private List<Msg>				mDatas	= new ArrayList<Msg>();
-	 //private UserMsgAdapter mMsgAdapter;
-	private UserMsgRefreshAdapter	mMsgAdapter;
+	private ListView		mListView;
+	private List<Msg>		mDatas	= new ArrayList<Msg>();
+	private UserMsgAdapter	mMsgAdapter;
 
 	@Override
 	public void initView()
 	{
 		setContentView(R.layout.ui_user_message);
-		mListView = (ZListView) findViewById(R.id.msg_listview);
+		mListView = (ListView) findViewById(R.id.msg_listview);
 	}
 
 	@Override
@@ -59,17 +61,10 @@ public class UserMessageUI extends BaseActivity implements OnClickListener, IXLi
 		mTvTitle.setText("我的消息");
 		mIvRightHeader.setImageResource(R.drawable.delete);
 		mIvRightHeader.setVisibility(0);
-		// mMsgAdapter = new UserMsgAdapter(this, mDatas);
-		mMsgAdapter = new UserMsgRefreshAdapter(this, mDatas);
+		mMsgAdapter = new UserMsgAdapter(this, mDatas);
 		mListView.setAdapter(mMsgAdapter);
 		setEmptyView(mListView, "没有相关消息！");
 		ToastUtils.showProgress(this);
-		loadData();
-
-	}
-
-	public void loadData()
-	{
 		String url = URLS.BASESERVER + URLS.User.myMessage;
 		RequestParams params = new RequestParams();
 		params.add(URLS.ACCESS_TOKEN, BaseApplication.getUser().access_token);
@@ -81,19 +76,20 @@ public class UserMessageUI extends BaseActivity implements OnClickListener, IXLi
 				processJson(json);
 			}
 		});
+
 	}
+
+	
 
 	protected void processJson(String json)
 	{
 		UserMsgBean msgBean = mGson.fromJson(json, UserMsgBean.class);
-		
 		if (!isListEmpty(msgBean.content))
 		{
-			mDatas.clear();
 			mDatas.addAll(msgBean.content);
 			mMsgAdapter.notifyDataSetChanged();
 		}
-		mListView.stopRefresh();
+
 	}
 
 	@Override
@@ -102,9 +98,7 @@ public class UserMessageUI extends BaseActivity implements OnClickListener, IXLi
 		super.initListener();
 		mIvLeftHeader.setOnClickListener(this);
 		mIvRightHeader.setOnClickListener(this);
-		mListView.setXListViewListener(this);
-		mListView.setPullRefreshEnable(true);
-		mListView.setPullLoadEnable(false);
+		mListView.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -138,27 +132,23 @@ public class UserMessageUI extends BaseActivity implements OnClickListener, IXLi
 	}
 
 	@Override
-	public void onRefresh()
+	public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
 	{
-		mListView.postDelayed(new RefreshData(), 1000);
-	}
-	private class RefreshData implements Runnable{
+		String url = URLS.BASESERVER + URLS.User.cleanMessage;
+		RequestParams params = new RequestParams();
+		final Msg msg = mDatas.get(position);
+		params.add(URLS.ACCESS_TOKEN, BaseApplication.getUser().access_token);
+		params.add("id", msg.id);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
 
-		@Override
-		public void run()
-		{
-			loadData();
-		}
-		
+			@Override
+			public void success(String json)
+			{
+				ToastUtils.makeShortText(UIUtils.getContext(), msg.title + "已清理");
+				mDatas.remove(position);
+				mMsgAdapter.notifyDataSetChanged();
+			}
+		});
 	}
-	@Override
-	public void onLoadMore()
-	{
-		//mListView.stopLoadMore();
-		mListView.postDelayed(new RefreshData(), 1000);
-	}
-
-
-	
 
 }

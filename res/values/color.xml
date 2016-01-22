@@ -28,4 +28,23 @@
     <color name="price_color">#FFA55D</color>
     <!-- money背景颜色 -->
     <color name="bg_money">#ff8c03</color>
+    
+    
+    <color name="black">#000000</color>
+    <color name="gray">#aaaaaa</color>
+    <color name="light_blue">#6593cb</color>
+    
+      <!-- 框框 -->
+    <color name="body_radius_bg_color">#fefefe</color>
+    <color name="body_radius_gary_bg_color">#ebebeb</color>
+    <color name="body_rectangle_while_bg_color">#ffffff</color>
+
+    <!-- e5e5e5边框颜色e3e3e3 -->
+    <color name="border_color">#e5e5e5</color>
+    <color name="border_color_dddddd">#dddddd</color>
+    <color name="lines_color">#e3e3e3</color>
+    <color name="blue">#2080D0</color>
+    
+      <color name="backgroundColor">#E8E8E0</color>
+    <color name="backgroundColorPress">#DBDBD3</color>
 </resources>

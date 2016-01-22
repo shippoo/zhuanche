@@ -1,8 +1,14 @@
 package com.baidu.zhuanche.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.view.DProgressDialog;
 import com.baidu.zhuanche.view.ProgressDialog;
 
 /**
@@ -20,10 +26,11 @@ import com.baidu.zhuanche.view.ProgressDialog;
  */
 public class ToastUtils
 {
-	private static ProgressDialog	mPd;
+	private static DProgressDialog	mPd;
 
 	public static void makeShortText(Context context, String text)
 	{
+	
 		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 	}
 
@@ -39,12 +46,12 @@ public class ToastUtils
 
 	public static void showProgress(Context context)
 	{
-		mPd = new ProgressDialog(context);
-		mPd.setCanceledOnTouchOutside(true);
-		mPd.setCancelable(true);
+		mPd = new DProgressDialog(context);
+		
+		mPd.setCanceledOnTouchOutside(false);
+		mPd.setCancelable(false);
 		mPd.show();
 	}
-
 	public static void closeProgress()
 	{
 		if (mPd != null)

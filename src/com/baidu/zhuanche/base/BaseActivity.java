@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -349,6 +350,20 @@ public abstract class BaseActivity extends Activity
 	 * 
 	 * @param refreshView
 	 */
+	public void setPullRefreshListUserRefresh(PullToRefreshBase<ListView> refreshView)
+	{
+		String str = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+		/** 上拉加载数据设置 */
+		refreshView.getLoadingLayoutProxy().setRefreshingLabel("正在刷新");
+		refreshView.getLoadingLayoutProxy().setPullLabel("下拉以刷新");
+		refreshView.getLoadingLayoutProxy().setReleaseLabel("放开以刷新");
+		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最后刷新时间:" + str);
+	}
+	/**
+	 * 上拉加載更多數據設置
+	 * 
+	 * @param refreshView
+	 */
 	public void setPullRefreshListUserLoadMoreData(PullToRefreshBase<ListView> refreshView)
 	{
 		String str = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
@@ -418,5 +433,25 @@ public abstract class BaseActivity extends Activity
 				}
 			}
 		});
+	}
+	/**
+	 * 打开或关闭软件盘
+	 */
+	public void openInputMethod(){
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		boolean isOpen=imm.isActive();
+		if(!isOpen){
+			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+		}
+	}
+	/**
+	 * 打开或关闭软件盘
+	 */
+	public void closeInputMethod(){
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		boolean isOpen=imm.isActive();
+		if(isOpen){
+			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+		}
 	}
 }
