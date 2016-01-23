@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -13,20 +14,35 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
+import com.amap.api.maps.CameraUpdate;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.GeocodeSearch.OnGeocodeSearchListener;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.adapter.HomeGridAdapter;
 import com.baidu.zhuanche.adapter.HotAskAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
+import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.bean.UserIndexBean;
 import com.baidu.zhuanche.bean.UserIndexBean.Article;
 import com.baidu.zhuanche.bean.UserIndexBean.Banner;
 import com.baidu.zhuanche.bean.UserIndexBean.Cate;
+import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.holder.UserHomePicHolder;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.ui.driver.DriverHomeUI;
 import com.baidu.zhuanche.view.NoScrolledGridView;
 import com.google.gson.Gson;
 
@@ -43,18 +59,19 @@ import com.google.gson.Gson;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class UserHomeUI extends BaseActivity implements OnClickListener
-{
-	private ListView			mListView;
-	private LinearLayout		mContainerLogin;						// 点击过境小车登陆
-	private User				mUser;
-	private FrameLayout			mContainerPic;							// 首页轮播图
-	private List<Article>		mListDatas	= new ArrayList<Article>();
-	private HotAskAdapter		mAskAdapter;
-	private NoScrolledGridView	mGridView;
-	private List<Cate>			mGridViewDatas;
-	private List<Banner>		mBannerDatas;							// 轮播图数据
-	private int					currentPage	= 1;
+public class UserHomeUI extends BaseActivity implements OnClickListener{
+	private ListView				mListView;
+	private LinearLayout			mContainerLogin;							// 点击过境小车登陆
+	private User					mUser;
+	private Driver					mDriver;
+	private FrameLayout				mContainerPic;								// 首页轮播图
+	private List<Article>			mListDatas		= new ArrayList<Article>();
+	private HotAskAdapter			mAskAdapter;
+	private NoScrolledGridView		mGridView;
+	private List<Cate>				mGridViewDatas;
+	private List<Banner>			mBannerDatas;								// 轮播图数据
+	private int						currentPage		= 1;
+
 
 	@Override
 	public void initView()
@@ -65,21 +82,25 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 		mContainerPic = (FrameLayout) headerView.findViewById(R.id.uh_container_pic);
 		mContainerLogin = (LinearLayout) headerView.findViewById(R.id.home_container_guojingxiaoche);
 		mGridView = (NoScrolledGridView) headerView.findViewById(R.id.uh_gridview);
-		//mListView.setMode(Mode.PULL_FROM_END);
-//		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
-//		headerView.setLayoutParams(layoutParams);
-//		ListView lv = mListView.getRefreshableView();
-//		lv.addHeaderView(headerView);
+		// mListView.setMode(Mode.PULL_FROM_END);
+		// AbsListView.LayoutParams layoutParams = new
+		// AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+		// AbsListView.LayoutParams.WRAP_CONTENT);
+		// headerView.setLayoutParams(layoutParams);
+		// ListView lv = mListView.getRefreshableView();
+		// lv.addHeaderView(headerView);
 		mListView.addHeaderView(headerView);
-		mListView.setAdapter(null); 
+		mListView.setAdapter(null);
 	}
 
+	
 	@Override
 	public void initData()
 	{
 		super.initData();
-
+		mIvLeftHeader.setVisibility(8);
 		mUser = BaseApplication.getUser();
+		mDriver = BaseApplication.getDriver();
 		mTvTitle.setText("首页");
 		mAskAdapter = new HotAskAdapter(this, mListDatas);
 		mListView.setAdapter(mAskAdapter);
@@ -114,7 +135,7 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 			mListDatas.addAll(userIndexBean.content.article);
 			mAskAdapter.notifyDataSetChanged();
 		}
-		//mListView.onRefreshComplete();
+		// mListView.onRefreshComplete();
 	}
 
 	protected void loadMore(String json)
@@ -128,7 +149,7 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 			mAskAdapter.notifyDataSetChanged();
 			currentPage++;
 		}
-	//	mListView.onRefreshComplete();
+		// mListView.onRefreshComplete();
 	}
 
 	@Override
@@ -165,7 +186,7 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 				Bundle bundle = new Bundle();
 				Article article = mListDatas.get(position - 1);
 				bundle.putString("id", article.id);
-				startActivity(NewsDetailUI.class,bundle);
+				startActivity(NewsDetailUI.class, bundle);
 			}
 		});
 	}
@@ -175,9 +196,13 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 	{
 		if (v == mContainerLogin)
 		{
-			if (mUser == null || TextUtils.isEmpty(mUser.mobile))
+			if ((mUser == null || TextUtils.isEmpty(mUser.mobile)) && (mDriver == null || TextUtils.isEmpty(mDriver.mobile)))
 			{
-				startActivity(UserLoginUI.class);
+				startActivity(SplashUI.class);
+			}
+			else if (mDriver != null && !TextUtils.isEmpty(mDriver.mobile))
+			{
+				startActivity(DriverHomeUI.class);
 			}
 			else
 			{
@@ -209,5 +234,7 @@ public class UserHomeUI extends BaseActivity implements OnClickListener
 		}
 
 	}
+
+	
 
 }

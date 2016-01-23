@@ -2,7 +2,6 @@ package com.baidu.zhuanche.ui.driver;
 
 import java.util.Date;
 
-import org.feezu.liuli.timeselector.Utils.TextUtil;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -27,6 +26,7 @@ import com.baidu.zhuanche.bean.DriverCenterOrderListBean.OrderBean;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.timeselector.utils.TextUtil;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.AtoolsUtil;
 import com.baidu.zhuanche.utils.DateFormatUtil;

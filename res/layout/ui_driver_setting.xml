@@ -12,6 +12,7 @@
     <View style="@style/DivideStyle" />
 
     <RelativeLayout
+          android:background="@drawable/item_bg_selector"
         android:id="@+id/setting_xgpassword"
         style="@style/SettingContainerStyle"
         android:layout_marginTop="20dp" >
@@ -26,9 +27,11 @@
             android:layout_marginTop="20dp" />
     </RelativeLayout>
 
-    <View style="@style/DivideStyle" />
+    <View android:visibility="gone" style="@style/DivideStyle" />
 
     <RelativeLayout
+        android:visibility="gone"
+          android:background="@drawable/item_bg_selector"
         android:id="@+id/setting_container_cache"
         style="@style/SettingContainerStyle" >
 
@@ -47,6 +50,7 @@
     <View style="@style/DivideStyle" />
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/setting_container_msg"
         style="@style/SettingContainerStyle" >
 
@@ -63,13 +67,13 @@
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
-    <View style="@style/DivideStyle" />
 
     <View
-        style="@style/DivideStyle"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        style="@style/DivideStyle"/>
 
     <RelativeLayout
+          android:background="@drawable/item_bg_selector"
         android:id="@+id/setting_container_check"
         style="@style/SettingContainerStyle" >
 
@@ -84,6 +88,7 @@
     <View style="@style/DivideStyle" />
 
     <RelativeLayout
+          android:background="@drawable/item_bg_selector"
         android:id="@+id/setting_container_us"
         style="@style/SettingContainerStyle" >
 
@@ -98,6 +103,7 @@
     <View style="@style/DivideStyle" />
 
     <RelativeLayout
+          android:background="@drawable/item_bg_selector"
         android:id="@+id/setting_container_fankui"
         style="@style/SettingContainerStyle" >
 
@@ -123,7 +129,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/bg_btn_gray"
+             android:background="@drawable/setting_bt_selector"
             android:gravity="center"
             android:text="退出登錄"
             android:textColor="@color/textcolor_order_selector"

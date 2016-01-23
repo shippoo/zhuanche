@@ -2,14 +2,13 @@ package com.baidu.zhuanche.ui.driver;
 
 import java.io.File;
 
-import android.os.Bundle;
+import android.content.DialogInterface;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import cn.jpush.android.api.JPushInterface;
 
 import com.baidu.zhuanche.R;
@@ -17,6 +16,7 @@ import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.utils.DataCleanManager;
 import com.baidu.zhuanche.utils.FileUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.baidu.zhuanche.view.DAlertDialog;
 import com.zcw.togglebutton.ToggleButton;
 import com.zcw.togglebutton.ToggleButton.OnToggleChanged;
 
@@ -134,17 +134,29 @@ public class SettingUI extends BaseActivity implements OnClickListener, OnToggle
 
 	public void clearCache()
 	{
-		if (getCache() == 0)
-		{
-			ToastUtils.makeShortText(this, "沒有緩存！");
-		}
-		else
-		{
-			ToastUtils.makeShortText(this, "清理" + Formatter.formatFileSize(this, getCache()) + "緩存！");
-			DataCleanManager.cleanCustomCache(FileUtils.getIconDir());
-			DataCleanManager.cleanCustomCache(FileUtils.getCacheDir());
-			mTvCache.setText(Formatter.formatFileSize(this, getCache()));
-		}
+		DAlertDialog dialog = new DAlertDialog(this);
+		dialog.setMessage("是否清空緩存！");
+		dialog.addConfirmListener(new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				if(which == 1){
+					if (getCache() == 0)
+					{
+						ToastUtils.makeShortText(SettingUI.this, "没有缓存！");
+					}
+					else
+					{
+						ToastUtils.makeShortText(SettingUI.this, "清理" + Formatter.formatFileSize(SettingUI.this, getCache()) + "缓存！");
+						DataCleanManager.cleanCustomCache(FileUtils.getIconDir());
+						DataCleanManager.cleanCustomCache(FileUtils.getCacheDir());
+						mTvCache.setText(Formatter.formatFileSize(SettingUI.this, getCache()));
+					}
+				}
+			}
+		});
+		dialog.show();
 	}
 
 	@Override

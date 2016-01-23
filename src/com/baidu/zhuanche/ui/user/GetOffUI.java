@@ -4,13 +4,19 @@ import java.lang.reflect.Field;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMap.OnMapClickListener;
 import com.amap.api.maps.AMap.OnMapLongClickListener;
 import com.amap.api.maps.AMap.OnMarkerClickListener;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -52,7 +58,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 	private MapView							mMapView;
 	private AMap							mAMap;
 	private ImageView						mIvLeftArrow;
-	private SearchView						mSearchView;
+	private EditText						mSearchView;
 	private GeocodeSearch					mGeocoderSearch;
 	private ProgressDialog					mPogressDialog	= null;
 	private MarkerOptions					mMarkerOptions;
@@ -65,42 +71,80 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 		setContentView(R.layout.ui_getoff);
 		mMapView = (MapView) findViewById(R.id.getoff_mapview);
 		mIvLeftArrow = (ImageView) findViewById(R.id.getoff_iv_leftarrow);
-		mSearchView = (SearchView) findViewById(R.id.getoff_searchview);
-		mSearchView.setIconifiedByDefault(false);
+		mSearchView = (EditText) findViewById(R.id.getoff_searchview);
+		// mSearchView.setIconifiedByDefault(false);
 		mMapView.onCreate(savedInstanceState);
 		initActivity();
 		initEvent();
+		initLocation();
+	}
+
+	private void initLocation()
+	{
+		GeocodeQuery query2 = new GeocodeQuery("香港", "");
+		mGeocoderSearch.getFromLocationNameAsyn(query2);
 	}
 
 	private void initEvent()
 	{
 		mGeocoderSearch.setOnGeocodeSearchListener(this);
-		/** 地图长按事件 */
-		mAMap.setOnMapLongClickListener(new OnMapLongClickListener() {
+		mAMap.setOnMapClickListener(new OnMapClickListener() {
 
 			@Override
-			public void onMapLongClick(LatLng latLng)
+			public void onMapClick(LatLng latLng)
 			{
 				showDialog();
 				RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(latLng.latitude, latLng.longitude), 200, GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
 				mGeocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
 			}
 		});
-		/** 搜索框地点查询 */
-		mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
+		/** 地图长按事件 */
+		// mAMap.setOnMapLongClickListener(new OnMapLongClickListener() {
+		//
+		// @Override
+		// public void onMapLongClick(LatLng latLng)
+		// {
+		// showDialog();
+		// RegeocodeQuery query = new RegeocodeQuery(new
+		// LatLonPoint(latLng.latitude, latLng.longitude), 200,
+		// GeocodeSearch.AMAP);//
+		// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+		// mGeocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+		// }
+		// });
+		// /** 搜索框地点查询 */
+		// mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
+		//
+		// @Override
+		// public boolean onQueryTextSubmit(String query)
+		// {
+		// showDialog();
+		// GeocodeQuery q = new GeocodeQuery(query, "");//
+		// 第一个参数表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode，
+		// mGeocoderSearch.getFromLocationNameAsyn(q);// 设置同步地理编码请求
+		// return true;
+		// }
+		//
+		// @Override
+		// public boolean onQueryTextChange(String newText)
+		// {
+		// return false;
+		// }
+		// });
+		mSearchView.setOnEditorActionListener(new OnEditorActionListener() {
 
 			@Override
-			public boolean onQueryTextSubmit(String query)
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
 			{
-				showDialog();
-				GeocodeQuery q = new GeocodeQuery(query, "");// 第一个参数表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode，
-				mGeocoderSearch.getFromLocationNameAsyn(q);// 设置同步地理编码请求
-				return true;
-			}
-
-			@Override
-			public boolean onQueryTextChange(String newText)
-			{
+				if (actionId == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+				{
+					closeInputMethod();
+					showDialog();
+					String text = mSearchView.getText().toString().trim();
+					GeocodeQuery q = new GeocodeQuery(text, "");// 第一个参数表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode，
+					mGeocoderSearch.getFromLocationNameAsyn(q);// 设置同步地理编码请求
+					return true;
+				}
 				return false;
 			}
 		});
@@ -110,6 +154,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 			@Override
 			public boolean onMarkerClick(Marker marker)
 			{
+
 				return false;
 			}
 		});
@@ -132,10 +177,10 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 		}
 		mGeocoderSearch = new GeocodeSearch(this);
 		mPogressDialog = new ProgressDialog(this);
-		mSearchView.setSubmitButtonEnabled(true);
+		// mSearchView.setSubmitButtonEnabled(true);
 		mMarkerOptions = new MarkerOptions();
 		mMarkerOptions.title("你的位置");
-		//mMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+		// mMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 		mMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pass));
 		/** 通过反射修改searchview 改变其样式 */
 		try
@@ -175,6 +220,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 					location.latLng = AMapUtil.convertToLatLng(address.getLatLonPoint());
 					mLocationListener.onGetOffLocation(location);
 				}
+				mSearchView.clearFocus();
 			}
 			else
 			{
@@ -307,6 +353,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 	public void initView()
 	{
 	}
+
 	@Override
 	public void onBackPressed()
 	{

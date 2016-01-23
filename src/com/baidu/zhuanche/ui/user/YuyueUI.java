@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.feezu.liuli.timeselector.TimeSelector;
-import org.feezu.liuli.timeselector.Utils.DateUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
@@ -17,6 +16,7 @@ import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -26,6 +26,21 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeAddress;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeAddress;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.GeocodeSearch.OnGeocodeSearchListener;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.autonavi.amap.mapcore.TextTextureGenerator;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.DialogGetSeaportAdapter;
@@ -44,8 +59,11 @@ import com.baidu.zhuanche.bean.Yuyue;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.timeselector.TimeSelector;
+import com.baidu.zhuanche.timeselector.utils.DateUtil;
 import com.baidu.zhuanche.ui.user.GetOffUI.OnGetOffLocationListener;
 import com.baidu.zhuanche.ui.user.GetOnUI.OnGetOnLocationListener;
+import com.baidu.zhuanche.utils.AMapUtil;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.PrintUtils;
@@ -67,51 +85,89 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLocationListener, OnGetOffLocationListener
+public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLocationListener, OnGetOffLocationListener, AMapLocationListener, OnGeocodeSearchListener
 {
-	private Yuyue				mYuyueData;									// 预约所需值，都封装在这个class中
+	private Yuyue					mYuyueData;											// 预约所需值，都封装在这个class中
 
-	private LinearLayout		mGroupView;									// 各条目容器
-
-	private User				mUser;
-	private AlertDialog.Builder	mBuilder;										// 对话框
-	private AsyncHttpClient		mClient	= AsyncHttpClientUtil.getInstance();
+	private LinearLayout			mGroupView;											// 各条目容器
+	private ProgressDialog					mPogressDialog	= null;
+	private User					mUser;
+	private AlertDialog.Builder		mBuilder;												// 对话框
+	private AsyncHttpClient			mClient			= AsyncHttpClientUtil.getInstance();
 	/** 级别容器 */
-	private RelativeLayout		mContainerLevel;
-	private EditText			mEtLevel;
+	private RelativeLayout			mContainerLevel;
+	private EditText				mEtLevel;
 	/** 类型容器 */
-	private RelativeLayout		mContainerType;
-	private EditText			mEtType;
+	private RelativeLayout			mContainerType;
+	private EditText				mEtType;
 	/** 签证类型 */
-	private RelativeLayout		mContainerSignType;
-	private TextView			mTvSignType;
+	private RelativeLayout			mContainerSignType;
+	private TextView				mTvSignType;
 	/** 时间 */
-	private RelativeLayout		mContainerTime;
-	private TextView			mTvTime;
+	private RelativeLayout			mContainerTime;
+	private TextView				mTvTime;
 	/** 口岸 */
-	private RelativeLayout		mContainerPort;
-	private TextView			mTvPort;
+	private RelativeLayout			mContainerPort;
+	private TextView				mTvPort;
 	/** 上车地点 */
-	private RelativeLayout		mContainerGetOn;
-	private EditText			mEtGetOn;
+	private RelativeLayout			mContainerGetOn;
+	private EditText				mEtGetOn;
 	/** 下车地点 */
-	private RelativeLayout		mContainerGetOff;
-	private EditText			mEtGetOff;
+	private RelativeLayout			mContainerGetOff;
+	private EditText				mEtGetOff;
 
 	/** 估价 */
-	private RelativeLayout		mContainerBudget;
-	private TextView			mTvBudget;
-	private Button				mBtYuyue;
-	private EditText			mEtPeopleCount;
-	private EditText			mEtXingLiCount;
-	private EditText			mEtFee;
-	private EditText			mEtDes;
+	private RelativeLayout			mContainerBudget;
+	private TextView				mTvBudget;
+	private Button					mBtYuyue;
+	private EditText				mEtPeopleCount;
+	private EditText				mEtXingLiCount;
+	private EditText				mEtFee;
+	private EditText				mEtDes;
+
+	// 声明AMapLocationClient类对象
+	public AMapLocationClient		mLocationClient	= null;
+	// 声明定位回调监听器
+	public AMapLocationListener		mLocationListener1;
+
+	public AMapLocationClientOption	mLocationOption	= null;
+	private double					mLatitude		= 0;
+	private double					mLongitude		= 0;
+	private GeocodeSearch			mGeocoderSearch;
 
 	@Override
 	public void init()
 	{
 		super.init();
 		setUserAligs();
+	}
+
+	private void init1()
+	{
+		// 初始化定位
+		mLocationClient = new AMapLocationClient(getApplicationContext());
+		// 设置定位回调监听
+		mLocationClient.setLocationListener(this);
+
+		// 初始化定位参数
+		mLocationOption = new AMapLocationClientOption();
+		// 设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+		mLocationOption.setLocationMode(AMapLocationMode.Hight_Accuracy);
+		// 设置是否返回地址信息（默认返回地址信息）
+		mLocationOption.setNeedAddress(true);
+		// 设置是否只定位一次,默认为false
+		mLocationOption.setOnceLocation(false);
+		// 设置是否强制刷新WIFI，默认为强制刷新
+		mLocationOption.setWifiActiveScan(true);
+		// 设置是否允许模拟位置,默认为false，不允许模拟位置
+		mLocationOption.setMockEnable(false);
+		// 设置定位间隔,单位毫秒,默认为2000ms
+		mLocationOption.setInterval(MyConstains.TIME_LOCATION);
+		// 给定位客户端对象设置定位参数
+		mLocationClient.setLocationOption(mLocationOption);
+		// 启动定位
+		mLocationClient.startLocation();
+
 	}
 
 	@Override
@@ -151,6 +207,30 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mEtXingLiCount = (EditText) view.findViewById(R.id.childer_et_luggageCount);
 		mEtDes = (EditText) view.findViewById(R.id.yuyue_tv_des);
 		mEtFee = (EditText) view.findViewById(R.id.yuyue_et_fee);
+		init1();
+	}
+	/**
+	 * 
+	 * 显示进度条对话框
+	 */
+	public void showDialog()
+	{
+		mPogressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mPogressDialog.setIndeterminate(false);
+		mPogressDialog.setCancelable(true);
+		mPogressDialog.setMessage("正在获取你当前的地址...");
+		mPogressDialog.show();
+	}
+
+	/**
+	 * 隐藏进度条对话框
+	 */
+	public void dismissDialog()
+	{
+		if (mPogressDialog != null)
+		{
+			mPogressDialog.dismiss();
+		}
 	}
 
 	@Override
@@ -159,10 +239,12 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		super.initData();
 		mUser = BaseApplication.getUser();
 		mIvRightHeader.setVisibility(0);
+		mPogressDialog = new ProgressDialog(this);
 		mIvRightHeader.setImageResource(R.drawable.page_02);
 		mTvTitle.setText("预约");
+		mGeocoderSearch = new GeocodeSearch(this);
 		mYuyueData = new Yuyue();
-		
+
 		mBuilder = new Builder(this);
 	}
 
@@ -182,47 +264,54 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mContainerGetOn.setOnClickListener(this);
 		mContainerGetOff.setOnClickListener(this);
 		mBtYuyue.setOnClickListener(this);
+		mGeocoderSearch.setOnGeocodeSearchListener(this);
 		mEtPeopleCount.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count)
 			{
-				if(!TextUtils.isEmpty(s)){
+				if (!TextUtils.isEmpty(s))
+				{
 					int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);
 					int p2 = Integer.parseInt(mEtPeopleCount.getText().toString().trim());
-					if(p2 > p1){
+					if (p2 > p1)
+					{
 						ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
 					}
 				}
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after)
 			{
-				
+
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable s)
 			{
-				if(!TextUtils.isEmpty(s)){
+				if (!TextUtils.isEmpty(s))
+				{
 					int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);
 					int p2 = Integer.parseInt(mEtPeopleCount.getText().toString().trim());
-					if(p2 > p1){
+					if (p2 > p1)
+					{
 						ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
 					}
 				}
 			}
 		});
 		mEtPeopleCount.setOnFocusChangeListener(new OnFocusChangeListener() {
-			
+
 			@Override
 			public void onFocusChange(View v, boolean hasFocus)
 			{
-				if(hasFocus){
+				if (hasFocus)
+				{
 					panDuan(1);
 				}
-				if(!hasFocus && !TextUtils.isEmpty(mEtPeopleCount.getText().toString().trim())){
+				if (!hasFocus && !TextUtils.isEmpty(mEtPeopleCount.getText().toString().trim()))
+				{
 					panDuan(2);
 				}
 			}
@@ -233,6 +322,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mEtGetOn.addTextChangedListener(new BudgetListener(4));
 
 	}
+
 	@Override
 	public void onClick(View v)
 	{
@@ -256,7 +346,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		{
 			// doClickSignType();
 			doClickSign();
-			//doClickCanCancelSign();
+			// doClickCanCancelSign();
 		}
 		else if (v == mContainerTime)
 		{
@@ -281,31 +371,36 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		else if (v == mContainerBudget)
 		{
 			getBudget();
-		}else if(v == mEtPeopleCount){
-			//panDuan();
+		}
+		else if (v == mEtPeopleCount)
+		{
+			// panDuan();
 		}
 	}
 
-	
-
 	private void panDuan(int index)
 	{
-		if(1 == index){
-			if(TextUtils.isEmpty(mYuyueData.cartype)){
+		if (1 == index)
+		{
+			if (TextUtils.isEmpty(mYuyueData.cartype))
+			{
 				mEtPeopleCount.setText("");
 				mEtPeopleCount.setEnabled(false);
 				ToastUtils.makeShortText("请先选择车级别！");
 				return;
 			}
-		}else if(2 == index){
+		}
+		else if (2 == index)
+		{
 			int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);
 			int p2 = Integer.parseInt(mEtPeopleCount.getText().toString().trim());
-			if(p2 > p1){
+			if (p2 > p1)
+			{
 				mEtPeopleCount.setText("");
 				ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
 			}
 		}
-		
+
 	}
 
 	private void getBudget()
@@ -394,11 +489,11 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			ToastUtils.makeShortText("请输入行李数");
 			return;
 		}
-//		else if (TextUtils.isEmpty(mYuyueData.signtype))
-//		{
-//			ToastUtils.makeShortText("请选择签证类型");
-//			return;
-//		}
+		// else if (TextUtils.isEmpty(mYuyueData.signtype))
+		// {
+		// ToastUtils.makeShortText("请选择签证类型");
+		// return;
+		// }
 		else if (TextUtils.isEmpty(mYuyueData.time))
 		{
 			ToastUtils.makeShortText("请选择时间");
@@ -422,35 +517,40 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		List<String> signs = mYuyueData.signs;
 		String sign1 = "";
 		String[] items = new String[] { "自由行", "团签", "回乡证", "护照" };
-		for(int i = 0; i < 4; i++){
-			if(items[i].equals(signs.get(i))){
-			sign1 += items[i] + ",";	
+		for (int i = 0; i < 4; i++)
+		{
+			if (items[i].equals(signs.get(i)))
+			{
+				sign1 += items[i] + ",";
 			}
 		}
-//		for(String s : signs){
-//			if(s.equals("1")){
-//				sign1 += items[0] + ",";
-//			}else if(s.equals("2")){
-//				sign1 += items[1] + ",";
-//			} else if( s.equals("3")){
-//				sign1 += items[2] + ",";
-//			}else if(s.equals("4")){
-//				sign1 += items[3] + ",";
-//			}
-//		}
+		// for(String s : signs){
+		// if(s.equals("1")){
+		// sign1 += items[0] + ",";
+		// }else if(s.equals("2")){
+		// sign1 += items[1] + ",";
+		// } else if( s.equals("3")){
+		// sign1 += items[2] + ",";
+		// }else if(s.equals("4")){
+		// sign1 += items[3] + ",";
+		// }
+		// }
 		PrintUtils.print("yyd = " + mYuyueData.signs);
-		if(!TextUtils.isEmpty(sign1)){
-			sign1 = sign1.substring(0, sign1.length() -1);
+		if (!TextUtils.isEmpty(sign1))
+		{
+			sign1 = sign1.substring(0, sign1.length() - 1);
 		}
 		PrintUtils.print("a = " + sign1);
-		if(TextUtils.isEmpty(sign1)){
+		if (TextUtils.isEmpty(sign1))
+		{
 			ToastUtils.makeShortText("请选择签证类型");
 			return;
 		}
 		PrintUtils.print("b = " + sign1);
 		int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);
 		int p2 = Integer.parseInt(mEtPeopleCount.getText().toString().trim());
-		if(p2 > p1){
+		if (p2 > p1)
+		{
 			ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
 			return;
 		}
@@ -483,8 +583,8 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			public void success(String json)
 			{
 				ToastUtils.makeShortText("预约成功！");
-				//mYuyueData = new Yuyue();
-				//clearData();
+				// mYuyueData = new Yuyue();
+				// clearData();
 				startActivity(UserCenterUI.class);
 			}
 		});
@@ -521,10 +621,10 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 					{
 						LevelBean bean = datas.get(which);
 						mYuyueData.cartype = bean.eid;
-						mYuyueData.maxPeopleCount = bean.value;     
+						mYuyueData.maxPeopleCount = bean.value;
 						mEtLevel.setText(bean.name);
 						mEtPeopleCount.setEnabled(true);
-						
+
 					}
 				});
 				mBuilder.show();
@@ -552,6 +652,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		});
 		mBuilder.show();
 	}
+
 	/** 签证类型 */
 	private void doClickSignType()
 	{
@@ -574,7 +675,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mBuilder.show();
 	}
 
-	private String	sign	= "";
+	private String		sign	= "";
 
 	private EditText	mEtAriNumber;
 
@@ -589,7 +690,9 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			if (mYuyueData.signs.get(i).equals(items[i]))
 			{
 				checkeItems[i] = true;
-			}else {
+			}
+			else
+			{
 				checkeItems[i] = false;
 			}
 		}
@@ -599,29 +702,35 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			@Override
 			public void onClick(DialogInterface dialog, int which, boolean isChecked)
 			{
-//				if (isChecked)
-//				{
-//					sign += items[which] + " ";
-//					mTvSignType.setText(sign);
-//					mYuyueData.signs.add(items[which]);
-//				}
-//				else
-//				{
-//					sign = sign.replace(items[which], "");
-//					mYuyueData.signs.remove(items[which]);
-//					mTvSignType.setText(sign);
-//				}
-				for(int i = 0 ; i< 4; i ++){
-					if(i == which && isChecked){
-						if(!sign.contains(items[which])){
+				// if (isChecked)
+				// {
+				// sign += items[which] + " ";
+				// mTvSignType.setText(sign);
+				// mYuyueData.signs.add(items[which]);
+				// }
+				// else
+				// {
+				// sign = sign.replace(items[which], "");
+				// mYuyueData.signs.remove(items[which]);
+				// mTvSignType.setText(sign);
+				// }
+				for (int i = 0; i < 4; i++)
+				{
+					if (i == which && isChecked)
+					{
+						if (!sign.contains(items[which]))
+						{
 							sign += items[which] + " ";
 							mTvSignType.setText(sign);
-							mYuyueData.signs.set(which,items[which]);
+							mYuyueData.signs.set(which, items[which]);
 						}
-					}else if(i == which && !isChecked){
-						if(sign.contains(items[which])){
+					}
+					else if (i == which && !isChecked)
+					{
+						if (sign.contains(items[which]))
+						{
 							sign = sign.replace(items[which], "");
-							mYuyueData.signs.set(which,which+"");
+							mYuyueData.signs.set(which, which + "");
 							mTvSignType.setText(sign);
 						}
 					}
@@ -641,7 +750,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		// }
 		// });
 		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
@@ -650,7 +759,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			}
 
 		});
-		builder.show();        
+		builder.show();
 
 	}
 
@@ -699,6 +808,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 	{
 		super.onRestart();
 		mUser = BaseApplication.getUser();
+		mLocationClient.startLocation();
 	}
 
 	protected void processJson(String json)
@@ -774,4 +884,99 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		}
 
 	}
+
+	@Override
+	public void onLocationChanged(AMapLocation amapLocation)
+	{
+		if (amapLocation != null)
+		{
+			if (amapLocation.getErrorCode() == 0)
+			{
+				mLatitude = amapLocation.getLatitude(); // 纬度
+				mLongitude = amapLocation.getLongitude();// 经度
+				// ToastUtils.makeShortText(mLatitude +"," + mLongitude);
+				// mAMap.getMyLocation().setLongitude(mLongitude);
+				// mAMap.getMyLocation().setLatitude(mLatitude);
+				showDialog();
+				RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(mLatitude, mLongitude), 200, GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+				mGeocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+			}
+			else
+			{
+				// 显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+				Log.e("AmapError", "location Error, ErrCode:"
+									+ amapLocation.getErrorCode() + ", errInfo:"
+									+ amapLocation.getErrorInfo());
+			}
+		}
+	}
+
+	@Override
+	public void onGeocodeSearched(GeocodeResult result, int rCode)
+	{
+		dismissDialog();
+		if (rCode == 0)
+		{
+			if (result != null && result.getGeocodeAddressList() != null && result.getGeocodeAddressList().size() > 0)
+			{
+				GeocodeAddress address = result.getGeocodeAddressList().get(0);
+				Location location = new Location();
+				location.address = address.getFormatAddress();
+				location.province = address.getProvince();
+				location.city = address.getCity();
+				location.district = address.getDistrict();
+				location.latLng = AMapUtil.convertToLatLng(address.getLatLonPoint());
+				mYuyueData.getOnLocation = location;
+				mEtGetOn.setText(mYuyueData.getOnLocation.address);
+			}
+			else
+			{
+				ToastUtils.makeShortText(this, "抱歉，未搜索到任何结果！");
+			}
+		}
+		else
+		{
+			ToastUtils.makeShortText(this, "抱歉，查询失败！");
+		}
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		mLocationClient.onDestroy();
+	}
+	/**
+	 * 逆地理编码接口回调
+	 */
+	@Override
+	public void onRegeocodeSearched(RegeocodeResult result, int rCode)
+	{
+		dismissDialog();
+		if (rCode == 0)
+		{
+			if (result != null && result.getRegeocodeAddress() != null && result.getRegeocodeAddress().getFormatAddress() != null)
+			{
+				RegeocodeQuery query = result.getRegeocodeQuery();
+				RegeocodeAddress address = result.getRegeocodeAddress();
+				Location location = new Location();
+				location.address = address.getFormatAddress();
+				location.province = address.getProvince();
+				location.city = address.getCity();
+				location.district = address.getDistrict();
+				location.latLng = new LatLng(query.getPoint().getLatitude(), query.getPoint().getLongitude());
+				mYuyueData.getOnLocation = location;
+				mEtGetOn.setText(mYuyueData.getOnLocation.address);
+			}
+			else
+			{
+				ToastUtils.makeShortText(this, "抱歉，未搜索到任何结果！");
+			}
+		}
+		else
+		{
+			ToastUtils.makeShortText(this, "抱歉，查询失败！");
+		}
+	}
+
 }

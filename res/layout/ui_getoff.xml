@@ -3,7 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-	<include layout="@layout/layout_header" android:visibility="gone"/>
+
+    <include
+        layout="@layout/layout_header"
+        android:visibility="gone" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -18,19 +22,27 @@
             android:layout_marginLeft="12dp"
             android:src="@drawable/left_arrow" />
 
-        <SearchView
+        <EditText
             android:id="@+id/getoff_searchview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/getoff_iv_leftarrow"
-            android:layout_marginRight="20dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/getoff_iv_leftarrow"
             android:background="@drawable/bg_search"
-            android:imeOptions="actionGo"
-            android:queryHint="输入地址查询" />
+            android:hint="输入地址查询"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="35dp"
+            android:singleLine="true" />
+        <ImageView 
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/page_31"/>
     </RelativeLayout>
 
     <!-- 引入布局文件 -->

@@ -290,7 +290,7 @@
                     <TextView
                         android:id="@+id/ic_tv_titlezjzh"
                         style="@style/LeftTitleTextStyle"
-                        android:text="準駕證號" />
+                        android:text="駕照編號" />
 
                     <EditText
                         android:id="@+id/ic_et_zjzh"

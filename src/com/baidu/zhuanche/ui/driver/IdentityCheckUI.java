@@ -429,6 +429,7 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 	protected void processJson(String json)
 	{
 		ToastUtils.makeShortText(this, "提交成功！");
+		mBtSubmit.setText("審覈中");
 		String url = URLS.BASESERVER + URLS.Driver.showVerifyInfo;
 		RequestParams params = new RequestParams();
 		params.put(URLS.ACCESS_TOKEN, mDriver.access_token);

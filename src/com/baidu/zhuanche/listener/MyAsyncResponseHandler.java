@@ -183,7 +183,7 @@ public abstract class MyAsyncResponseHandler extends AsyncHttpResponseHandler
 					return;
 				}
 				if(49005 == code){
-					ToastUtils.makeShortText(UIUtils.getContext(), "不在指定乘车范围！");
+					ToastUtils.makeShortText(UIUtils.getContext(), "你還有訂單未完成，請完成後再來接單！");
 					return;
 				}
 				if (50001 == code)

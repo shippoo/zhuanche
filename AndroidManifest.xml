@@ -73,7 +73,7 @@
             android:value="44e8d20da9fea192723f65009fd4177a" />
 
         <activity
-            android:name=".SplashUI"
+            android:name=".ui.user.UserHomeUI"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -95,10 +95,10 @@
         <activity
             android:name=".ui.user.YuyueUI"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity android:name=".ui.user.UserHomeUI" />
+        <activity android:name=".SplashUI" />
         <activity android:name=".ui.user.UserMessageUI" />
         <activity android:name=".ui.user.UserFindPasswordUI" />
-        <activity android:name=".ui.user.GetOnUI" />
+        <activity android:name=".ui.user.GetOnUI"  android:windowSoftInputMode="stateAlwaysHidden|stateHidden"/>
         <activity android:name=".ui.user.GetOffUI" />
         <activity android:name=".ui.user.MyRouteUI" />
         <activity android:name=".ui.user.NewsListUI" />

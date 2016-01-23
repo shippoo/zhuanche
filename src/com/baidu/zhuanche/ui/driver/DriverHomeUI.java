@@ -27,6 +27,7 @@ import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.driver.AcceptOrderUI.OnReceiverOrderListener;
+import com.baidu.zhuanche.ui.user.UserHomeUI;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -119,7 +120,7 @@ public class DriverHomeUI extends BaseActivity	implements
 		mTvTitle.setText("首頁");
 		mListView.setMode(Mode.BOTH);
 		mIvRightHeader.setVisibility(0);
-		mIvLeftHeader.setVisibility(8);
+		mIvLeftHeader.setVisibility(0);
 		mIvRightHeader.setImageResource(R.drawable.picture_31);
 
 		mAdapter = new DriverHomeOrderAdapter(this, mDatas);
@@ -211,7 +212,7 @@ public class DriverHomeUI extends BaseActivity	implements
 	public void initListener()
 	{
 		super.initListener();
-		// mIvLeftHeader.setOnClickListener(this);
+		 mIvLeftHeader.setOnClickListener(this);
 		AcceptOrderUI.setOnReceiverOrderListener(this);
 		DriverHomeOrderAdapter.setOnReceiverOrderListener(this);
 		mIvRightHeader.setOnClickListener(this);
@@ -243,6 +244,7 @@ public class DriverHomeUI extends BaseActivity	implements
 		if (v == mIvLeftHeader)
 		{
 			// finishActivity(SplashUI.class);
+			finishActivity(UserHomeUI.class);
 		}
 		else if (v == mIvRightHeader)
 		{

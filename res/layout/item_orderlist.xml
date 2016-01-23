@@ -593,8 +593,8 @@
                 android:layout_marginLeft="15dp"
                 android:background="@drawable/btn_bg_normal_shaped"
                 android:focusable="false"
+                android:textColor="#0000ff"
                 android:text="去付款"
-                android:textColor="@color/item_yuyue_textColor"
                 android:textSize="12sp" />
         </RelativeLayout>
     </LinearLayout>

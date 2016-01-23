@@ -8,6 +8,8 @@ import java.util.Timer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -26,6 +28,8 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.SplashUI;
+import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.helper.CountDownButtonHelper;
@@ -39,6 +43,7 @@ import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.SPUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.baidu.zhuanche.view.DAlertDialog;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -145,6 +150,7 @@ public abstract class BaseActivity extends Activity
 	public void exit()
 	{
 		BaseApplication.setUser(new User());
+		BaseApplication.setDriver(new Driver());
 		stopService(new Intent(this, DriverService.class));
 		stopService(new Intent(this, MyService.class));
 		for (BaseActivity activity : allActivitys)
@@ -152,12 +158,14 @@ public abstract class BaseActivity extends Activity
 			activity.finish();
 		}
 	}
+
 	@Override
 	protected void onPause()
 	{
 		JPushInterface.onPause(this);
 		super.onPause();
 	}
+
 	@Override
 	public void onBackPressed()
 	{
@@ -192,6 +200,7 @@ public abstract class BaseActivity extends Activity
 		finish();
 		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 	}
+
 	/**
 	 * 开启一个新界面,并且结束当前界面
 	 * 
@@ -204,6 +213,7 @@ public abstract class BaseActivity extends Activity
 		startActivity(intent);
 		overridePendingTransition(R.anim.next_enter, R.anim.next_exit);
 	}
+
 	/**
 	 * 开启一个新界面
 	 * 
@@ -306,17 +316,48 @@ public abstract class BaseActivity extends Activity
 	 */
 	public void userLogout()
 	{
-		String url = URLS.BASESERVER + URLS.User.logout;
-		ToastUtils.showProgress(this);
-		mClient.post(url, new MyAsyncResponseHandler() {
-
+		DAlertDialog dialog = new DAlertDialog(this);
+		dialog.setMessage("是否退出登陸！");
+		dialog.addConfirmListener(new OnClickListener() {
+			
 			@Override
-			public void success(String json)
+			public void onClick(DialogInterface dialog, int which)
 			{
-				ToastUtils.makeShortText(getApplicationContext(), "你已成功退出！");
-				exit();
+				if(which == 1){
+					BaseApplication.setDriver(new Driver());
+					stopService(new Intent(BaseActivity.this, DriverService.class));
+					startActivityAndFinish(SplashUI.class);
+				}
 			}
 		});
+		dialog.show();
+		
+
+	}
+
+	/**
+	 * 退出
+	 */
+	public void userLogout1()
+	{
+		//ToastUtils.makeShortText(getApplicationContext(), "你已成功退出！");
+		DAlertDialog dialog = new DAlertDialog(this);
+		dialog.setMessage("是否退出登陆！");
+		dialog.addConfirmListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				if(which == 1){
+					BaseApplication.setUser(new User());
+					stopService(new Intent(BaseActivity.this, MyService.class));
+					startActivityAndFinish(SplashUI.class);
+				}
+			}
+		});
+		dialog.show();
+		
+
 	}
 
 	/**
@@ -332,6 +373,7 @@ public abstract class BaseActivity extends Activity
 		refreshView.getLoadingLayoutProxy().setReleaseLabel("釋放開始加載");
 		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最後加載時間:" + str);
 	}
+
 	/**
 	 * 上拉加載更多數據設置
 	 * 
@@ -345,6 +387,7 @@ public abstract class BaseActivity extends Activity
 		refreshView.getLoadingLayoutProxy().setReleaseLabel("放開以刷新");
 		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最後刷新時間:" + str);
 	}
+
 	/**
 	 * 上拉加載更多數據設置
 	 * 
@@ -359,6 +402,7 @@ public abstract class BaseActivity extends Activity
 		refreshView.getLoadingLayoutProxy().setReleaseLabel("放开以刷新");
 		refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最后刷新时间:" + str);
 	}
+
 	/**
 	 * 上拉加載更多數據設置
 	 * 
@@ -385,10 +429,12 @@ public abstract class BaseActivity extends Activity
 		String DEVICE_ID = tm.getDeviceId();
 		return DEVICE_ID;
 	}
+
 	/**
 	 * 为用户端设置标签
 	 */
-	public void setUserAligs(){
+	public void setUserAligs()
+	{
 		Set<String> tags = new HashSet<String>();
 		tags.add(MD5Utils.encode(BaseApplication.getUser().mobile));
 		JPushInterface.setAliasAndTags(this, "aligs", tags, new TagAliasCallback() {
@@ -403,10 +449,12 @@ public abstract class BaseActivity extends Activity
 			}
 		});
 	}
-	public void showTimeCountDown(final Button bt){
-		CountDownButtonHelper helper = new CountDownButtonHelper(bt,"发送验证码", 60, 1);
+
+	public void showTimeCountDown(final Button bt)
+	{
+		CountDownButtonHelper helper = new CountDownButtonHelper(bt, "发送验证码", 60, 1);
 		helper.setOnFinishListener(new OnFinishListener() {
-			
+
 			@Override
 			public void finish()
 			{
@@ -415,10 +463,12 @@ public abstract class BaseActivity extends Activity
 		});
 		helper.start();
 	}
+
 	/**
 	 * 为司机端设置标签
 	 */
-	public void setDriverAligs(){
+	public void setDriverAligs()
+	{
 		Set<String> tags = new HashSet<String>();
 		tags.add(MD5Utils.encode(BaseApplication.getDriver().mobile));
 		PrintUtils.print("司機別名=" + MD5Utils.encode(BaseApplication.getDriver().mobile));
@@ -434,23 +484,29 @@ public abstract class BaseActivity extends Activity
 			}
 		});
 	}
+
 	/**
 	 * 打开或关闭软件盘
 	 */
-	public void openInputMethod(){
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		boolean isOpen=imm.isActive();
-		if(!isOpen){
+	public void openInputMethod()
+	{
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		boolean isOpen = imm.isActive();
+		if (!isOpen)
+		{
 			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 		}
 	}
+
 	/**
 	 * 打开或关闭软件盘
 	 */
-	public void closeInputMethod(){
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		boolean isOpen=imm.isActive();
-		if(isOpen){
+	public void closeInputMethod()
+	{
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		boolean isOpen = imm.isActive();
+		if (isOpen)
+		{
 			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 		}
 	}

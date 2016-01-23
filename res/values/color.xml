@@ -2,6 +2,8 @@
 <resources>
     <color name="bg">#F6F6F6</color>
     <color name="textColor">#999999</color>
+    <color name="item_bg_press_F6">#F6F6F6</color>
+    <color name="item_bg_press_E5">#E5E5E5</color>
     <!-- 对话框标题的背景颜色 -->
     <color name="title">#1368AA</color>
     <!-- 对话框中内容 条目的文字颜色 -->
