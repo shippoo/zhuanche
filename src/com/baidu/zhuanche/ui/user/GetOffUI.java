@@ -219,6 +219,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 					location.district = address.getDistrict();
 					location.latLng = AMapUtil.convertToLatLng(address.getLatLonPoint());
 					mLocationListener.onGetOffLocation(location);
+					mSearchView.setText(location.address);
 				}
 				mSearchView.clearFocus();
 			}
@@ -259,6 +260,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 					location.district = address.getDistrict();
 					location.latLng = new LatLng(query.getPoint().getLatitude(), query.getPoint().getLongitude());
 					mLocationListener.onGetOffLocation(location);
+					mSearchView.setText(location.address);
 				}
 			}
 			else

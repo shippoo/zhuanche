@@ -227,6 +227,13 @@ public class ReIdentityCheckUI extends BaseActivity implements OnClickListener
 		mIvZjzh.setEnabled(enabled);
 		mBtSubmit.setEnabled(enabled);
 		mBtSubmit.setBackgroundResource(enabled ? R.drawable.bg_identity : R.drawable.bg_identity_press);
+		if(!enabled && mDriver.status.equals("2")){
+			mBtSubmit.setText("審覈中");
+		}else if(!enabled && mDriver.status.equals("3")){
+			mBtSubmit.setText("審覈通過");
+		}else if(!enabled && mDriver.status.equals("4")){
+			mBtSubmit.setText("審覈失敗");
+		}
 	}
 
 	private void setStatusImg()

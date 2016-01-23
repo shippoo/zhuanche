@@ -294,6 +294,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 					location.district = address.getDistrict();
 					location.latLng = AMapUtil.convertToLatLng(address.getLatLonPoint());
 					mLocationListener.onGetOnLocation(location);
+					mSearchView.setText(location.address);
 				}
 				mSearchView.clearFocus();
 			}
@@ -334,6 +335,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 					location.district = address.getDistrict();
 					location.latLng = new LatLng(query.getPoint().getLatitude(), query.getPoint().getLongitude());
 					mLocationListener.onGetOnLocation(location);
+					mSearchView.setText(location.address);
 				}
 
 			}
