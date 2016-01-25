@@ -7,12 +7,14 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,6 +25,9 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,6 +36,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
+import com.amap.api.mapcore.util.bu;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.services.core.LatLonPoint;
@@ -85,12 +91,12 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLocationListener, OnGetOffLocationListener, AMapLocationListener, OnGeocodeSearchListener
+public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLocationListener, OnGetOffLocationListener, AMapLocationListener, OnGeocodeSearchListener, OnCheckedChangeListener
 {
 	private Yuyue					mYuyueData;											// 预约所需值，都封装在这个class中
 
 	private LinearLayout			mGroupView;											// 各条目容器
-	private ProgressDialog					mPogressDialog	= null;
+	private ProgressDialog			mPogressDialog	= null;
 	private User					mUser;
 	private AlertDialog.Builder		mBuilder;												// 对话框
 	private AsyncHttpClient			mClient			= AsyncHttpClientUtil.getInstance();
@@ -135,6 +141,10 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 	private double					mLongitude		= 0;
 	private GeocodeSearch			mGeocoderSearch;
 
+	private RadioGroup				mRadioGroup;
+	private RadioButton				mRbSpecialCar;
+	private RadioButton				mRbFreeCar;
+
 	@Override
 	public void init()
 	{
@@ -170,6 +180,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 
 	}
 
+	@SuppressLint("CutPasteId")
 	@Override
 	public void initView()
 	{
@@ -182,8 +193,9 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mContainerLevel = (RelativeLayout) view.findViewById(R.id.yuyueContainer_level);
 		mEtLevel = (EditText) view.findViewById(R.id.yuyue_et_level);
 		// 类型
-		mContainerType = (RelativeLayout) view.findViewById(R.id.yuyueContainer_type);
-		mEtType = (EditText) view.findViewById(R.id.yuyue_et_type);
+		// mContainerType = (RelativeLayout)
+		// view.findViewById(R.id.yuyueContainer_type);
+		// mEtType = (EditText) view.findViewById(R.id.yuyue_et_type);
 		// 签证类型
 		mContainerSignType = (RelativeLayout) view.findViewById(R.id.yuyueContainer_signtype);
 		mTvSignType = (TextView) view.findViewById(R.id.yuyue_tv_signtype);
@@ -207,8 +219,13 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mEtXingLiCount = (EditText) view.findViewById(R.id.childer_et_luggageCount);
 		mEtDes = (EditText) view.findViewById(R.id.yuyue_tv_des);
 		mEtFee = (EditText) view.findViewById(R.id.yuyue_et_fee);
+
+		mRadioGroup = (RadioGroup) view.findViewById(R.id.children_radiogroup);
+		mRbFreeCar = (RadioButton) view.findViewById(R.id.childer_rb_freecar);
+		mRbSpecialCar = (RadioButton) view.findViewById(R.id.childer_rb_specialcar);
 		init1();
 	}
+
 	/**
 	 * 
 	 * 显示进度条对话框
@@ -242,6 +259,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mPogressDialog = new ProgressDialog(this);
 		mIvRightHeader.setImageResource(R.drawable.page_02);
 		mTvTitle.setText("预约");
+		mBtYuyue.setEnabled(false);
 		mGeocoderSearch = new GeocodeSearch(this);
 		mYuyueData = new Yuyue();
 
@@ -257,7 +275,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mIvLeftHeader.setOnClickListener(this);
 		mIvRightHeader.setOnClickListener(this);
 		mContainerLevel.setOnClickListener(this);
-		mContainerType.setOnClickListener(this);
+		// mContainerType.setOnClickListener(this);
 		mContainerSignType.setOnClickListener(this);
 		mContainerTime.setOnClickListener(this);
 		mContainerPort.setOnClickListener(this);
@@ -265,6 +283,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mContainerGetOff.setOnClickListener(this);
 		mBtYuyue.setOnClickListener(this);
 		mGeocoderSearch.setOnGeocodeSearchListener(this);
+		mRadioGroup.setOnCheckedChangeListener(this);
 		mEtPeopleCount.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -279,6 +298,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 						ToastUtils.makeShortText("乘车人数不能大于最大乘车人数！");
 					}
 				}
+				enableYuyue();
 			}
 
 			@Override
@@ -317,10 +337,57 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			}
 		});
 		mEtLevel.addTextChangedListener(new BudgetListener(1));
-		mEtType.addTextChangedListener(new BudgetListener(2));
+		// mEtType.addTextChangedListener(new BudgetListener(2));
 		mEtGetOff.addTextChangedListener(new BudgetListener(3));
 		mEtGetOn.addTextChangedListener(new BudgetListener(4));
+		mTvPort.addTextChangedListener(new TextWatcher() {
 
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count)
+			{
+				if (TextUtils.isEmpty(s))
+				{
+					mBtYuyue.setEnabled(false);
+				}
+				enableYuyue();
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after)
+			{
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s)
+			{
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+	}
+
+	public void enableYuyue()
+	{
+		String peopleCount = mEtPeopleCount.getText().toString().trim();
+		String port = mTvPort.getText().toString().trim();
+		String getoff = mEtGetOff.getText().toString().trim();
+		String geton = mEtGetOn.getText().toString().trim();
+		String price = mTvBudget.getText().toString().trim();
+		boolean flag = !TextUtils.isEmpty(peopleCount) && !TextUtils.isEmpty(port)
+						&& !TextUtils.isEmpty(getoff) && !TextUtils.isEmpty(geton) && !TextUtils.isEmpty(price);
+
+		if (flag)
+		{
+			mBtYuyue.setEnabled(true);
+		}
+		else
+		{
+			mBtYuyue.setEnabled(false);
+		}
 	}
 
 	@Override
@@ -358,7 +425,9 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		}
 		else if (v == mContainerGetOn)
 		{
-			startActivity(GetOnUI.class);
+			Bundle bundle = new Bundle();
+			bundle.putString("geton", mYuyueData.getOnLocation.address);
+			startActivity(GetOnUI.class, bundle);
 		}
 		else if (v == mContainerGetOff)
 		{
@@ -875,6 +944,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			if (TextUtils.isEmpty(offLocation.address)) { return; }
 			if (TextUtils.isEmpty(onLocation.address)) { return; }
 			getBudget();
+			enableYuyue();
 		}
 
 		@Override
@@ -939,13 +1009,20 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 			ToastUtils.makeShortText(this, "抱歉，查询失败！");
 		}
 	}
-	
+
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity(UserHomeUI.class);
+	}
+
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
 		mLocationClient.onDestroy();
 	}
+
 	/**
 	 * 逆地理编码接口回调
 	 */
@@ -976,6 +1053,19 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		else
 		{
 			ToastUtils.makeShortText(this, "抱歉，查询失败！");
+		}
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId)
+	{
+		if (checkedId == R.id.childer_rb_freecar)
+		{
+			mYuyueData.carpool = "1";
+		}
+		else if (checkedId == R.id.childer_rb_specialcar)
+		{
+			mYuyueData.carpool = "0";
 		}
 	}
 

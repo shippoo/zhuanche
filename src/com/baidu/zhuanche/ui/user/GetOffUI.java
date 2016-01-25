@@ -3,6 +3,7 @@ package com.baidu.zhuanche.ui.user;
 import java.lang.reflect.Field;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.bean.Location;
 import com.baidu.zhuanche.utils.AMapUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.baidu.zhuanche.view.DAlertDialog;
 
 /**
  * @项目名: 拼车
@@ -71,6 +73,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 		setContentView(R.layout.ui_getoff);
 		mMapView = (MapView) findViewById(R.id.getoff_mapview);
 		mIvLeftArrow = (ImageView) findViewById(R.id.getoff_iv_leftarrow);
+		mIvLeftArrow.setImageResource(R.drawable.sure);
 		mSearchView = (EditText) findViewById(R.id.getoff_searchview);
 		// mSearchView.setIconifiedByDefault(false);
 		mMapView.onCreate(savedInstanceState);
@@ -164,7 +167,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 			@Override
 			public void onClick(View v)
 			{
-				finishActivity();
+				selectPlace();
 			}
 		});
 	}
@@ -359,6 +362,24 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 	@Override
 	public void onBackPressed()
 	{
-		finishActivity();
+		selectPlace();
+	}
+
+	public void selectPlace()
+	{
+		DAlertDialog dialog = new DAlertDialog(this);
+		dialog.setMessage("你确认选中此地址吗？");
+		dialog.addConfirmListener(new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				if(which == 1){
+					finishActivity();
+				}
+				
+			}
+		});
+		dialog.show();
 	}
 }

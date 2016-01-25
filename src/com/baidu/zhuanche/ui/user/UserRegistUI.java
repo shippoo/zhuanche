@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.conf.URLS;
@@ -60,7 +61,11 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 	private LinearLayout	mContainerQuhao;
 	private QuhaoAdapter	mAdapter;
 	protected String		mVerifyCode	= "";
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 	@Override
 	public void initView()
 	{

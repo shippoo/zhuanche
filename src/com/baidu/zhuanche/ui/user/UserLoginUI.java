@@ -22,6 +22,7 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
@@ -71,6 +72,11 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 	public void init()
 	{
 		super.init();
+	}
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity(SplashUI.class);
 	}
 	@Override
 	public void initView()

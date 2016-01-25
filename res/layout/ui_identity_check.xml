@@ -252,7 +252,7 @@
                     <TextView
                         android:id="@+id/ic_tv_title_seaport"
                         style="@style/LeftTitleTextStyle"
-                        android:text="港口" />
+                        android:text="口岸" />
 
                     <TextView
                         android:id="@+id/ic_tv_seaport"

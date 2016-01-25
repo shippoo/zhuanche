@@ -73,7 +73,11 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		// mListView.scrollBy(0, -1);
 
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 	@Override
 	protected void onRestart()
 	{
@@ -190,9 +194,13 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
 		if (position == 0) { return; }
-		OrderBean orderBean = mDatas.get(position - 2);
+		int index = position - 2;
+		if(index == -1){
+			return;
+		}
+		OrderBean orderBean = mDatas.get(index);
 		Bundle bundle = new Bundle();
-		bundle.putInt("position", position - 2);
+		bundle.putInt("position", index);
 		bundle.putSerializable(MyConstains.ITEMBEAN, orderBean);
 		startActivity(YuYueDetailUI.class, bundle);
 	}

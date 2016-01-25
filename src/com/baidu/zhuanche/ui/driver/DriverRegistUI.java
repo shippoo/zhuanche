@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.zhuanche.R;
+import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.conf.URLS;
@@ -72,7 +73,11 @@ public class DriverRegistUI extends BaseActivity implements OnClickListener
 		mBtGetCode = (Button) findViewById(R.id.dr_bt_yanzhengma);
 		mBtRegist = (Button) findViewById(R.id.dr_bt_regist);
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 	@Override
 	public void initData()
 	{
@@ -119,11 +124,11 @@ public class DriverRegistUI extends BaseActivity implements OnClickListener
 		String code = mEtCode.getText().toString().trim();
 		String password = mEtPassword.getText().toString().trim();
 		if(TextUtils.isEmpty(number) || TextUtils.isEmpty(code) || TextUtils.isEmpty(password) ){
-			ToastUtils.makeShortText(this, "请完善信息！");
+			ToastUtils.makeShortText(this, "請完善信息！");
 			return;
 		}
 		if(!code.equals(mVerifyCode)){
-			ToastUtils.makeShortText(this, "验证码不对！");
+			ToastUtils.makeShortText(this, "驗證碼不對！");
 			return;
 		}
 		String url = URLS.BASESERVER + URLS.Driver.regist;
@@ -151,7 +156,7 @@ public class DriverRegistUI extends BaseActivity implements OnClickListener
 		String number = mEtNumber.getText().toString().trim();
 		if (TextUtils.isEmpty(number))
 		{
-			ToastUtils.makeShortText(this, "请输入手机号码！");
+			ToastUtils.makeShortText(this, "請輸入手機號碼！");
 			return;
 		}
 		showTimeCountDown(mBtGetCode);

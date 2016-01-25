@@ -25,6 +25,7 @@ import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.AtoolsUtil;
 import com.baidu.zhuanche.utils.DateFormatUtil;
 import com.baidu.zhuanche.utils.ImageUtils;
+import com.baidu.zhuanche.utils.OrderUtil;
 import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.view.CircleImageView;
@@ -86,7 +87,7 @@ public class DriverHomeOrderAdapter extends MyBaseApdater<DriverHomeOrder>
 
 			}
 		});
-		holder.tvTime.setText(DateFormatUtil.getDateTimeStr(new Date(Long.parseLong(bean.time) * 1000)));
+		holder.tvTime.setText(OrderUtil.getDateText(bean.time));
 		holder.tvGetOn.setText(bean.from);
 		holder.tvGetOff.setText(bean.to);
 		holder.tvCarPool.setText(AtoolsUtil.getCarPool(bean.carpool));

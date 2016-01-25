@@ -106,6 +106,11 @@ public class DriverHomeUI extends BaseActivity	implements
 		mLocationClient.startLocation();
 	}
 	@Override
+	public void onBackPressed()
+	{
+		finishActivity(UserHomeUI.class);
+	}
+	@Override
 	public void initView()
 	{
 

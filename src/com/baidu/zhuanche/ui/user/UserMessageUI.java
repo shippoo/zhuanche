@@ -67,7 +67,11 @@ public class UserMessageUI extends BaseActivity implements OnClickListener, IXLi
 		loadData();
 
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 	public void loadData()
 	{
 		String url = URLS.BASESERVER + URLS.User.myMessage;

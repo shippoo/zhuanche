@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="车费详情"
+                    android:text="车费合计"
                     android:textColor="#999999"
                     android:textSize="12sp" />
 
@@ -131,6 +131,7 @@
 
                 <TextView
                     android:id="@+id/yuyue_text_09"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -286,6 +287,7 @@
                 <Button
                     android:id="@+id/yyd_bt_status"
                     style="@style/GreenButtonStyle"
+                    android:background="@drawable/xiangrigou_selector"
                     android:text="预 约" />
             </RelativeLayout>
         </LinearLayout>

@@ -95,7 +95,11 @@ public class SettingUI extends BaseActivity implements OnClickListener, OnToggle
 		}
 		return cache;
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 	@Override
 	public void initListener()
 	{

@@ -76,7 +76,11 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		mTvRegist = (TextView) findViewById(R.id.dl_tv_regist);
 		mContainerQuhao = (LinearLayout) findViewById(R.id.dl_container_quhao);
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity(SplashUI.class);
+	}
 	@Override
 	public void initData()
 	{

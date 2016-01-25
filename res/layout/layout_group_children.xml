@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:id="@+id/yuyueContainer_level"
         android:layout_width="match_parent"
-        android:background="@drawable/item_bg_selector"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
             android:id="@+id/imageView01"
@@ -29,7 +30,9 @@
             android:text="级别"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-		<requestFocus />
+
+        <requestFocus />
+
         <ImageView
             android:id="@+id/children_list01"
             android:layout_width="16dp"
@@ -43,14 +46,13 @@
             android:id="@+id/yuyue_et_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:enabled="false"
             android:layout_centerVertical="true"
             android:layout_marginLeft="24dp"
             android:layout_toRightOf="@+id/yuyue_tv_levellevel"
+            android:background="@null"
+            android:enabled="false"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-
     </RelativeLayout>
 
     <ImageView
@@ -62,8 +64,8 @@
     <RelativeLayout
         android:id="@+id/yuyueContainer_type"
         android:layout_width="match_parent"
-         android:background="@drawable/item_bg_selector"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
             android:id="@+id/imageView02"
@@ -84,27 +86,35 @@
             android:text="类型"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-        
-        <EditText
-            android:id="@+id/yuyue_et_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-             android:enabled="false"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="24dp"
-            android:layout_toRightOf="@+id/yuyue_tv_typetype"
-            android:textColor="#4A4A4A"
-            android:textSize="14sp" />
 
-        <ImageView
-            android:id="@+id/children_list03"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentRight="true"
+        <RadioGroup
+            android:id="@+id/children_radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/page_05" />
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/yuyue_tv_typetype"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/childer_rb_specialcar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="专车"
+                android:textColor="#4A4A4A"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/childer_rb_freecar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="顺风车"
+                android:textColor="#4A4A4A"
+                android:textSize="14sp" />
+        </RadioGroup>
     </RelativeLayout>
 
     <ImageView
@@ -210,8 +220,8 @@
     <RelativeLayout
         android:id="@+id/yuyueContainer_signtype"
         android:layout_width="match_parent"
-         android:background="@drawable/item_bg_selector"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
             android:id="@+id/imageView27"
@@ -232,7 +242,7 @@
             android:text="签证类型"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-        
+
         <TextView
             android:id="@+id/yuyue_tv_signtype"
             android:layout_width="wrap_content"
@@ -262,8 +272,8 @@
     <RelativeLayout
         android:id="@+id/yuyueContainer_date"
         android:layout_width="match_parent"
-         android:background="@drawable/item_bg_selector"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
             android:id="@+id/imageView09"
@@ -317,8 +327,8 @@
     <RelativeLayout
         android:id="@+id/yuyueContainer_port"
         android:layout_width="match_parent"
-         android:background="@drawable/item_bg_selector"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
             android:id="@+id/imageView11"
@@ -339,7 +349,7 @@
             android:text="口岸"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-        
+
         <TextView
             android:id="@+id/yuyue_tv_port"
             android:layout_width="wrap_content"
@@ -369,8 +379,8 @@
     <RelativeLayout
         android:id="@+id/yuyueContainer_geton"
         android:layout_width="match_parent"
-         android:background="@drawable/item_bg_selector"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
             android:id="@+id/imageView13"
@@ -389,18 +399,18 @@
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/imageView13"
             android:text="上车地点"
+            android:background="@null"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-        
+
         <EditText
             android:id="@+id/yuyue_et_geton"
             android:layout_width="wrap_content"
-            android:background="@null"
-             android:enabled="false"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="24dp"
             android:layout_toRightOf="@+id/children_text09"
+            android:background="@null"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
 
@@ -423,8 +433,8 @@
     <RelativeLayout
         android:id="@+id/yuyueContainer_getoff"
         android:layout_width="match_parent"
-         android:background="@drawable/item_bg_selector"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
             android:id="@+id/imageView15"
@@ -441,21 +451,21 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:background="@null"
             android:layout_toRightOf="@+id/imageView15"
+            android:background="@null"
             android:text="下车地点"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-        
+
         <EditText
             android:id="@+id/yuyue_et_getoff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
-             android:enabled="false"
             android:layout_centerVertical="true"
             android:layout_marginLeft="24dp"
             android:layout_toRightOf="@+id/children_text10"
+            android:background="@null"
+            android:enabled="false"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
 
@@ -478,8 +488,8 @@
     <RelativeLayout
         android:id="@+id/yuyue_container_budget"
         android:layout_width="match_parent"
-         android:background="@drawable/item_bg_selector"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
             android:id="@+id/imageView17"
@@ -514,7 +524,8 @@
     </RelativeLayout>
 
     <!-- hangbanhao -->
-     <ImageView
+
+    <ImageView
         android:id="@+id/imageView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -532,7 +543,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/page_16" />
+            android:src="@drawable/air" />
 
         <TextView
             android:id="@+id/children_text121"
@@ -544,7 +555,7 @@
             android:text="航班号"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-        
+
         <EditText
             android:id="@+id/yuyue_et_airnumber"
             android:layout_width="wrap_content"
@@ -559,23 +570,9 @@
             android:hint="请输入航班号"
             android:inputType="number"
             android:textSize="14sp" />
-        
     </RelativeLayout>
     <!-- hangbanhao -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     <ImageView
         android:id="@+id/imageView18"
         android:layout_width="wrap_content"
@@ -606,7 +603,7 @@
             android:text="小费"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-        
+
         <EditText
             android:id="@+id/yuyue_et_fee"
             android:layout_width="wrap_content"
@@ -621,61 +618,61 @@
             android:hint="请输入金额"
             android:inputType="number"
             android:textSize="14sp" />
-        
     </RelativeLayout>
-    
-     <ImageView
+
+    <ImageView
         android:id="@+id/imageView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/page_19" />
 
-      <RelativeLayout
+    <RelativeLayout
         android:id="@+id/relativeLayout122"
         android:layout_width="match_parent"
         android:layout_height="60dp" >
-        
-          <ImageView
+
+        <ImageView
             android:id="@+id/imageView21"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/page_17" />
-          
-          <TextView
+
+        <TextView
             android:id="@+id/children_text13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/imageView21"
             android:text="备注"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
-          <EditText
+
+        <EditText
             android:id="@+id/yuyue_tv_des"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="13dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="30dp"
+            android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/children_text13"
             android:background="@null"
             android:ems="10"
             android:hint="请输入想说的话..."
             android:textSize="14sp" />
-        
-          </RelativeLayout>
-          
-      <ImageView
+    </RelativeLayout>
+
+    <ImageView
         android:id="@+id/imageView22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/page_19" />
+
 </LinearLayout>

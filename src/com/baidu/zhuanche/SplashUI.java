@@ -39,7 +39,11 @@ public class SplashUI extends BaseActivity implements OnClickListener
 		mBtUser.setOnClickListener(this);
 		mIvLeftHeader.setOnClickListener(this);
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity(UserHomeUI.class);
+	}
 	@Override
 	public void onClick(View v)
 	{

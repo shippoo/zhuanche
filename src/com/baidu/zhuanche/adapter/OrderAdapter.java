@@ -131,7 +131,7 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 		holder.tvXcPosition.setText(bean.to);
 		holder.tvBudget.setText(bean.budget + "元");
 		holder.tvFee.setText(bean.fee + "元");
-		holder.tvTime.setText(AtoolsUtil.unixTimeToLocalTime(bean.time));
+		holder.tvTime.setText(OrderUtil.getDateText(bean.time));
 //		String sign = "";
 //		if(bean.is_hk != null && bean.is_hk.size() > 0){
 //			for(String s : bean.is_hk){

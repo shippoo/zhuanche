@@ -75,7 +75,11 @@ public class DriverMessageUI extends BaseActivity implements OnClickListener, On
 	}
 
 	
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();         
+	}
 	protected void processJson(String json)
 	{
 		DriverMsgBean msgBean = mGson.fromJson(json, DriverMsgBean.class);

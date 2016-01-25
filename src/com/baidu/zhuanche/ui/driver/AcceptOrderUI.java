@@ -80,17 +80,20 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 		params.put(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
 		params.put("sn", mOrderbean.sn);
 		mClient.post(url, params, new MyAsyncResponseHandler() {
-			
+
 			@Override
 			public void success(String json)
 			{
 				processJson(json);
 			}
 		});
-		
-		
-		
-		
+
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
 	}
 
 	public void setData()
@@ -104,7 +107,8 @@ public class AcceptOrderUI extends BaseActivity implements OnClickListener
 		mTvCarPool.setText(AtoolsUtil.getCarPool(mOrderbean.carpool));
 		mTvSeaport.setText(mOrderbean.seaport + "口岸");
 		mTvPeopleCount.setText(mOrderbean.count + "人");
-		mTvXingLiCount.setText(TextUtils.isEmpty(mOrderbean.luggage)? "無" : mOrderbean.luggage);// 行李數 //TODO
+		mTvXingLiCount.setText(TextUtils.isEmpty(mOrderbean.luggage) ? "無" : mOrderbean.luggage);// 行李數
+																									// //TODO
 		mTvSignType.setText(mOrderbean.is_hk);// 簽證類型
 		mTvFee.setText("￥" + mOrderbean.fee);
 		mTvYuyuePrice.setText("￥" + mOrderbean.budget);

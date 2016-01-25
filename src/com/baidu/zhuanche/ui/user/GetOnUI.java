@@ -7,7 +7,9 @@ import org.apache.http.util.LangUtils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -55,6 +57,7 @@ import com.baidu.zhuanche.bean.Location;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.utils.AMapUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.baidu.zhuanche.view.DAlertDialog;
 
 /**
  * @项目名: 拼车
@@ -94,15 +97,43 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ui_geton);
-		init1();
+		Bundle bundle = getIntent().getBundleExtra(VALUE_PASS);
+		String geton = bundle.getString("geton");
 		mMapView = (MapView) findViewById(R.id.geton_mapview);
 		mIvLeftArrow = (ImageView) findViewById(R.id.geton_iv_leftarrow);
+		mIvLeftArrow.setImageResource(R.drawable.sure);
 		mSearchView = (EditText) findViewById(R.id.geton_searchview);
 		mMapView.onCreate(savedInstanceState);
 		initActivity();
 		initEvent();
+		if(TextUtils.isEmpty(geton)){
+			init1();
+		}else{
+			initLocation(geton);
+		}
 	}
-
+	public void selectPlace()
+	{
+		DAlertDialog dialog = new DAlertDialog(this);
+		dialog.setMessage("你确认选中此地址吗？");
+		dialog.addConfirmListener(new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				if(which == 1){
+					finishActivity();
+				}
+				
+			}
+		});
+		dialog.show();
+	}
+	private void initLocation(String geton)
+	{
+		GeocodeQuery query2 = new GeocodeQuery("" + geton, "深圳");
+		mGeocoderSearch.getFromLocationNameAsyn(query2);
+	}
 	/**
 	 * 收起软键盘并设置提示文字
 	 */
@@ -153,12 +184,6 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 
 	}
 
-	@Override
-	protected void onRestart()
-	{
-		super.onRestart();
-		mLocationClient.startLocation();
-	}
 
 	private void initEvent()
 	{
@@ -239,7 +264,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 			@Override
 			public void onClick(View v)
 			{
-				finishActivity();
+				selectPlace();
 			}
 		});
 	}
@@ -398,7 +423,10 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		mLocationClient.onDestroy();
+		if(mLocationClient != null){
+			mLocationClient.onDestroy();
+			mLocationClient = null;
+		}
 		mMapView.onDestroy();
 	}
 
@@ -450,7 +478,8 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 	public void onBackPressed()
 	{
 		// super.onBackPressed();
-		finishActivity();
+		//finishActivity();
+		selectPlace();
 	}
 
 	@Override

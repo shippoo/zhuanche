@@ -66,7 +66,7 @@ public class OrderUtil
 				text = "专车";
 				break;
 			case 1:
-				text = "拼车";
+				text = "顺风车";
 				break;
 			default:
 				break;
@@ -78,10 +78,10 @@ public class OrderUtil
 	 * @param time
 	 * @return
 	 */
-	private static String getDateText(String time)
+	public static String getDateText(String time)
 	{
 		Long timestamp = Long.parseLong(time)*1000;  
-		String date = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(timestamp));  
+		String date = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm").format(new java.util.Date(timestamp));  
 		return date;  
 	}
 	/**

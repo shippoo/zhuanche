@@ -134,7 +134,7 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 			mContainerDriver.setVisibility(0);
 			mContainerPay.setVisibility(0);
 			mContainerFee.setVisibility(8);
-			mBtStatus.setText("付款");
+			mBtStatus.setText("确认支付");
 		}
 		else if ("2".equals(status))
 		{

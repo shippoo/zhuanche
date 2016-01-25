@@ -46,7 +46,11 @@ public class SettingUI extends BaseActivity implements OnClickListener, OnToggle
 		mTbToggle = (ToggleButton) findViewById(R.id.setting_tb_toggle);
 		mBtLogout = (Button) findViewById(R.id.setting_bt_logout);
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 	@Override
 	public void initData()
 	{
