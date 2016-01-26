@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,6 +63,17 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 	private QuhaoAdapter	mAdapter;
 	private String			mNumber;
 	private String			mQuhao;
+	private String			username;
+	private String			password;
+
+	@Override
+	public void init()
+	{
+		super.init();
+		Bundle bundle = getIntent().getBundleExtra(VALUE_PASS);
+		username = bundle.getString("username");
+		password = bundle.getString("password");
+	}
 
 	@Override
 	public void initView()
@@ -76,11 +88,13 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		mTvRegist = (TextView) findViewById(R.id.dl_tv_regist);
 		mContainerQuhao = (LinearLayout) findViewById(R.id.dl_container_quhao);
 	}
+
 	@Override
 	public void onBackPressed()
 	{
 		finishActivity(SplashUI.class);
 	}
+
 	@Override
 	public void initData()
 	{
@@ -100,6 +114,11 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		if (!TextUtils.isEmpty(lastQuhao) && !TextUtils.isEmpty(lastMobile) && !TextUtils.isEmpty(lastPassword))
 		{
 			mCbJizhu.setChecked(true);
+		}
+		if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password))
+		{
+			mEtNumber.setText(username);
+			mEtPassword.setText(password);
 		}
 	}
 
@@ -212,7 +231,7 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		driver.access_token = driverBean.content.access_token;
 		driver.password = mPassword;
 		BaseApplication.setDriver(driver);
-		
+
 		/* 判段賬號是否禁用 */
 		if ("0".equals(driver.status))
 		{
@@ -233,7 +252,7 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		}
 		else
 		{
-			startService(new Intent(this, DriverService.class));
+			//startService(new Intent(this, DriverService.class));
 			startActivityAndFinish(DriverHomeUI.class);
 		}
 

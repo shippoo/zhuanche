@@ -22,6 +22,8 @@ import com.baidu.zhuanche.bean.OrderListBean.OrderBean;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.holder.InfoNameHolder;
+import com.baidu.zhuanche.holder.InfoNameHolder.OnModifyNameListener;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.AtoolsUtil;
@@ -36,7 +38,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 
-public class UserCenterUI extends BaseActivity implements OnClickListener, OnItemClickListener, OnRefreshListener2<ListView>
+public class UserCenterUI extends BaseActivity implements OnClickListener, OnItemClickListener, OnRefreshListener2<ListView>, OnModifyNameListener
 {
 
 	private PullToRefreshListView	mListView;
@@ -158,6 +160,7 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 		mListView.setOnItemClickListener(this);
 		mIvLeftHeader.setOnClickListener(this);
 		mListView.setOnRefreshListener(this);
+		InfoNameHolder.setOnModifyNameListener(this);
 		// mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 		//
 		// @Override
@@ -220,6 +223,7 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 	public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView)
 	{
 		setPullRefreshListUserRefresh(refreshView);
+		mDatas.clear();
 		currentpage = 1;
 		mListView.postDelayed(new LoadMoreTask(), 1000);
 	}
@@ -229,6 +233,11 @@ public class UserCenterUI extends BaseActivity implements OnClickListener, OnIte
 	{
 		setPullRefreshListUserLoadMoreData(refreshView);
 		mListView.postDelayed(new LoadMoreTask(), 1000);
+	}
+	@Override
+	public void onModifyName(String name)
+	{
+		mTvName.setText(name);
 	}
 
 }

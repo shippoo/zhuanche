@@ -1,5 +1,6 @@
 package com.baidu.zhuanche;
 
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -49,11 +50,17 @@ public class SplashUI extends BaseActivity implements OnClickListener
 	{
 		if (v == mBtDriver)
 		{
-			startActivityAndFinish(DriverLoginUI.class);
+			Bundle bundle = new Bundle();
+			bundle.putString("username", "");
+			bundle.putString("password", "");
+			startActivityAndFinish(DriverLoginUI.class,bundle);
 		}
 		else if (v == mBtUser)
 		{
-			startActivityAndFinish(UserLoginUI.class);
+			Bundle bundle = new Bundle();
+			bundle.putString("username", "");
+			bundle.putString("password", "");
+			startActivityAndFinish(UserLoginUI.class,bundle);
 		}
 		else if (v == mIvLeftHeader)
 		{

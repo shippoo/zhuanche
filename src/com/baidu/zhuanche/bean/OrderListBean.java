@@ -42,7 +42,9 @@ public class OrderListBean extends BaseBean implements Serializable
 		public String				to;											// 香港特别行政区国际机场
 		public String				driver_id;
 		public String				is_hk;
+		public String				luggage;
 		public DriverInfo			d_del;
+		public String				air_number;
 	}
 
 	public class DriverInfo implements Serializable

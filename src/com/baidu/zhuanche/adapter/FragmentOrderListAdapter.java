@@ -1,6 +1,5 @@
 package com.baidu.zhuanche.adapter;
 
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -13,8 +12,8 @@ import com.baidu.zhuanche.base.MyBaseApdater;
 import com.baidu.zhuanche.bean.DriverCenterOrderListBean.OrderBean;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.utils.AtoolsUtil;
-import com.baidu.zhuanche.utils.DateFormatUtil;
 import com.baidu.zhuanche.utils.ImageUtils;
+import com.baidu.zhuanche.utils.OrderUtil;
 import com.baidu.zhuanche.view.CircleImageView;
 
 
@@ -59,7 +58,7 @@ public class FragmentOrderListAdapter extends MyBaseApdater<OrderBean>
 		OrderBean bean = (OrderBean) getItem(position);
 		ImageUtils imageUtils = new ImageUtils(mContext);
 		imageUtils.display(holder.ivPic, URLS.BASE + bean.icon);
-		holder.tvTime.setText(DateFormatUtil.getDateTimeStr(new Date(Long.parseLong(bean.time) * 1000)));
+		holder.tvTime.setText(OrderUtil.getDateText(bean.time));
 		holder.tvGetOn.setText(bean.from);
 		holder.tvGetOff.setText(bean.to);
 		holder.tvStatus.setText(AtoolsUtil.getDriverStatus(bean.status));

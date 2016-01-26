@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@color/white" >
 
     <com.baidu.zhuanche.zlist.widget.ZSwipeItem
         android:id="@+id/swipe_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_bg_selector" >
 
         <LinearLayout
             android:id="@+id/ll"
@@ -24,7 +26,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_selector"
+            android:background="@drawable/item_bg_selector"
             android:orientation="vertical" >
 
             <RelativeLayout

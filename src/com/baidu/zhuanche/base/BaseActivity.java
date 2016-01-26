@@ -324,8 +324,7 @@ public abstract class BaseActivity extends Activity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				if(which == 1){
-					BaseApplication.setDriver(new Driver());
-					stopService(new Intent(BaseActivity.this, DriverService.class));
+					exit();
 					startActivityAndFinish(SplashUI.class);
 				}
 			}
@@ -349,8 +348,7 @@ public abstract class BaseActivity extends Activity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				if(which == 1){
-					BaseApplication.setUser(new User());
-					stopService(new Intent(BaseActivity.this, MyService.class));
+					exit();
 					startActivityAndFinish(SplashUI.class);
 				}
 			}

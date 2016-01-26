@@ -124,7 +124,7 @@ public class ReIdentityCheckUI extends BaseActivity implements OnClickListener
 		mBtSubmit = (Button) findViewById(R.id.ic_bt_submit);
 		mCivPhoto = (CircleImageView) findViewById(R.id.ic_civ_photo);
 	}
-
+	
 	@Override
 	public void initData()
 	{

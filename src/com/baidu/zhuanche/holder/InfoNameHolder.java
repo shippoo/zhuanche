@@ -95,13 +95,22 @@ public class InfoNameHolder extends BaseHolder<User> implements OnClickListener
 							BaseApplication.setUser(mUser);
 							mTvName.setText(mUser.username);
 							ToastUtils.makeShortText(UIUtils.getContext(), "修改用户名成功！");
+							if(mListener != null){
+								mListener.onModifyName(username);
+							}
 						}
 					});
 				}
 			}
 		});
 	}
-
+	private static OnModifyNameListener mListener;
+	public static void setOnModifyNameListener(OnModifyNameListener listener){
+		mListener = listener;
+	}
+	public interface OnModifyNameListener{
+		void onModifyName(String name);
+	}
 	@Override
 	public void onClick(View v)
 	{

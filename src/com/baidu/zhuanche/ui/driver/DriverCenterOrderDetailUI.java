@@ -2,7 +2,6 @@ package com.baidu.zhuanche.ui.driver;
 
 import java.util.Date;
 
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -144,15 +143,18 @@ public class DriverCenterOrderDetailUI extends BaseActivity implements OnClickLi
 		mTvSignType.setText("回鄉證/團簽");// 簽證類型
 		mTvFee.setText("￥" + mHomeOrder.fee);
 		mTvYuyuePrice.setText("￥" + mHomeOrder.budget);
-		mTvHangBan.setText(TextUtils.isEmpty(mHomeOrder.air_number)?"B100G" : mHomeOrder.air_number);// 航班
+		mTvHangBan.setText(TextUtils.isEmpty(mHomeOrder.air_number) ? "B100G" : mHomeOrder.air_number);// 航班
 		mImageUtils.display(mIvPhoto, URLS.BASE + mHomeOrder.icon);
 		mTvName.setText(mHomeOrder.username);
 		mTvMobile.setText(mHomeOrder.mobile);
 		mTvXingLiCount.setText(mHomeOrder.luggage + "個");
 		mTvDes.setText(mHomeOrder.remark);
 		mBtOrder.setText(setBtText(mHomeOrder.status));
-		mBtOrder.setEnabled(true);
-		mBtOrder.setSelected(true);
+		if("5".equals(mHomeOrder.status)){
+			mBtOrder.setEnabled(true);
+		}else {
+			mBtOrder.setEnabled(false);
+		}
 	}
 
 	protected void processJson(String json)
@@ -195,6 +197,10 @@ public class DriverCenterOrderDetailUI extends BaseActivity implements OnClickLi
 		{
 			text = "已取消";
 		}
+		else if ("5".equals(status))
+		{
+			text = "確認收款";
+		}
 		return text;
 	}
 
@@ -208,16 +214,47 @@ public class DriverCenterOrderDetailUI extends BaseActivity implements OnClickLi
 		else if (v == mContainerCall)
 		{
 			showCall();
+		}else if(v == mBtOrder){
+			order();
 		}
 	}
 
+	private void order()
+	{
+		if("確認收款".equals(mBtOrder.getText().toString())){
+			String url = URLS.BASESERVER + URLS.Driver.finished;
+			RequestParams params = new RequestParams();
+			params.put(URLS.ACCESS_TOKEN, BaseApplication.getDriver().access_token);
+			params.put("sn", mOrderBean.sn);
+			mClient.post(url, params, new MyAsyncResponseHandler() {
+				
+				@Override
+				public void success(String json)
+				{
+					ToastUtils.makeShortText("確認收款成功！");
+					mOrderBean.status = "2";
+					if(mListener != null){
+						mListener.onChange(mOrderBean);
+					}
+					mBtOrder.setEnabled(false);
+				}
+			});
+		}
+	}
+	private static OnChangeStatusListener mListener;
+	public static void setOnChangeStatusListener(OnChangeStatusListener listener){
+		mListener = listener;
+	}
+	public interface OnChangeStatusListener{
+		void onChange(OrderBean orderBean);
+	}
 	private void showCall()
 	{
 		if (mDialog == null)
 		{
 			mDialog = new Dialog(this, R.style.CustomBottomDialog);
 			mDialog.setCanceledOnTouchOutside(false);
-		//	mDialog.setCancelable(false);
+			// mDialog.setCancelable(false);
 			// 获取对话框，并设置窗口参数
 			Window window = mDialog.getWindow();
 			LayoutParams params = new LayoutParams();
@@ -237,7 +274,7 @@ public class DriverCenterOrderDetailUI extends BaseActivity implements OnClickLi
 			TextView tvName = (TextView) mDialog.findViewById(R.id.call_bt_text1);
 			tvName.setText(mHomeOrder.mobile);
 			tvName.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v)
 				{
@@ -246,7 +283,7 @@ public class DriverCenterOrderDetailUI extends BaseActivity implements OnClickLi
 				}
 			});
 			btCancle.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v)
 				{

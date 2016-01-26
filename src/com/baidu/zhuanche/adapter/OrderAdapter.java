@@ -40,8 +40,6 @@ import com.baidu.zhuanche.ui.user.MyRouteUI;
 import com.baidu.zhuanche.ui.user.YuYueDetailUI;
 import com.baidu.zhuanche.ui.user.YuYueDetailUI.OnAddFeeListener;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
-import com.baidu.zhuanche.utils.AtoolsUtil;
-import com.baidu.zhuanche.utils.DateFormatUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.OrderUtil;
 import com.baidu.zhuanche.utils.ToastUtils;
@@ -95,6 +93,8 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 			holder.ivArrow = (ImageView) convertView.findViewById(R.id.item_yuyue_iv_arrow);
 			holder.btLook = (Button) convertView.findViewById(R.id.item_yuyue_look);
 			holder.tvSign = (TextView) convertView.findViewById(R.id.item_yuyue_qianzheng);
+			holder.tvXingli = (TextView) convertView.findViewById(R.id.item_yuyue_wu);
+			holder.tvHangban = (TextView) convertView.findViewById(R.id.item_yuyue_hangbanhao);
 			// 加小费容器
 			holder.btAddFee = (Button) convertView.findViewById(R.id.item_yuyue_addFee);
 			// 去付款按钮
@@ -102,6 +102,7 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 			// 去评价按钮
 			holder.btGoAssess = (Button) convertView.findViewById(R.id.item_yuyue_bt_assess);
 			// 查看评价
+			holder.hahaha = (RelativeLayout) convertView.findViewById(R.id.hahaha);
 			holder.btLookAssess = (Button) convertView.findViewById(R.id.item_yuyue_bt_lookassess);
 			//已取消按鈕
 			holder.btCancel = (Button) convertView.findViewById(R.id.item_yuyue_bt_cancel);
@@ -122,8 +123,11 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 			holder = (OrderViewHolder) convertView.getTag();
 		}
 		final OrderBean bean = (OrderBean) getItem(position);
+		
+		holder.tvXingli.setText(bean.luggage);
 		holder.tvStatus.setText(OrderUtil.getStatusText(bean.status));
 		holder.tvLevel.setText(bean.cartype);
+		holder.tvHangban.setText(TextUtils.isEmpty(bean.air_number)? "无" :bean.air_number);
 		holder.tvType.setText(OrderUtil.getCarPoolText(bean.carpool));
 		holder.tvPeople.setText(bean.count + "人");
 		holder.tvPort.setText(bean.seaport);
@@ -193,10 +197,12 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 		}
 		else if("5".equals(bean.status)){
 			holder.container_daijiedan.setVisibility(8);
-			holder.container_yiyueyue.setVisibility(8);
-			holder.container_goAssess.setVisibility(0);
+			holder.container_yiyueyue.setVisibility(0);
+			holder.container_goAssess.setVisibility(8);
 			holder.container_lookAssess.setVisibility(8);
 			holder.container_cancel.setVisibility(8);
+			holder.btPay.setVisibility(8);
+			holder.hahaha.setVisibility(8);
 		}
 		// 5 待评价 线下支付 等待评价 和2一样
 		/** 小费按钮点击事件 */
@@ -281,6 +287,19 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 
 	@Override
 	public void onAssess(OrderBean orderBean)
+	{
+		int position = 0;
+		for(int i = 0 ; i < mDataSource.size(); i++){
+			if((mDataSource.get(i).sn).equals(orderBean.sn)){
+				position = i;
+			}
+		}
+		mDataSource.set(position, orderBean);
+		notifyDataSetChanged();
+	}
+
+	@Override
+	public void onChangeStatus(OrderBean orderBean)
 	{
 		int position = 0;
 		for(int i = 0 ; i < mDataSource.size(); i++){
@@ -414,6 +433,8 @@ class MyOnClickLsterner implements OnClickListener
 
 class OrderViewHolder
 {
+	TextView		tvHangban;
+	TextView   		tvXingli;
 	TextView        tvSign;
 	TextView		tvTime;				// 08:00
 	TextView		tvStatus;				// 订单状态
@@ -440,6 +461,7 @@ class OrderViewHolder
 	LinearLayout	container_orderDetail;	// 详情
 	RelativeLayout	container_goAssess;
 	RelativeLayout	container_lookAssess;
+	RelativeLayout  hahaha;
 }
 
 class FeeViewHolder

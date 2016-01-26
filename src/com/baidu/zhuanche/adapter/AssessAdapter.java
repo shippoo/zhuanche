@@ -13,6 +13,7 @@ import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.base.MyBaseApdater;
 import com.baidu.zhuanche.bean.AllAssessBean.Assess;
 import com.baidu.zhuanche.utils.DateFormatUtil;
+import com.baidu.zhuanche.utils.OrderUtil;
 
 
 /**
@@ -53,9 +54,7 @@ public class AssessAdapter extends MyBaseApdater<Assess>
 		holder.ratingBar.setRating(Float.parseFloat(bean.star));
 		holder.tvAssess.setText(bean.remark);
 		holder.tvMobile.setText(bean.mobile);
-		Date date = new Date(Long.parseLong(bean.createtime));
-		String time = DateFormatUtil.getStrDate4Date(date, "yyyy-MM-dd HH:mm:ss");
-		holder.tvTime.setText(time);
+		holder.tvTime.setText(OrderUtil.getDateText(bean.createtime));
 		return convertView;
 	}
 	private class ViewHolder{

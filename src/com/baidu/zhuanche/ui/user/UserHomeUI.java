@@ -59,19 +59,19 @@ import com.google.gson.Gson;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class UserHomeUI extends BaseActivity implements OnClickListener{
-	private ListView				mListView;
-	private LinearLayout			mContainerLogin;							// 点击过境小车登陆
-	private User					mUser;
-	private Driver					mDriver;
-	private FrameLayout				mContainerPic;								// 首页轮播图
-	private List<Article>			mListDatas		= new ArrayList<Article>();
-	private HotAskAdapter			mAskAdapter;
-	private NoScrolledGridView		mGridView;
-	private List<Cate>				mGridViewDatas;
-	private List<Banner>			mBannerDatas;								// 轮播图数据
-	private int						currentPage		= 1;
-
+public class UserHomeUI extends BaseActivity implements OnClickListener
+{
+	private ListView			mListView;
+	private LinearLayout		mContainerLogin;						// 点击过境小车登陆
+	private User				mUser;
+	private Driver				mDriver;
+	private FrameLayout			mContainerPic;							// 首页轮播图
+	private List<Article>		mListDatas	= new ArrayList<Article>();
+	private HotAskAdapter		mAskAdapter;
+	private NoScrolledGridView	mGridView;
+	private List<Cate>			mGridViewDatas;
+	private List<Banner>		mBannerDatas;							// 轮播图数据
+	private int					currentPage	= 1;
 
 	@Override
 	public void initView()
@@ -93,7 +93,6 @@ public class UserHomeUI extends BaseActivity implements OnClickListener{
 		mListView.setAdapter(null);
 	}
 
-	
 	@Override
 	public void initData()
 	{
@@ -190,7 +189,6 @@ public class UserHomeUI extends BaseActivity implements OnClickListener{
 			}
 		});
 	}
-
 	@Override
 	public void onClick(View v)
 	{
@@ -200,13 +198,17 @@ public class UserHomeUI extends BaseActivity implements OnClickListener{
 			{
 				startActivity(SplashUI.class);
 			}
-			else if (mDriver != null && !TextUtils.isEmpty(mDriver.mobile))
+			else if (mDriver != null && !TextUtils.isEmpty(mDriver.mobile) && mDriver.status.equals("3"))
 			{
 				startActivity(DriverHomeUI.class);
 			}
-			else
+			else if (mUser != null && !TextUtils.isEmpty(mUser.mobile))
 			{
 				startActivity(YuyueUI.class);
+			}
+			else
+			{
+				startActivity(SplashUI.class);
 			}
 		}
 		else if (v == mIvLeftHeader)
@@ -234,7 +236,5 @@ public class UserHomeUI extends BaseActivity implements OnClickListener{
 		}
 
 	}
-
-	
 
 }

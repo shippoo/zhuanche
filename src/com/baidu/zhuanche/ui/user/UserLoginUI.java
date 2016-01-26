@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,10 +69,15 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 	private QuhaoAdapter	mAdapter;
 	private String			mNumber;
 	private String			mQuhao;
+	private String			username;
+	private String			password;
 	@Override
 	public void init()
 	{
 		super.init();
+		Bundle bundle = getIntent().getBundleExtra(VALUE_PASS);
+		username = bundle.getString("username");
+		password = bundle.getString("password");
 	}
 	@Override
 	public void onBackPressed()
@@ -110,6 +116,10 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 		mEtPassword.setText(lastPassword);
 		if(!TextUtils.isEmpty(lastQuhao) && !TextUtils.isEmpty(lastMobile) && !TextUtils.isEmpty(lastPassword)){
 			mCbJizhu.setChecked(true); 
+		}
+		if(!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)){
+			mEtNumber.setText(username);
+			mEtPassword.setText(password);
 		}
 	}
 
@@ -220,7 +230,7 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 		user.password = mPassword;
 		BaseApplication.setUser(user);
 		Intent service = new Intent(this, MyService.class);
-		startService(service);
+		//startService(service);
 		startActivityAndFinish(YuyueUI.class);
 	}
 }

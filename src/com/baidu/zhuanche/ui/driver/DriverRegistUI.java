@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,7 @@ import com.baidu.zhuanche.adapter.QuhaoAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
+import com.baidu.zhuanche.ui.user.UserLoginUI;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.JsonUtils;
 import com.baidu.zhuanche.utils.MD5Utils;
@@ -120,9 +122,9 @@ public class DriverRegistUI extends BaseActivity implements OnClickListener
 	private void doClickRegist()
 	{
 		String quhao = mTvQuhao.getText().toString(); //TODO 区号
-		String number = mEtNumber.getText().toString().trim();
+		final String number = mEtNumber.getText().toString().trim();
 		String code = mEtCode.getText().toString().trim();
-		String password = mEtPassword.getText().toString().trim();
+		final String password = mEtPassword.getText().toString().trim();
 		if(TextUtils.isEmpty(number) || TextUtils.isEmpty(code) || TextUtils.isEmpty(password) ){
 			ToastUtils.makeShortText(this, "請完善信息！");
 			return;
@@ -145,7 +147,10 @@ public class DriverRegistUI extends BaseActivity implements OnClickListener
 			{
 				ToastUtils.makeShortText(getApplicationContext(), "註冊成功，請填寫資料！");
 				/*跳轉到資料審覈頁面*/
-				startActivityAndFinish(DriverLoginUI.class);
+				Bundle bundle = new Bundle();
+				bundle.putString("username", number);
+				bundle.putString("password", password);
+				startActivityAndFinish(DriverLoginUI.class,bundle);
 			}
 		});
 	}

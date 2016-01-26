@@ -19,14 +19,17 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -367,7 +370,59 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 
 			}
 		});
+		mEtGetOn.setOnTouchListener(new OnTouchListener() {
 
+			long	time;
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event)
+			{
+				switch (event.getAction())
+				{
+					case MotionEvent.ACTION_DOWN:
+						time = System.currentTimeMillis();
+						break;
+					case MotionEvent.ACTION_UP:
+						if (System.currentTimeMillis() - time < 200)
+						{
+							Bundle bundle = new Bundle();
+							bundle.putString("geton", mYuyueData.getOnLocation.address);
+							startActivity(GetOnUI.class, bundle);
+						}
+						closeInputMethod();
+						break;
+					default:
+						break;
+				}
+				return true;
+			}
+		});
+
+		mEtGetOff.setOnTouchListener(new OnTouchListener() {
+
+			long	time;
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event)
+			{
+				switch (event.getAction())
+				{
+					case MotionEvent.ACTION_DOWN:
+						time = System.currentTimeMillis();
+						break;
+					case MotionEvent.ACTION_UP:
+						if (System.currentTimeMillis() - time < 200)
+						{
+							startActivity(GetOffUI.class);
+						}
+						closeInputMethod();
+						break;
+					default:
+						break;
+				}
+				return true;
+			}
+		});
 	}
 
 	public void enableYuyue()

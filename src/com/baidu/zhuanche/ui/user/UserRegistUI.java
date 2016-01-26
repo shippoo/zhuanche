@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -126,9 +127,9 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 	private void doClickRegist()
 	{
 		String quhao = mTvQuhao.getText().toString(); // TODO 区号
-		String number = mEtNumber.getText().toString().trim();
+		final String number = mEtNumber.getText().toString().trim();
 		String code = mEtCode.getText().toString().trim();
-		String password = mEtPassword.getText().toString().trim();
+		final String password = mEtPassword.getText().toString().trim();
 		if (TextUtils.isEmpty(number) || TextUtils.isEmpty(code) || TextUtils.isEmpty(password))
 		{
 			ToastUtils.makeShortText(this, "请完善信息！");
@@ -153,7 +154,10 @@ public class UserRegistUI extends BaseActivity implements OnClickListener
 			{
 				ToastUtils.makeShortText(getApplicationContext(), "注册成功！");
 				/** 跳转到登陆 */
-				startActivityAndFinish(UserLoginUI.class);
+				Bundle bundle = new Bundle();
+				bundle.putString("username", number);
+				bundle.putString("password", password);
+				startActivityAndFinish(UserLoginUI.class,bundle);
 			}
 		});
 	}

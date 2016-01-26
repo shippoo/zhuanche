@@ -216,7 +216,7 @@ public class AtoolsUtil
 		}
 		else if ("5".equals(status))
 		{
-			text = "已确认";
+			text = "待確認";
 		}
 		return text;
 	}

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:background="#ffffff"
+    android:background="@drawable/item_bg_selector"
     android:descendantFocusability="blocksDescendants"
     android:padding="8dp" >
 
@@ -43,8 +43,8 @@
             android:drawablePadding="4dp"
             android:text="香港九龙"
             android:textSize="12sp" />
-
     </LinearLayout>
+
     <TextView
         android:id="@+id/item_fragment_order_tv_status"
         android:layout_width="wrap_content"

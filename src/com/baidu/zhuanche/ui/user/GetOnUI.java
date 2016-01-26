@@ -106,34 +106,41 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 		mMapView.onCreate(savedInstanceState);
 		initActivity();
 		initEvent();
-		if(TextUtils.isEmpty(geton)){
+		if (TextUtils.isEmpty(geton))
+		{
 			init1();
-		}else{
+		}
+		else
+		{
 			initLocation(geton);
 		}
 	}
+
 	public void selectPlace()
 	{
-		DAlertDialog dialog = new DAlertDialog(this);
-		dialog.setMessage("你确认选中此地址吗？");
-		dialog.addConfirmListener(new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				if(which == 1){
-					finishActivity();
-				}
-				
-			}
-		});
-		dialog.show();
+		// DAlertDialog dialog = new DAlertDialog(this);
+		// dialog.setMessage("你确认选中此地址吗？");
+		// dialog.addConfirmListener(new DialogInterface.OnClickListener() {
+		//
+		// @Override
+		// public void onClick(DialogInterface dialog, int which)
+		// {
+		// if(which == 1){
+		// finishActivity();
+		// }
+		//
+		// }
+		// });
+		// dialog.show();
+		finishActivity();
 	}
+
 	private void initLocation(String geton)
 	{
 		GeocodeQuery query2 = new GeocodeQuery("" + geton, "深圳");
 		mGeocoderSearch.getFromLocationNameAsyn(query2);
 	}
+
 	/**
 	 * 收起软键盘并设置提示文字
 	 */
@@ -184,12 +191,11 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 
 	}
 
-
 	private void initEvent()
 	{
 		mGeocoderSearch.setOnGeocodeSearchListener(this);
 		mAMap.setOnMapClickListener(new OnMapClickListener() {
-			
+
 			@Override
 			public void onMapClick(LatLng latLng)
 			{
@@ -277,7 +283,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 		}
 		mGeocoderSearch = new GeocodeSearch(this);
 		mPogressDialog = new ProgressDialog(this);
-		//mSearchView.setSubmitButtonEnabled(true);
+		// mSearchView.setSubmitButtonEnabled(true);
 		mMarkerOptions = new MarkerOptions();
 		mMarkerOptions.title("你的位置");
 		// mMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
@@ -423,7 +429,8 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		if(mLocationClient != null){
+		if (mLocationClient != null)
+		{
 			mLocationClient.onDestroy();
 			mLocationClient = null;
 		}
@@ -478,7 +485,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 	public void onBackPressed()
 	{
 		// super.onBackPressed();
-		//finishActivity();
+		// finishActivity();
 		selectPlace();
 	}
 

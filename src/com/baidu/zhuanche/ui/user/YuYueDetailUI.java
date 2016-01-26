@@ -21,6 +21,8 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,6 +66,8 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 	private RelativeLayout	mContainerItemFee;	;
 	private TextView		mTvFee;
 
+	private RadioGroup		mRadioGroup;
+
 	@Override
 	public void init()
 	{
@@ -91,6 +95,7 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 		mContainerFee = (LinearLayout) findViewById(R.id.yyd_container_fee);
 		mContainerItemFee = (RelativeLayout) findViewById(R.id.yyd_container_itemfee);
 		mTvFee = (TextView) findViewById(R.id.yyd_tv_fee);
+		mRadioGroup = (RadioGroup) findViewById(R.id.yyd_radiogroup);
 	}
 
 	@Override
@@ -134,6 +139,7 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 			mContainerDriver.setVisibility(0);
 			mContainerPay.setVisibility(0);
 			mContainerFee.setVisibility(8);
+			mTvTitle.setText("支付详情");
 			mBtStatus.setText("确认支付");
 		}
 		else if ("2".equals(status))
@@ -169,7 +175,8 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 			mContainerDriver.setVisibility(0);
 			mContainerPay.setVisibility(8);
 			mContainerFee.setVisibility(8);
-			mBtStatus.setText("评价");
+			mBtStatus.setText("等待确认");
+			mBtStatus.setEnabled(false);
 		}
 
 	}
@@ -213,9 +220,9 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 			// 取消订单
 			cancelOrder();
 		}
-		else if (mBtStatus.getText().equals("付款"))
+		else if (mBtStatus.getText().equals("确认支付"))
 		{
-			ToastUtils.makeShortText("付款");
+			gopay();
 		}
 		else if (mBtStatus.getText().equals("评价"))
 		{
@@ -233,6 +240,49 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 		}
 	}
 
+	private void gopay()
+	{
+		int id = mRadioGroup.getCheckedRadioButtonId();
+		switch (id)
+		{
+			case R.id.yyd_rb_xianjin:
+				payxianjing();
+				break;
+			case R.id.yyd_rb_weixin:
+				break;
+			case R.id.yyd_rb_zfb:
+				break;
+			default:
+				ToastUtils.makeShortText("请选择支付方式！");
+				break;
+		}
+	}
+	/**
+	 * 现金支付
+	 */
+	private void payxianjing()
+	{
+		String url = URLS.BASESERVER + URLS.User.payment;
+		RequestParams params = new RequestParams();
+		params.put(URLS.ACCESS_TOKEN, BaseApplication.getUser().access_token);
+		params.put(URLS.TYPE, "cash");
+		params.put("sn", mOrderBean.sn);
+		mClient.post(url, params, new MyAsyncResponseHandler() {
+			
+			@Override
+			public void success(String json)
+			{
+				//TODO
+				mOrderBean.status = "5";
+				if(mAddFeeListener != null){
+					mAddFeeListener.onChangeStatus(mOrderBean);
+				}
+				ToastUtils.makeShortText("现金支付成功！");
+				setStatusData("5");
+			}
+		});
+	}
+
 	private void cancelOrder()
 	{
 		String url = URLS.BASESERVER + URLS.User.orderCancel;
@@ -240,12 +290,13 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 		params.add("sn", mOrderBean.sn);
 		params.add(URLS.ACCESS_TOKEN, user.access_token);
 		mClient.post(url, params, new MyAsyncResponseHandler() {
-			
+
 			@Override
 			public void success(String json)
 			{
-				if(mAddFeeListener != null){
-					mOrderBean.status = "" +4;
+				if (mAddFeeListener != null)
+				{
+					mOrderBean.status = "" + 4;
 					mAddFeeListener.onAddFee(mOrderBean, position);
 					setStatusData(mOrderBean.status);
 				}
@@ -305,7 +356,7 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 					// 接口回调
 					if (mAddFeeListener != null)
 					{
-						mAddFeeListener.onAddFee(mOrderBean,position);
+						mAddFeeListener.onAddFee(mOrderBean, position);
 					}
 				}
 				catch (JSONException e)
@@ -319,6 +370,7 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 	private int						position;
 
 	private static OnAddFeeListener	mAddFeeListener;
+
 	public static void setOnAddFeeListener(OnAddFeeListener addFeeListener)
 	{
 		mAddFeeListener = addFeeListener;
@@ -327,6 +379,7 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 	public interface OnAddFeeListener
 	{
 		void onAddFee(OrderBean orderBean, int position);
+		void onChangeStatus(OrderBean orderBean);
 	}
 
 	@Override
@@ -405,4 +458,5 @@ public class YuYueDetailUI extends BaseActivity implements OnClickListener
 			mDialog = null;
 		}
 	}
+
 }

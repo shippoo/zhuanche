@@ -170,6 +170,7 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 				selectPlace();
 			}
 		});
+		
 	}
 
 	private void initActivity()
@@ -367,19 +368,20 @@ public class GetOffUI extends BaseActivity implements OnGeocodeSearchListener
 
 	public void selectPlace()
 	{
-		DAlertDialog dialog = new DAlertDialog(this);
-		dialog.setMessage("你确认选中此地址吗？");
-		dialog.addConfirmListener(new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				if(which == 1){
-					finishActivity();
-				}
-				
-			}
-		});
-		dialog.show();
+		// DAlertDialog dialog = new DAlertDialog(this);
+		// dialog.setMessage("你确认选中此地址吗？");
+		// dialog.addConfirmListener(new DialogInterface.OnClickListener() {
+		//
+		// @Override
+		// public void onClick(DialogInterface dialog, int which)
+		// {
+		// if(which == 1){
+		// finishActivity();
+		// }
+		//
+		// }
+		// });
+		// dialog.show();
+		finishActivity();
 	}
 }

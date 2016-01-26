@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/item_bg_selector"
     android:orientation="vertical" >
 
     <View
@@ -59,7 +59,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
                 android:text="已预约"
-                android:textColor="@color/item_yuyue_textColor"
+                android:textColor="#ff0000"
                 android:textSize="12sp" />
         </RelativeLayout>
     </LinearLayout>
@@ -73,8 +73,6 @@
             android:id="@+id/list_relativeLayout_08"
             android:layout_width="wrap_content"
             android:layout_height="22dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
             android:layout_below="@+id/list_relativeLayout_07" >
 
             <ImageView
@@ -262,7 +260,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:src="@drawable/page_39" />
+                    android:src="@drawable/xingli" />
 
                 <TextView
                     android:id="@+id/item_yuyue_wu"
@@ -361,7 +359,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:src="@drawable/page_34" />
+                    android:src="@drawable/huixiangzheng" />
 
                 <TextView
                     android:id="@+id/item_yuyue_qianzheng"
@@ -419,7 +417,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:src="@drawable/page_34" />
+                    android:src="@drawable/hangban1" />
 
                 <TextView
                     android:id="@+id/item_yuyue_hangbanhao"
@@ -481,10 +479,10 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/btn_bg_normal_shaped"
+            android:background="@drawable/smallbg_selector"
             android:focusable="false"
             android:text="加小费"
-            android:textColor="@color/item_yuyue_textColor"
+            android:textColor="@color/white"
             android:textSize="12sp" />
 
         <TextView
@@ -533,7 +531,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:src="@drawable/page_34" />
+                    android:src="@drawable/page_39" />
 
                 <TextView
                     android:id="@+id/item_yuyue_tv_drivername"
@@ -559,7 +557,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:src="@drawable/page_43" />
+                    android:src="@drawable/page_04" />
 
                 <TextView
                     android:id="@+id/item_yuyue_tv_carid"
@@ -581,6 +579,7 @@
             android:background="@color/divide_color" />
 
         <RelativeLayout
+            android:id="@+id/hahaha"
             android:layout_width="match_parent"
             android:layout_height="40dp" >
 
@@ -591,10 +590,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/btn_bg_normal_shaped"
+                android:background="@drawable/smallbg_selector"
                 android:focusable="false"
-                android:textColor="#0000ff"
                 android:text="去付款"
+                android:textColor="#0000ff"
                 android:textSize="12sp" />
         </RelativeLayout>
     </LinearLayout>
@@ -613,10 +612,10 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/btn_bg_normal_shaped"
+            android:background="@drawable/smallbg_selector"
             android:focusable="false"
             android:text="去评价"
-            android:textColor="@color/item_yuyue_textColor"
+            android:textColor="@color/white"
             android:textSize="12sp" />
     </RelativeLayout>
     <!-- 看评价 -->
@@ -633,10 +632,10 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/btn_bg_normal_shaped"
+            android:background="@drawable/smallbg_selector"
             android:focusable="false"
             android:text="查看评价"
-            android:textColor="@color/item_yuyue_textColor"
+            android:textColor="@color/white"
             android:textSize="12sp" />
     </RelativeLayout>
     <!-- 已取消 -->
@@ -653,11 +652,11 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/btn_bg_normal_shaped"
+            android:background="@drawable/smallbg_selector"
             android:enabled="false"
             android:focusable="false"
             android:text="已取消"
-            android:textColor="@color/item_yuyue_textColor"
+            android:textColor="@color/white"
             android:textSize="12sp" />
     </RelativeLayout>
 

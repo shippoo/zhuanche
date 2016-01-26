@@ -47,6 +47,8 @@ public class OrderUtil
 			case 4:
 				text = "已取消";
 				break;
+			case 5:
+				text = "等待确认";
 			default:
 				break;
 		}

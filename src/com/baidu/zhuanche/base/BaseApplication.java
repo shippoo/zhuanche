@@ -95,7 +95,7 @@ public class BaseApplication extends Application
 
 		// 4.用户信息
 		mUser = new User();
-		JPushInterface.setDebugMode(true);
+		//JPushInterface.setDebugMode(true);
 	    JPushInterface.init(this);
 		super.onCreate();
 	}

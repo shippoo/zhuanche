@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -465,7 +464,6 @@
             android:layout_marginLeft="24dp"
             android:layout_toRightOf="@+id/children_text10"
             android:background="@null"
-            android:enabled="false"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
 

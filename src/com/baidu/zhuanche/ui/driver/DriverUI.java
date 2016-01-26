@@ -29,6 +29,7 @@ import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.driver.CompleteUI.OnModifyListener;
+import com.baidu.zhuanche.ui.driver.DriverCenterOrderDetailUI.OnChangeStatusListener;
 import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.utils.UIUtils;
@@ -54,7 +55,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DriverUI extends BaseActivity implements OnClickListener, OnRefreshListener<ScrollView>, OnModifyListener, OnItemClickListener
+public class DriverUI extends BaseActivity implements OnClickListener, OnRefreshListener<ScrollView>, OnModifyListener, OnItemClickListener, OnChangeStatusListener
 {
 	private NoScrollListView		mListView;
 	private PullToRefreshScrollView	mRefreshScrollView;
@@ -102,6 +103,7 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 	{
 		super.initData();
 		CompleteUI.setOnModifyListener(this);
+		DriverCenterOrderDetailUI.setOnChangeStatusListener(this);
 		mTvTitle.setText("我");
 		mIvRightHeader.setVisibility(0);
 		mIvRightHeader.setImageResource(R.drawable.picture_19);
@@ -273,5 +275,19 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(MyConstains.ITEMBEAN, orderBean);
 		startActivity(DriverCenterOrderDetailUI.class,bundle);
+	}
+	@Override
+	public void onChange(OrderBean orderBean)
+	{
+		int index = 0;
+		for(int i = 0; i <mDatas.size(); i++){
+			OrderBean bean = mDatas.get(i);
+			if(bean.sn.equals(orderBean.sn)){
+				index = i;
+				break;
+			}
+		}
+		mDatas.set(index, orderBean);
+		mAdapter.notifyDataSetChanged();
 	}
 }

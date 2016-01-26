@@ -52,6 +52,7 @@ public interface URLS
 		String	getSeaport			= "User/User/getSeaport";
 		String	budget				= "User/User/budget";
 		String	article_detail		= "User/Login/article_detail";
+		String	payment				= "User/Order/payment";
 		// http://192.168.1.12/pinche/index.php/User/Login/article_detail
 	}
 
@@ -88,6 +89,7 @@ public interface URLS
 		String	findPassword		= "Driver/Login/findPassword";
 		String	orderDetail			= "Driver/Driver/orderDetail";
 		String	cleanWithdraw		= "Driver/Driver/cleanWithdraw";
+		String	finished			= "Driver/Driver/finished";
 	}
 
 	String	MOBILE			= "mobile";		// 手机号码

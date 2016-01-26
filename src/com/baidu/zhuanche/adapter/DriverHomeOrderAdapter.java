@@ -1,14 +1,11 @@
 package com.baidu.zhuanche.adapter;
 
-import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,15 +15,11 @@ import com.baidu.zhuanche.base.MyBaseApdater;
 import com.baidu.zhuanche.bean.DriverHomeBean.DriverHomeOrder;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.ui.driver.AcceptOrderUI;
-import com.baidu.zhuanche.ui.driver.AcceptOrderUI.OnReceiverOrderListener;
 import com.baidu.zhuanche.ui.driver.DriverUI;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.AtoolsUtil;
-import com.baidu.zhuanche.utils.DateFormatUtil;
 import com.baidu.zhuanche.utils.ImageUtils;
 import com.baidu.zhuanche.utils.OrderUtil;
-import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.view.CircleImageView;
 import com.loopj.android.http.AsyncHttpClient;
