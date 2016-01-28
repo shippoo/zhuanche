@@ -89,7 +89,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLocationListener, OnGetOffLocationListener, AMapLocationListener, OnGeocodeSearchListener, OnCheckedChangeListener
+public class CopyOfYuyueUI extends BaseActivity implements OnClickListener, OnGetOnLocationListener, OnGetOffLocationListener, AMapLocationListener, OnGeocodeSearchListener, OnCheckedChangeListener
 {
 	private Yuyue					mYuyueData;											// 预约所需值，都封装在这个class中
 
@@ -592,12 +592,22 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mYuyueData.phone = mEtPhone.getText().toString().trim();
 		if (TextUtils.isEmpty(mYuyueData.cartype))
 		{
-			ToastUtils.makeShortText("请选择车型");
+			ToastUtils.makeShortText("请选择级别");
 			return;
 		}
 		else if (TextUtils.isEmpty(mYuyueData.carpool))
 		{
 			ToastUtils.makeShortText("请选择类型");
+			return;
+		}
+		else if (TextUtils.isEmpty(mYuyueData.peopleCount))
+		{
+			ToastUtils.makeShortText("请输入乘车人数");
+			return;
+		}
+		else if (TextUtils.isEmpty(mYuyueData.xingliCount))
+		{
+			ToastUtils.makeShortText("请输入行李数");
 			return;
 		}
 		// else if (TextUtils.isEmpty(mYuyueData.signtype))
@@ -653,6 +663,12 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		if (!TextUtils.isEmpty(sign1))
 		{
 			sign1 = sign1.substring(0, sign1.length() - 1);
+		}
+		PrintUtils.print("a = " + sign1);
+		if (TextUtils.isEmpty(sign1))
+		{
+			ToastUtils.makeShortText("请选择签证类型");
+			return;
 		}
 		PrintUtils.print("b = " + sign1);
 		int p1 = Integer.parseInt(mYuyueData.maxPeopleCount);

@@ -97,8 +97,6 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ui_geton);
-		Bundle bundle = getIntent().getBundleExtra(VALUE_PASS);
-		String geton = bundle.getString("geton");
 		mMapView = (MapView) findViewById(R.id.geton_mapview);
 		mIvLeftArrow = (ImageView) findViewById(R.id.geton_iv_leftarrow);
 		mIvLeftArrow.setImageResource(R.drawable.sure);
@@ -106,14 +104,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 		mMapView.onCreate(savedInstanceState);
 		initActivity();
 		initEvent();
-		if (TextUtils.isEmpty(geton))
-		{
-			init1();
-		}
-		else
-		{
-			initLocation(geton);
-		}
+		init1();
 	}
 
 	public void selectPlace()
@@ -135,11 +126,6 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 		finishActivity();
 	}
 
-	private void initLocation(String geton)
-	{
-		GeocodeQuery query2 = new GeocodeQuery("" + geton, "深圳");
-		mGeocoderSearch.getFromLocationNameAsyn(query2);
-	}
 
 	/**
 	 * 收起软键盘并设置提示文字
@@ -502,9 +488,12 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 				// mAMap.getMyLocation().setLongitude(mLongitude);
 				// mAMap.getMyLocation().setLatitude(mLatitude);
 				LatLng latLng = new LatLng(mLatitude, mLongitude);
-				CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-				mAMap.moveCamera(update);
-
+				// mGeocoderSearch.
+				showDialog();
+				 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+				 mAMap.moveCamera(update);
+				RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(latLng.latitude, latLng.longitude), 200, GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+				mGeocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
 			}
 			else
 			{

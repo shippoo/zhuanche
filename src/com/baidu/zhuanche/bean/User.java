@@ -1,5 +1,7 @@
 package com.baidu.zhuanche.bean;
 
+import java.io.Serializable;
+
 import org.apache.http.Header;
 
 
@@ -16,7 +18,7 @@ import org.apache.http.Header;
  * @更新时间:	$Date$
  * @更新描述:	TODO
  */
-public class User
+public class User implements Serializable
 {
 	public Header[] headers;
 	public String password;

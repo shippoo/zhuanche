@@ -35,9 +35,10 @@ public class Yuyue
 	public Location		getOnLocation	= new Location();			// 上车地点
 	public Location		getOffLocation	= new Location();			// 下车地点
 	public String		peopleCount;
-	public String		xingliCount;
-	public String		fee;
+	public String		xingliCount = "0";
+	public String		fee = "0";
 	public String		des;
 	public String		budget;
 	public String		maxPeopleCount	= "0";
+	public String 		phone;
 }

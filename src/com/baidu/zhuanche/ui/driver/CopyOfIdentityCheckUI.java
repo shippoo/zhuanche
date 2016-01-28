@@ -63,7 +63,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class IdentityCheckUI extends BaseActivity implements OnClickListener
+public class CopyOfIdentityCheckUI extends BaseActivity implements OnClickListener
 {
 	private Dialog					mDialog;										// 底部对话框
 	private int						selectedLevelPosition	= 0;					// 默认选中位置
@@ -360,11 +360,11 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "請填寫身份證號！");
 			return;
 		}
-		// if (TextUtils.isEmpty(type))
-		// {
-		// ToastUtils.makeShortText(this, "請填寫車型！");
-		// return;
-		// }
+		if (TextUtils.isEmpty(type))
+		{
+			ToastUtils.makeShortText(this, "請填寫車型！");
+			return;
+		}
 		if (TextUtils.isEmpty(level))
 		{
 			ToastUtils.makeShortText(this, "請填寫級別！");
@@ -411,7 +411,6 @@ public class IdentityCheckUI extends BaseActivity implements OnClickListener
 		params.put("carid", carid);
 		params.put("driverid", driverid);
 		params.put("citizenid", citizenid);
-		type = "";
 		params.put("type", type);
 		params.put("cartype", mLevelDatas.get(selectedLevelPosition).eid);
 		params.put("seaport", mSeaportDatas.get(selectedSeaportPosition).eid);

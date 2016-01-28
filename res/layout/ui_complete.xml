@@ -99,7 +99,30 @@
                 android:paddingRight="10dp"
                 android:src="@drawable/right_arrow" />
         </RelativeLayout>
+ 		<View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/divide_color" />
 
+        <RelativeLayout
+            android:id="@+id/complete_container_sexsb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/applycash_tv_title_carlevelsb"
+                style="@style/LeftTitleTextStyle2"
+                android:text="主手机号" />
+
+            <TextView
+                android:id="@+id/complet_tv_sexsb"
+                style="@style/RightEditTextStyle"
+                android:layout_toRightOf="@id/applycash_tv_title_carlevelsb"
+                android:text="15580714398"/>
+
+           
+        </RelativeLayout>
+        
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
@@ -119,13 +142,8 @@
                     android:id="@+id/complete_tv_quhao"
                     style="@style/LeftTitleTextStyle2"
                     android:layout_width="100dp"
+                    android:drawableRight="@drawable/quhao1"
                     android:text="+86" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/quhao1" />
             </LinearLayout>
 
             <EditText

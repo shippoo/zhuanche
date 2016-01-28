@@ -1,9 +1,7 @@
 package com.baidu.zhuanche.ui.user;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -19,9 +17,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
-
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.adapter.QuhaoAdapter;
@@ -29,14 +24,14 @@ import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.bean.UserBean;
+import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.connect.ServiceUtil;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.service.MyService;
+import com.baidu.zhuanche.service.UserConnectService;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
-import com.baidu.zhuanche.view.DAlertDialog;
-import com.baidu.zhuanche.view.DToastView;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -71,6 +66,7 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 	private String			mQuhao;
 	private String			username;
 	private String			password;
+
 	@Override
 	public void init()
 	{
@@ -79,11 +75,13 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 		username = bundle.getString("username");
 		password = bundle.getString("password");
 	}
+
 	@Override
 	public void onBackPressed()
 	{
 		finishActivity(SplashUI.class);
 	}
+
 	@Override
 	public void initView()
 	{
@@ -114,10 +112,12 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 		String lastPassword = mSpUtils.getString("user_password", ""); // 上次的密码
 		mEtNumber.setText(lastMobile);
 		mEtPassword.setText(lastPassword);
-		if(!TextUtils.isEmpty(lastQuhao) && !TextUtils.isEmpty(lastMobile) && !TextUtils.isEmpty(lastPassword)){
-			mCbJizhu.setChecked(true); 
+		if (!TextUtils.isEmpty(lastQuhao) && !TextUtils.isEmpty(lastMobile) && !TextUtils.isEmpty(lastPassword))
+		{
+			mCbJizhu.setChecked(true);
 		}
-		if(!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)){
+		if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password))
+		{
 			mEtNumber.setText(username);
 			mEtPassword.setText(password);
 		}
@@ -191,7 +191,7 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 			ToastUtils.makeShortText(this, "请输入密码！");
 			return;
 		}
-		
+
 		ToastUtils.showProgress(this);
 		String url = URLS.BASESERVER + URLS.User.login;
 		AsyncHttpClient client = AsyncHttpClientUtil.getInstance();
@@ -204,11 +204,14 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 			public void success(String json)
 			{
 				/** 是否保存账户信息 */
-				if(mCbJizhu.isChecked()){
+				if (mCbJizhu.isChecked())
+				{
 					mSpUtils.putString("user_quhao", mQuhao);
 					mSpUtils.putString("user_mobile", mNumber);
 					mSpUtils.putString("user_password", mPassword);
-				}else {
+				}
+				else
+				{
 					mSpUtils.removeKey("user_quhao");
 					mSpUtils.removeKey("user_mobile");
 					mSpUtils.removeKey("user_password");
@@ -229,8 +232,14 @@ public class UserLoginUI extends BaseActivity implements OnClickListener
 		user.access_token = userBean.content.access_token;
 		user.password = mPassword;
 		BaseApplication.setUser(user);
-		Intent service = new Intent(this, MyService.class);
-		//startService(service);
+		if (MyConstains.OPEN_SERVICE)
+		{
+			ServiceUtil.invokeTimerUserService(this);
+		}
+		else if (MyConstains.OPEN_LONG_SERVICE)
+		{
+			startService(new Intent(this, UserConnectService.class));
+		}
 		startActivityAndFinish(YuyueUI.class);
 	}
 }

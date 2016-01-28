@@ -1,5 +1,7 @@
 package com.baidu.zhuanche.bean;
 
+import java.io.Serializable;
+
 import com.amap.api.maps.model.LatLng;
 
 
@@ -16,7 +18,7 @@ import com.amap.api.maps.model.LatLng;
  * @更新时间:	$Date$
  * @更新描述:	TODO
  */
-public class Location
+public class Location implements Serializable
 {
 	/**详细地址*/
 	public String address;

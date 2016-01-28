@@ -38,14 +38,11 @@
     </RelativeLayout>
     <!-- 中间方块 -->
 	<com.baidu.zhuanche.view.NoScrolledGridView
-	    android:padding="0.1dp"
 	    android:background="#33000000"
 	    android:id="@+id/uh_gridview" 
 	    android:numColumns="3"
 	    android:listSelector="@null"
 	    android:stretchMode="columnWidth"
-	    android:verticalSpacing="1dp"
-	    android:horizontalSpacing="1dp"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"/>
    

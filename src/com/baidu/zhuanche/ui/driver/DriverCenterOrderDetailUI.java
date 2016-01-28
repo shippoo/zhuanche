@@ -106,7 +106,11 @@ public class DriverCenterOrderDetailUI extends BaseActivity implements OnClickLi
 		mTvDes = (TextView) findViewById(R.id.acceptorder_tv_des);
 		mContainerCall = (LinearLayout) findViewById(R.id.container_call);
 	}
-
+	@Override
+	public void onBackPressed()
+	{
+		finishActivity();
+	}
 	@Override
 	public void initData()
 	{
@@ -139,15 +143,14 @@ public class DriverCenterOrderDetailUI extends BaseActivity implements OnClickLi
 		mTvCarPool.setText(AtoolsUtil.getCarPool(mHomeOrder.carpool));
 		mTvSeaport.setText(mHomeOrder.seaport + "口岸");
 		mTvPeopleCount.setText(mHomeOrder.count + "人");
-		mTvXingLiCount.setText("無");// 行李數 //TODO
-		mTvSignType.setText("回鄉證/團簽");// 簽證類型
+		mTvXingLiCount.setText(TextUtils.isEmpty(mHomeOrder.luggage)? "無" : mHomeOrder.luggage +"个");// 行李數 //TODO
+		mTvSignType.setText(mHomeOrder.is_hk);// 簽證類型
 		mTvFee.setText("￥" + mHomeOrder.fee);
 		mTvYuyuePrice.setText("￥" + mHomeOrder.budget);
 		mTvHangBan.setText(TextUtils.isEmpty(mHomeOrder.air_number) ? "B100G" : mHomeOrder.air_number);// 航班
 		mImageUtils.display(mIvPhoto, URLS.BASE + mHomeOrder.icon);
 		mTvName.setText(mHomeOrder.username);
 		mTvMobile.setText(mHomeOrder.mobile);
-		mTvXingLiCount.setText(mHomeOrder.luggage + "個");
 		mTvDes.setText(mHomeOrder.remark);
 		mBtOrder.setText(setBtText(mHomeOrder.status));
 		if("5".equals(mHomeOrder.status)){

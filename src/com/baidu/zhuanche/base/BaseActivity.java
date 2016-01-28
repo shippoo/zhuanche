@@ -11,12 +11,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewDebug.FlagToString;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -31,18 +33,18 @@ import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.User;
-import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.conf.MyConstains;
+import com.baidu.zhuanche.connect.ServiceUtil;
 import com.baidu.zhuanche.helper.CountDownButtonHelper;
 import com.baidu.zhuanche.helper.CountDownButtonHelper.OnFinishListener;
-import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.service.DriverService;
-import com.baidu.zhuanche.service.MyService;
+import com.baidu.zhuanche.service.DriverConnectService;
+import com.baidu.zhuanche.service.UserConnectService;
+import com.baidu.zhuanche.ui.driver.DriverLoginUI;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.ImageUtils;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.SPUtils;
-import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.view.DAlertDialog;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -92,6 +94,7 @@ public abstract class BaseActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		mSpUtils = new SPUtils(this);
 		mGson = new Gson();
 		mTimer = new Timer();
@@ -151,8 +154,8 @@ public abstract class BaseActivity extends Activity
 	{
 		BaseApplication.setUser(new User());
 		BaseApplication.setDriver(new Driver());
-		stopService(new Intent(this, DriverService.class));
-		stopService(new Intent(this, MyService.class));
+		// stopService(new Intent(this, DriverService.class));
+		// stopService(new Intent(this, MyService.class));
 		for (BaseActivity activity : allActivitys)
 		{
 			activity.finish();
@@ -164,6 +167,25 @@ public abstract class BaseActivity extends Activity
 	{
 		JPushInterface.onPause(this);
 		super.onPause();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		outState.putSerializable("user", BaseApplication.getUser());
+		outState.putSerializable("driver", BaseApplication.getDriver());
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+		if (savedInstanceState != null)
+		{
+			BaseApplication.setUser((User) savedInstanceState.getSerializable("user"));
+			BaseApplication.setDriver((Driver) savedInstanceState.getSerializable("driver"));
+		}
 	}
 
 	@Override
@@ -312,25 +334,37 @@ public abstract class BaseActivity extends Activity
 	}
 
 	/**
-	 * 退出
+	 * 退出 司机
 	 */
 	public void userLogout()
 	{
 		DAlertDialog dialog = new DAlertDialog(this);
 		dialog.setMessage("是否退出登陸！");
 		dialog.addConfirmListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				if(which == 1){
-					exit();
-					startActivityAndFinish(SplashUI.class);
+				if (which == 1)
+				{
+					if (MyConstains.OPEN_SERVICE)
+					{
+						ServiceUtil.cancleDriverAlarmManager(BaseActivity.this);
+					}
+					else if (MyConstains.OPEN_LONG_SERVICE)
+					{
+						stopService(new Intent(BaseActivity.this, DriverConnectService.class));
+					}
+					// startActivityAndFinish(SplashUI.class);
+					// 还有另外一种实现方法
+					BaseApplication.setDriver(new Driver());
+					Intent intent = new Intent(BaseActivity.this,SplashUI.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
 				}
 			}
 		});
 		dialog.show();
-		
 
 	}
 
@@ -339,22 +373,33 @@ public abstract class BaseActivity extends Activity
 	 */
 	public void userLogout1()
 	{
-		//ToastUtils.makeShortText(getApplicationContext(), "你已成功退出！");
+		// ToastUtils.makeShortText(getApplicationContext(), "你已成功退出！");
 		DAlertDialog dialog = new DAlertDialog(this);
 		dialog.setMessage("是否退出登陆！");
 		dialog.addConfirmListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				if(which == 1){
-					exit();
-					startActivityAndFinish(SplashUI.class);
+				if (which == 1)
+				{
+					if (MyConstains.OPEN_SERVICE)
+					{
+						ServiceUtil.cancleUserAlarmManager(BaseActivity.this);
+					}
+					else if (MyConstains.OPEN_LONG_SERVICE)
+					{
+						stopService(new Intent(BaseActivity.this, UserConnectService.class));
+					}
+					//startActivityAndFinish(SplashUI.class);
+					BaseApplication.setUser(new User());
+					Intent intent = new Intent(BaseActivity.this,SplashUI.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
 				}
 			}
 		});
 		dialog.show();
-		
 
 	}
 

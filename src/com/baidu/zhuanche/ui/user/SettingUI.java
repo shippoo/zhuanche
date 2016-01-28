@@ -3,25 +3,16 @@ package com.baidu.zhuanche.ui.user;
 import java.io.File;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.text.format.Formatter;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import cn.jpush.android.api.JPushInterface;
 
 import com.baidu.zhuanche.R;
-import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.base.BaseActivity;
-import com.baidu.zhuanche.base.BaseApplication;
-import com.baidu.zhuanche.bean.User;
-import com.baidu.zhuanche.service.MyService;
-import com.baidu.zhuanche.ui.driver.DriverAboutUsUI;
 import com.baidu.zhuanche.utils.DataCleanManager;
 import com.baidu.zhuanche.utils.FileUtils;
 import com.baidu.zhuanche.utils.ToastUtils;

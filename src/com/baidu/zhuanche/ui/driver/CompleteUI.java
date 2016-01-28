@@ -68,7 +68,9 @@ import com.loopj.android.http.RequestParams;
  */
 public class CompleteUI extends BaseActivity implements OnClickListener
 {
-	private Bitmap					head;										// 头像Bitmap
+	private Bitmap					head;
+
+	// 头像Bitmap
 	private static String			path				= "/sdcard/myHead/";	// sd路径
 	private String					mHeadName			= "head1.jpg";
 	private CircleImageView			mCivPic;
@@ -79,7 +81,9 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 	private EditText				mEtBackupMobile;
 	private Button					mBtConfirm;
 	private LinearLayout			mContainerQuhao;
-	private Dialog					mDialog;									// 底部对话框
+	private Dialog					mDialog;
+
+	// 底部对话框
 	private Button					mBtOK;
 	private Button					mBtCancel;
 	private ListView				mListView;
@@ -92,6 +96,8 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 	private SelectPicPopupWindow	mPopupWindow;
 	private TextView				mTvMainQuhao;
 	private Driver					mDriver;
+	private TextView				mTvNumSb;
+	private TextView				mTvQuhaoSb;
 
 	@Override
 	public void initView()
@@ -107,6 +113,8 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		mContainerQuhao = (LinearLayout) findViewById(R.id.complete_container_quhao);
 		mTvSex = (TextView) findViewById(R.id.complet_tv_sex);
 		mTvMainQuhao = (TextView) findViewById(R.id.complete_tv_mainquhao);
+		mTvQuhaoSb = (TextView) findViewById(R.id.applycash_tv_title_carlevelsb);
+		mTvNumSb = (TextView) findViewById(R.id.complet_tv_sexsb);
 	}
 
 	@Override
@@ -116,8 +124,14 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		mTvTitle.setText("完善資料");
 		mDriver = BaseApplication.getDriver();
 		enable(false);
-		mTvMainQuhao.setText(TextUtils.isEmpty(mDriver.area) ? "+86" : "+" + mDriver.area);
+		mTvMainQuhao.setText(TextUtils.isEmpty(mDriver.area) ? "+86" : "+" +
+
+																		mDriver.area);
 		mTvMobile.setText(mDriver.mobile);
+		// mTvQuhaoSb.setText(TextUtils.isEmpty(mDriver.area) ? "+86" : "+" +
+		//
+		// mDriver.area);
+		mTvNumSb.setText("+" + mDriver.area + "  " + mDriver.mobile);
 		ToastUtils.showProgress(this);
 		String url = URLS.BASESERVER + URLS.Driver.getModify;
 		RequestParams params = new RequestParams();
@@ -139,7 +153,9 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 			}
 		});
 	}
-	private void enable(boolean enabled){
+
+	private void enable(boolean enabled)
+	{
 		mCivPic.setEnabled(enabled);
 		mEtName.setEnabled(enabled);
 		mTvSex.setEnabled(enabled);
@@ -148,7 +164,7 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		mEtBackupMobile.setEnabled(enabled);
 		mBtConfirm.setText(enabled ? "確定" : "編輯");
 	}
-	
+
 	protected void processDefaultJson(String json) throws JSONException
 	{
 		JSONObject content = JsonUtils.getContent(json);
@@ -213,9 +229,12 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		{
 			try
 			{
-				if(mBtConfirm.getText().equals("確定")){
+				if (mBtConfirm.getText().equals("確定"))
+				{
 					confirm();
-				}else {
+				}
+				else
+				{
 					enable(true);
 				}
 			}
@@ -223,7 +242,9 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 			{
 				e.printStackTrace();
 			}
-		}else if(v == mTvSex){
+		}
+		else if (v == mTvSex)
+		{
 			showSexDialog();
 		}
 	}
@@ -236,7 +257,9 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		String area1 = mTvQuhao.getText().toString().replace("+", "");
 		String mobile1 = mEtBackupMobile.getText().toString().trim();
 		boolean b = TextUtils.isEmpty(username)
-					|| TextUtils.isEmpty(gender) || TextUtils.isEmpty(area1) || TextUtils.isEmpty(mobile1);
+					|| TextUtils.isEmpty(gender) || TextUtils.isEmpty
+
+(area1) || TextUtils.isEmpty(mobile1);
 		if( TextUtils.isEmpty(mobile1)){
 			ToastUtils.makeShortText(this, "請輸入備用手機號碼！");
 			return;
@@ -285,16 +308,22 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 			}
 		});
 	}
-	public static OnModifyListener mListener;
-	public static void setOnModifyListener(OnModifyListener listener){
+
+	public static OnModifyListener	mListener;
+
+	public static void setOnModifyListener(OnModifyListener listener)
+	{
 		mListener = listener;
 	}
+
 	/**
 	 * 修改成功之後的接口回調
 	 */
-	public interface OnModifyListener{
-		void onModify(Bitmap bitmap,String name);
+	public interface OnModifyListener
+	{
+		void onModify(Bitmap bitmap, String name);
 	}
+
 	/** 区号选择 */
 	private void doClickQuhao()
 	{
@@ -372,7 +401,9 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			public void onItemClick(AdapterView<?> parent, View view, int
+
+									position, long id)
 			{
 				view.setSelected(true);
 				selectedSexPosition = position;
@@ -393,7 +424,9 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 
 	public void setOnModifyIcon(CircleImageView iv, final String photoName)
 	{
-		mPopupWindow = PhotoUtilChange.getPicPopupWindow(this, new OnClickListener() {
+		mPopupWindow = PhotoUtilChange.getPicPopupWindow(this, new OnClickListener
+
+() {
 
 			@Override
 			public void onClick(View v)
@@ -410,7 +443,8 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 					case R.id.btn_take_photo:// 拍照
 						Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 						intent2.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), photoName)));
-						startActivityForResult(intent2, 21);// 采用ForResult打开
+						startActivityForResult(intent2, 21);// 采用
+
 						break;
 					case R.id.btn_pick_photo: // 从相册取照片
 						Intent intent1 = new Intent(Intent.ACTION_PICK, null);
@@ -440,7 +474,9 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 			case 21:
 				if (resultCode == RESULT_OK) // 拍照
 				{
-					File temp = new File(Environment.getExternalStorageDirectory() + "/" + mHeadName);
+					File temp = new File
+
+(Environment.getExternalStorageDirectory() + "/" + mHeadName);
 					cropPhoto(Uri.fromFile(temp), 22);// 裁剪图片
 				}
 				break;
@@ -451,8 +487,10 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 					head = extras.getParcelable("data");
 					if (head != null)
 					{
-						setPicToView(head, mHeadName);// 保存在SD卡中
-						mCivPic.setImageBitmap(head);// 用ImageView显示出来
+						setPicToView(head, mHeadName);// 保存在SD卡
+
+						mCivPic.setImageBitmap(head);// 用ImageView
+
 					}
 				}
 				break;
@@ -498,7 +536,7 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 		try
 		{
 			b = new FileOutputStream(fileName);
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文
 
 		}
 		catch (FileNotFoundException e)
@@ -520,6 +558,5 @@ public class CompleteUI extends BaseActivity implements OnClickListener
 
 		}
 	}
-
 
 }

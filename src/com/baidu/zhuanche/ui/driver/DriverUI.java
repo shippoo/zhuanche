@@ -81,6 +81,12 @@ public class DriverUI extends BaseActivity implements OnClickListener, OnRefresh
 		driver = BaseApplication.getDriver();
 	}
 	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		mListView.smoothScrollToPosition(0, 0);
+	}
+	@Override
 	public void initView()
 	{
 		setContentView(R.layout.ui_driver);

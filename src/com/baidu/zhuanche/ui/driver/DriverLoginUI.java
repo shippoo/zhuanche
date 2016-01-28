@@ -24,9 +24,12 @@ import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.Driver;
 import com.baidu.zhuanche.bean.DriverBean;
+import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
+import com.baidu.zhuanche.connect.ServiceUtil;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
-import com.baidu.zhuanche.service.DriverService;
+import com.baidu.zhuanche.service.DriverConnectService;
+import com.baidu.zhuanche.service.UserConnectService;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.ToastUtils;
@@ -252,7 +255,14 @@ public class DriverLoginUI extends BaseActivity implements OnClickListener
 		}
 		else
 		{
-			//startService(new Intent(this, DriverService.class));
+			if (MyConstains.OPEN_SERVICE)
+			{
+				ServiceUtil.invokeTimerDriverService(this);
+			}
+			else if (MyConstains.OPEN_LONG_SERVICE)
+			{
+				startService(new Intent(this, DriverConnectService.class));
+			}
 			startActivityAndFinish(DriverHomeUI.class);
 		}
 

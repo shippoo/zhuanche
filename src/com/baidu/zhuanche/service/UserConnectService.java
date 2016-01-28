@@ -2,17 +2,9 @@ package com.baidu.zhuanche.service;
 
 import org.apache.http.Header;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.SystemClock;
-
 import com.baidu.zhuanche.base.BaseApplication;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.bean.UserBean;
-import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.PrintUtils;
@@ -22,12 +14,18 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.os.SystemClock;
+import android.util.Log;
+
 /**
- * @项目名: 拼车
- * @包名: com.baidu.zhuanche.service
- * @类名: MyService
+ * @项目名: LongConnectionDemo
+ * @包名: com.cxw.longconnectiondemo.service
+ * @类名: UserConnectService
  * @创建者: 陈选文
- * @创建时间: 2016-1-13 上午9:53:56
+ * @创建时间: 2016-1-27 下午2:53:02
  * @描述: TODO
  * 
  * @svn版本: $Rev$
@@ -35,50 +33,31 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class MyService extends Service
+public class UserConnectService extends Service
 {
-	private Handler mHandler = new Handler(){
 
-		@Override
-		public void handleMessage(Message msg)
-		{
-			switch (msg.what)
-			{
-				case 0:
-					lianjieUser();
-					break;
+	private static final String	TAG	= "tylz";
 
-				default:
-					break;
-			}
-		}
-		
-	};
 	@Override
 	public IBinder onBind(Intent intent)
 	{
-
-		return null; 
-	} 
+		return null;
+	}
 
 	@Override
 	public void onCreate()
 	{
-		new Thread(new Runnable() {
-
-			@Override
-			public void run()
-			{
-				while (true)
-				{
-					SystemClock.sleep(MyConstains.TIME_PERIOD );
-					mHandler.sendEmptyMessage(0);
-				}
-			}
-			
-		}).start();
+		Log.d(TAG, "用户服务开始连接...");
+		lianjieUser();
 	}
-
+	@Override
+	public void onDestroy()
+	{
+		Log.d(TAG, "销毁用户服务...");
+	}
+	/**
+	 * 用户模块
+	 */
 	public void lianjieUser()
 	{
 		String url = URLS.BASESERVER + URLS.User.login;
@@ -95,23 +74,20 @@ public class MyService extends Service
 				Gson gson = new Gson();
 				UserBean userBean = gson.fromJson(json, UserBean.class);
 				// 保存全局用戶信息
-				PrintUtils.print("后台1 = " + BaseApplication.getUser().access_token);
 				String password = BaseApplication.getUser().password;
 				User user = userBean.content.member_data;
 				user.password = password;
 				user.access_token = userBean.content.access_token;
 				
 				BaseApplication.setUser(user);
-				PrintUtils.print("后台2 = " + userBean.content.access_token);
-				
+				stopSelf();
 			}
 			
 			@Override
 			public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3)
 			{
+				stopSelf();
 			}
 		});
 	}
-	
-
 }

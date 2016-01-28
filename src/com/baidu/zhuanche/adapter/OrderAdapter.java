@@ -143,7 +143,7 @@ public class OrderAdapter extends MyBaseApdater<OrderBean> implements OnAddFeeLi
 //			}
 //			sign = sign.substring(0,sign.length() - 1);
 //		}
-		holder.tvSign.setText(bean.is_hk);
+		holder.tvSign.setText(TextUtils.isEmpty(bean.is_hk) ? "无" : bean.is_hk);
 		DriverInfo driverInfo = bean.d_del;
 		
 		if(!TextUtils.isEmpty(driverInfo.name)){

@@ -73,7 +73,7 @@
             android:value="44e8d20da9fea192723f65009fd4177a" />
 
         <activity
-            android:name=".ui.user.UserHomeUI"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -83,6 +83,7 @@
         </activity>
 
         <!-- 用户端 -->
+        <activity android:name=".ui.user.UserHomeUI"/>
         <activity android:name=".ui.user.UserLoginSelectUI" />
         <activity android:name=".ui.user.UserLoginUI" />
         <activity android:name=".ui.user.UserCenterUI" />
@@ -144,8 +145,8 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".ui.driver.DriverCenterOrderDetailUI" />
         <!-- service -->
-        <service android:name=".service.DriverService" />
-        <service android:name=".service.MyService" />
+        <service android:name=".service.DriverConnectService" />
+        <service android:name=".service.UserConnectService" />
         <service android:name="com.amap.api.location.APSService" />
         <!-- 极光推送 -->
         <!-- Required SDK 核心功能 -->

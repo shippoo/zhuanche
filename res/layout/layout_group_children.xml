@@ -26,7 +26,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/imageView01"
-            android:text="级别"
+            android:text="车型"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
 
@@ -115,7 +115,264 @@
                 android:textSize="14sp" />
         </RadioGroup>
     </RelativeLayout>
+  <ImageView
+        android:id="@+id/imageView08 "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/page_19" />
 
+    <RelativeLayout
+        android:id="@+id/yuyueContainer_date"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
+
+        <ImageView
+            android:id="@+id/imageView09"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/page_10" />
+
+        <TextView
+            android:id="@+id/children_text06"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/imageView09"
+            android:text="时间"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/yuyue_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/children_text06"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/children_text07"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:visibility="gone"
+            android:text="(10:00-12:00仅限皇岗口岸进入)"
+            android:textColor="#4C4C4C"
+            android:textSize="8sp" />
+    </RelativeLayout>
+     <ImageView
+        android:id="@+id/imageView10 "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/page_19" />
+
+    <RelativeLayout
+        android:id="@+id/yuyueContainer_port"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
+
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/page_11" />
+
+        <TextView
+            android:id="@+id/children_text08"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/imageView11"
+            android:text="口岸"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/yuyue_tv_port"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
+            android:layout_toRightOf="@+id/children_text08"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/children_list06"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/page_05" />
+    </RelativeLayout>
+     <ImageView
+        android:id="@+id/imageView12 "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/page_19" />
+
+    <RelativeLayout
+        android:id="@+id/yuyueContainer_geton"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/page_12" />
+
+        <TextView
+            android:id="@+id/children_text09"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/imageView13"
+            android:text="上车地点"
+            android:background="@null"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/yuyue_et_geton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
+            android:layout_toRightOf="@+id/children_text09"
+            android:background="@null"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/children_list07"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/page_14" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/page_19" />
+
+    <RelativeLayout
+        android:id="@+id/yuyueContainer_getoff"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
+
+        <ImageView
+            android:id="@+id/imageView15"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/page_13" />
+
+        <TextView
+            android:id="@+id/children_text10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/imageView15"
+            android:background="@null"
+            android:text="下车地点"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/yuyue_et_getoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
+            android:layout_toRightOf="@+id/children_text10"
+            android:background="@null"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/children_list08"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/page_14" />
+    </RelativeLayout>
+    <!-- 乘车人电话 -->
+     <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/page_19" />
+
+    <RelativeLayout
+        android:id="@+id/yuyueContainer_getoff"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
+
+        <ImageView
+            android:id="@+id/imageView151"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/home_phone" />
+
+        <TextView
+            android:id="@+id/children_text101"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/imageView151"
+            android:background="@null"
+            android:text="乘车人电话"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/yuyue_et_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
+            android:layout_toRightOf="@+id/children_text101"
+            android:background="@null"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
     <ImageView
         android:id="@+id/children_list04"
         android:layout_width="wrap_content"
@@ -262,264 +519,54 @@
             android:src="@drawable/page_05" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/imageView08 "
+   <ImageView
+        android:id="@+id/imageView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/page_19" />
 
     <RelativeLayout
-        android:id="@+id/yuyueContainer_date"
+        android:id="@+id/relativeLayout121"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/item_bg_selector" >
+        android:layout_height="38dp" >
 
         <ImageView
-            android:id="@+id/imageView09"
+            android:id="@+id/imageView19"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/page_10" />
+            android:src="@drawable/page_16" />
 
         <TextView
-            android:id="@+id/children_text06"
+            android:id="@+id/children_text12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/imageView09"
-            android:text="时间"
-            android:textColor="#4A4A4A"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/yuyue_tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="110dp"
-            android:layout_toRightOf="@+id/children_text06"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/children_text07"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
-            android:text="(10:00-12:00仅限皇岗口岸进入)"
-            android:textColor="#4C4C4C"
-            android:textSize="8sp" />
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/imageView10 "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/page_19" />
-
-    <RelativeLayout
-        android:id="@+id/yuyueContainer_port"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/item_bg_selector" >
-
-        <ImageView
-            android:id="@+id/imageView11"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/page_11" />
-
-        <TextView
-            android:id="@+id/children_text08"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/imageView11"
-            android:text="口岸"
-            android:textColor="#4A4A4A"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/yuyue_tv_port"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="24dp"
-            android:layout_toRightOf="@+id/children_text08"
-            android:textColor="#4A4A4A"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:id="@+id/children_list06"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/page_05" />
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/imageView12 "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/page_19" />
-
-    <RelativeLayout
-        android:id="@+id/yuyueContainer_geton"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/item_bg_selector" >
-
-        <ImageView
-            android:id="@+id/imageView13"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/page_12" />
-
-        <TextView
-            android:id="@+id/children_text09"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/imageView13"
-            android:text="上车地点"
-            android:background="@null"
+            android:layout_toRightOf="@+id/imageView19"
+            android:text="小费"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/yuyue_et_geton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="24dp"
-            android:layout_toRightOf="@+id/children_text09"
-            android:background="@null"
-            android:textColor="#4A4A4A"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:id="@+id/children_list07"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/page_14" />
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/imageView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/page_19" />
-
-    <RelativeLayout
-        android:id="@+id/yuyueContainer_getoff"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/item_bg_selector" >
-
-        <ImageView
-            android:id="@+id/imageView15"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/page_13" />
-
-        <TextView
-            android:id="@+id/children_text10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/imageView15"
-            android:background="@null"
-            android:text="下车地点"
-            android:textColor="#4A4A4A"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/yuyue_et_getoff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="24dp"
-            android:layout_toRightOf="@+id/children_text10"
-            android:background="@null"
-            android:textColor="#4A4A4A"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:id="@+id/children_list08"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/page_14" />
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/imageView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/page_19" />
-
-    <RelativeLayout
-        android:id="@+id/yuyue_container_budget"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/item_bg_selector" >
-
-        <ImageView
-            android:id="@+id/imageView17"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/page_15" />
-
-        <TextView
-            android:id="@+id/children_text11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/imageView17"
-            android:text="估价"
-            android:textColor="#4A4A4A"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/yuyue_tv_price"
+            android:id="@+id/yuyue_et_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="30dp"
-            android:layout_toRightOf="@+id/children_text11"
+            android:layout_toRightOf="@+id/children_text12"
+            android:background="@null"
+            android:ems="10"
+            android:hint="请输入金额"
+            android:inputType="number"
             android:textSize="14sp" />
     </RelativeLayout>
+    
+   
 
     <!-- hangbanhao -->
 
@@ -571,53 +618,52 @@
     </RelativeLayout>
     <!-- hangbanhao -->
 
+   
+   
     <ImageView
-        android:id="@+id/imageView18"
+        android:id="@+id/imageView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/page_19" />
 
     <RelativeLayout
-        android:id="@+id/relativeLayout121"
+        android:id="@+id/yuyue_container_budget"
         android:layout_width="match_parent"
-        android:layout_height="38dp" >
+        android:layout_height="38dp"
+        android:background="@drawable/item_bg_selector" >
 
         <ImageView
-            android:id="@+id/imageView19"
+            android:id="@+id/imageView17"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/page_16" />
+            android:src="@drawable/page_15" />
 
         <TextView
-            android:id="@+id/children_text12"
+            android:id="@+id/children_text11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/imageView19"
-            android:text="小费"
+            android:layout_toRightOf="@+id/imageView17"
+            android:text="估价"
             android:textColor="#4A4A4A"
             android:textSize="14sp" />
 
-        <EditText
-            android:id="@+id/yuyue_et_fee"
+        <TextView
+            android:id="@+id/yuyue_tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="30dp"
-            android:layout_toRightOf="@+id/children_text12"
-            android:background="@null"
-            android:ems="10"
-            android:hint="请输入金额"
-            android:inputType="number"
+            android:layout_toRightOf="@+id/children_text11"
             android:textSize="14sp" />
     </RelativeLayout>
-
+    
     <ImageView
         android:id="@+id/imageView20"
         android:layout_width="wrap_content"

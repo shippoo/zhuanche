@@ -1,15 +1,9 @@
 package com.baidu.zhuanche.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.view.DProgressDialog;
-import com.baidu.zhuanche.view.ProgressDialog;
 
 /**
  * @项目名: ZhuanChe
@@ -48,8 +42,8 @@ public class ToastUtils
 	{
 		mPd = new DProgressDialog(context);
 		
-		mPd.setCanceledOnTouchOutside(false);
-		mPd.setCancelable(false);
+		mPd.setCanceledOnTouchOutside(true);
+		mPd.setCancelable(true);
 		mPd.show();
 	}
 	public static void closeProgress()

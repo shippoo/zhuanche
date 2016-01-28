@@ -1,5 +1,7 @@
 package com.baidu.zhuanche.bean;
 
+import java.io.Serializable;
+
 
 
 /**
@@ -15,7 +17,7 @@ package com.baidu.zhuanche.bean;
  * @更新时间:	$Date$
  * @更新描述:	TODO
  */
-public class Driver
+public class Driver implements Serializable
 {
 	public String access_token;
 	public String password;
