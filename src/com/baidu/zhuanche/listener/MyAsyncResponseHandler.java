@@ -294,11 +294,11 @@ public abstract class MyAsyncResponseHandler extends AsyncHttpResponseHandler
 					ToastUtils.makeShortText(UIUtils.getContext(), "系统错误！");
 					return;
 				}
-				else
-				{
-					ToastUtils.makeShortText(UIUtils.getContext(), "未知状态码错误！");
-					return;
-				}
+				// else
+				// {
+				// ToastUtils.makeShortText(UIUtils.getContext(), "未知状态码错误！");
+				// return;
+				// }
 			}
 			if (0 == code)
 			{

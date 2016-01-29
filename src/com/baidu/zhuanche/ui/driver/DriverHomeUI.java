@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import org.apache.http.Header;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,8 @@ import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.adapter.DriverHomeOrderAdapter;
 import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.base.BaseApplication;
+import com.baidu.zhuanche.bean.Driver;
+import com.baidu.zhuanche.bean.DriverBean;
 import com.baidu.zhuanche.bean.DriverHomeBean;
 import com.baidu.zhuanche.bean.DriverHomeBean.DriverHomeOrder;
 import com.baidu.zhuanche.conf.MyConstains;
@@ -28,13 +32,18 @@ import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.listener.MyAsyncResponseHandler;
 import com.baidu.zhuanche.ui.driver.AcceptOrderUI.OnReceiverOrderListener;
 import com.baidu.zhuanche.ui.user.UserHomeUI;
+import com.baidu.zhuanche.utils.AsyncHttpClientUtil;
 import com.baidu.zhuanche.utils.MD5Utils;
+import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
+import com.baidu.zhuanche.utils.UIUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /**
@@ -50,7 +59,7 @@ import com.loopj.android.http.RequestParams;
  * @更新时间: $Date$
  * @更新描述: TODO
  */
-public class DriverHomeUI extends BaseActivity	implements
+public class DriverHomeUI extends BaseActivity implements
 												OnClickListener,
 												OnItemClickListener,
 												AMapLocationListener,
@@ -99,17 +108,20 @@ public class DriverHomeUI extends BaseActivity	implements
 		// 启动定位
 		mLocationClient.startLocation();
 	}
+
 	@Override
 	protected void onRestart()
 	{
 		super.onRestart();
 		mLocationClient.startLocation();
 	}
+
 	@Override
 	public void onBackPressed()
 	{
 		finishActivity(UserHomeUI.class);
 	}
+
 	@Override
 	public void initView()
 	{
@@ -172,6 +184,7 @@ public class DriverHomeUI extends BaseActivity	implements
 			}
 		});
 	}
+
 	public void refresh()
 	{
 		String url = URLS.BASESERVER + URLS.Driver.getorderList;
@@ -188,6 +201,7 @@ public class DriverHomeUI extends BaseActivity	implements
 			}
 		});
 	}
+
 	protected void processJson(String json)
 	{
 		Gson gson = new Gson();
@@ -200,6 +214,7 @@ public class DriverHomeUI extends BaseActivity	implements
 		}
 		mListView.onRefreshComplete();
 	}
+
 	protected void processRefreshJson(String json)
 	{
 		Gson gson = new Gson();
@@ -213,11 +228,12 @@ public class DriverHomeUI extends BaseActivity	implements
 		}
 		mListView.onRefreshComplete();
 	}
+
 	@Override
 	public void initListener()
 	{
 		super.initListener();
-		 mIvLeftHeader.setOnClickListener(this);
+		mIvLeftHeader.setOnClickListener(this);
 		AcceptOrderUI.setOnReceiverOrderListener(this);
 		DriverHomeOrderAdapter.setOnReceiverOrderListener(this);
 		mIvRightHeader.setOnClickListener(this);
@@ -253,17 +269,75 @@ public class DriverHomeUI extends BaseActivity	implements
 		}
 		else if (v == mIvRightHeader)
 		{
-			startActivity(DriverUI.class);
+			String url = URLS.BASESERVER + URLS.Driver.login;
+			RequestParams params = new RequestParams();
+			params.add("mobile", BaseApplication.getDriver().mobile);
+			params.add("password", BaseApplication.getDriver().password);
+			AsyncHttpClient client = AsyncHttpClientUtil.getInstance(UIUtils.getContext());
+			client.post(url, params, new AsyncHttpResponseHandler() {
+
+				@Override
+				public void onSuccess(int arg0, Header[] arg1, byte[] arg2)
+				{
+					String json = new String(arg2);
+					Gson gson = new Gson();
+					DriverBean driverBean = gson.fromJson(json, DriverBean.class);
+					// 保存全局用戶信息
+					String password = BaseApplication.getDriver().password;
+					Driver driver = driverBean.content.driver_data;
+					driver.password = password;
+					driver.access_token = driverBean.content.access_token;
+					BaseApplication.setDriver(driver);
+					PrintUtils.println("重新登陆下");
+					startActivity(DriverUI.class);
+				}
+
+				@Override
+				public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3)
+				{
+					ToastUtils.makeShortText("网络请求失败!");
+				}
+			});
+			
 		}
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
 	{
 		// TODO 这里需要传值，将本条目的值传过去
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("orderbean", mDatas.get(position - 1));
-		startActivity(AcceptOrderUI.class, bundle);
+		String url = URLS.BASESERVER + URLS.Driver.login;
+		RequestParams params = new RequestParams();
+		params.add("mobile", BaseApplication.getDriver().mobile);
+		params.add("password", BaseApplication.getDriver().password);
+		AsyncHttpClient client = AsyncHttpClientUtil.getInstance(UIUtils.getContext());
+		client.post(url, params, new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, byte[] arg2)
+			{
+				String json = new String(arg2);
+				Gson gson = new Gson();
+				DriverBean driverBean = gson.fromJson(json, DriverBean.class);
+				// 保存全局用戶信息
+				String password = BaseApplication.getDriver().password;
+				Driver driver = driverBean.content.driver_data;
+				driver.password = password;
+				driver.access_token = driverBean.content.access_token;
+				BaseApplication.setDriver(driver);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("orderbean", mDatas.get(position - 1));
+				PrintUtils.println("重新登陆下");
+				startActivity(AcceptOrderUI.class, bundle);
+			}
+
+			@Override
+			public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3)
+			{
+				ToastUtils.makeShortText("网络请求失败!");
+			}
+		});
+		
 	}
 
 	private class LoadMore implements Runnable
@@ -275,6 +349,7 @@ public class DriverHomeUI extends BaseActivity	implements
 			loadMore();
 		}
 	}
+
 	private class Refresh implements Runnable
 	{
 
@@ -284,6 +359,7 @@ public class DriverHomeUI extends BaseActivity	implements
 			refresh();
 		}
 	}
+
 	@Override
 	protected void onDestroy()
 	{

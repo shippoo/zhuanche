@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.Timer;
 
+import org.apache.http.Header;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,8 +34,10 @@ import cn.jpush.android.api.TagAliasCallback;
 import com.baidu.zhuanche.R;
 import com.baidu.zhuanche.SplashUI;
 import com.baidu.zhuanche.bean.Driver;
+import com.baidu.zhuanche.bean.DriverBean;
 import com.baidu.zhuanche.bean.User;
 import com.baidu.zhuanche.conf.MyConstains;
+import com.baidu.zhuanche.conf.URLS;
 import com.baidu.zhuanche.connect.ServiceUtil;
 import com.baidu.zhuanche.helper.CountDownButtonHelper;
 import com.baidu.zhuanche.helper.CountDownButtonHelper.OnFinishListener;
@@ -45,11 +49,14 @@ import com.baidu.zhuanche.utils.ImageUtils;
 import com.baidu.zhuanche.utils.MD5Utils;
 import com.baidu.zhuanche.utils.PrintUtils;
 import com.baidu.zhuanche.utils.SPUtils;
+import com.baidu.zhuanche.utils.UIUtils;
 import com.baidu.zhuanche.view.DAlertDialog;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 /**
  * @创建者 Administrator
@@ -552,5 +559,34 @@ public abstract class BaseActivity extends Activity
 		{
 			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 		}
+	}
+	public void lianjieDriver()
+	{
+		String url = URLS.BASESERVER + URLS.Driver.login;
+		RequestParams params = new RequestParams();
+		params.add("mobile", BaseApplication.getDriver().mobile);
+		params.add("password", BaseApplication.getDriver().password);
+		AsyncHttpClient client = AsyncHttpClientUtil.getInstance(UIUtils.getContext());
+		client.post(url, params, new AsyncHttpResponseHandler() {
+			
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, byte[] arg2)
+			{
+				String json = new String(arg2);
+				Gson gson = new Gson();
+				DriverBean driverBean = gson.fromJson(json, DriverBean.class);
+				// 保存全局用戶信息
+				String password = BaseApplication.getDriver().password;
+				Driver driver = driverBean.content.driver_data;
+				driver.password = password;
+				driver.access_token = driverBean.content.access_token;
+				BaseApplication.setDriver(driver);
+			}
+			
+			@Override
+			public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3)
+			{
+			}
+		});
 	}
 }

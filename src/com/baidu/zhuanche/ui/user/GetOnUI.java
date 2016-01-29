@@ -56,6 +56,7 @@ import com.baidu.zhuanche.base.BaseActivity;
 import com.baidu.zhuanche.bean.Location;
 import com.baidu.zhuanche.conf.MyConstains;
 import com.baidu.zhuanche.utils.AMapUtil;
+import com.baidu.zhuanche.utils.GpsCorrectUtils;
 import com.baidu.zhuanche.utils.ToastUtils;
 import com.baidu.zhuanche.view.DAlertDialog;
 
@@ -186,6 +187,8 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 			public void onMapClick(LatLng latLng)
 			{
 				showDialog();
+				double[] ll = new double[2];
+				GpsCorrectUtils.transform(latLng.latitude, latLng.longitude, ll);
 				RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(latLng.latitude, latLng.longitude), 200, GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
 				mGeocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
 			}
@@ -490,7 +493,7 @@ public class GetOnUI extends BaseActivity implements OnGeocodeSearchListener, AM
 				LatLng latLng = new LatLng(mLatitude, mLongitude);
 				// mGeocoderSearch.
 				showDialog();
-				 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+				 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 21);
 				 mAMap.moveCamera(update);
 				RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(latLng.latitude, latLng.longitude), 200, GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
 				mGeocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
