@@ -265,6 +265,7 @@ public class YuyueUI extends BaseActivity implements OnClickListener, OnGetOnLoc
 		mYuyueData = new Yuyue();
 
 		mBuilder = new Builder(this);
+		mTvPort.setText("不限定口岸");
 	}
 
 	@Override
